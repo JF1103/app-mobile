@@ -129,10 +129,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   text2: {
-    lex: 1,
+    flex: 1,
     fontSize: 15,
     color: '#eeeeee',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   touch2: {
     flex: 1,
@@ -147,6 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#eeeeee',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   iconcheckin: {
     flex: 1,
@@ -175,6 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#eeeeee',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   touch4: {
     flex: 1,
@@ -196,6 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#eeeeee',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   touch: {
     flex: 1,
@@ -217,6 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#eeeeee',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   touch1: {
     flex: 1,
