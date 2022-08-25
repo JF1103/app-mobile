@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   containerb2: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fb8c00',
+    backgroundColor: 'orange',
     borderRadius: 20,
     boxShadow: 5,
     borderColor: '#fb8c00',
