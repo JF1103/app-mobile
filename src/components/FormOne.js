@@ -222,14 +222,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   row: {
-    backgroundColor: '#fb8c00',
+    backgroundColor: '#f5f5f5',
     marginHorizontal: '6%',
     marginVertical: '5%',
     padding: '5%',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
+    borderColor: '#ffb74d',
+    borderWidth: 1.0,
+    fontWeight: 'bold',
   },
   welcome: {
     fontSize: 18,
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 40,
     marginRight: 300,
-    color: '#ff0000',
+    color: '#c88719',
     marginTop: 20,
   },
   title: {
@@ -283,19 +284,26 @@ const styles = StyleSheet.create({
   },
   textarea: {
     borderRadius: 20,
-    height: 70,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    boxShadow: 5,
+    borderColor: '#ffb74d',
+    borderWidth: 1.0,
+    fontWeight: 'bold',
+    color: '#212121',
   },
   sm: {
     borderRadius: 30,
     height: 70,
     alignItems: 'center',
     justifyContent: 'center',
+    boxShadow: 5,
+    borderColor: '#ffb74d',
+    borderWidth: 1.0,
   },
   geolocalizacion: {
     flex: 1,
-    borderRadius: 30,
   },
 });
 

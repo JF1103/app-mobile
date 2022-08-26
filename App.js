@@ -8,7 +8,7 @@ const App = () => {
   enableLatestRenderer();
   return (
     <AuthProvider>
-      <StatusBar backgroundColor="#4b636e" />
+      <StatusBar backgroundColor="#c88719" />
       <Navigation />
     </AuthProvider>
   );
