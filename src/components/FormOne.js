@@ -1,5 +1,14 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {StyleSheet, Text, View, ScrollView, Button, Switch, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Button,
+  Switch,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import RNSingleSelect, {
   ISingleSelectDataType,
@@ -12,8 +21,13 @@ import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {GetFiles} from './GetFiles';
 
 const FormOne = ({navigation, route}) => {
+  const [location, setLocation] = useState({});
+  let nbr_latitud = 0;
+  let nbr_longitud = 0;
   useEffect(() => {
     Geolocation.getCurrentPosition(info => console.log(info));
   }, []);
@@ -21,8 +35,6 @@ const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud} = route.params;
   nbr_latitud = Number(latitud);
   nbr_longitud = Number(longitud);
-  console.log(nbr_latitud);
-  console.log(nbr_longitud);
 
   //console.log('tareas', tareas);
   const {userInfo} = useContext(AuthContext);
@@ -68,9 +80,12 @@ const FormOne = ({navigation, route}) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-      <TouchableOpacity onPress={() => {navigation.navigate('Home')}}>
-      <Icon  style={styles.icon} name="arrow-back-outline"/>
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <Icon style={styles.icon} name="arrow-back-outline" />
+        </TouchableOpacity>
         <Text style={styles.title}>Formulario</Text>
         {/* {tareas?.formularios?.map((tarea, index) => {
           const preguntas = tarea.preguntas;
@@ -155,7 +170,7 @@ const FormOne = ({navigation, route}) => {
                         />
                       </View>
                     ) : pregunta.tiporespuesta === 'Texto' ? (
-                      <View  key={pregunta.id}>
+                      <View key={pregunta.id}>
                         <Text style={styles.text}>{pregunta.pregunta}</Text>
                         <RNTextArea
                           key={pregunta.id}
@@ -172,6 +187,10 @@ const FormOne = ({navigation, route}) => {
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                       <View key={pregunta.id} style={{height: 300}}>
                         <Text style={styles.geo}>{pregunta.pregunta}</Text>
+                        <Text>
+                          Latitud:{location.latitude} longitud:
+                          {location.longitude}
+                        </Text>
                         <MapView
                           showsUserLocation={true}
                           style={styles.geolocalizacion}
@@ -191,6 +210,8 @@ const FormOne = ({navigation, route}) => {
                           />
                         </MapView>
                       </View>
+                    ) : pregunta.tiporespuesta === 'Archivo' ? (
+                      <GetFiles pregunta={pregunta} />
                     ) : (
                       <></>
                     )}
@@ -289,7 +310,7 @@ const styles = StyleSheet.create({
   },
   sm: {
     borderRadius: 30,
-    height: 70,
+
     alignItems: 'center',
     justifyContent: 'center',
   },
