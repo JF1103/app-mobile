@@ -86,14 +86,21 @@ export const GetFiles = ({pregunta}) => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-around',
-          marginTop: 10,
+          marginTop: 5,
         }}>
-        <Button title="Foto" onPress={takePhoto} />
-        <Button title="Video" onPress={takeVideo} />
-        <Button title="Audio" onPress={takeAudio} />
 
-        <Button title="Galería" onPress={takePhotoFromGallery} />
+      <TouchableOpacity style={styles.btn} onPress={takePhoto}>
+        <Text style={styles.text5}>Foto</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={takeVideo}>
+        <Text style={styles.text5}>Video</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={takeAudio}>
+        <Text style={styles.text5}>Audio</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={takePhotoFromGallery}>
+        <Text style={styles.text5}>Galería</Text>
+      </TouchableOpacity>
       </View>
 
       {tempUri && (
@@ -174,23 +181,45 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   textarea: {
     borderRadius: 20,
     height: 70,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   sm: {
     borderRadius: 30,
-
     alignItems: 'center',
     justifyContent: 'center',
   },
   geolocalizacion: {
     flex: 1,
     borderRadius: 30,
+  },
+  archivo: {
+    fontSize: 18,
+    color: '#000000',
+    padding: 5,
+    marginVertical: '5%',
+    textAlign: 'center',
+  },
+  btn: {
+    flex: 1,
+    backgroundColor: '#ffb74d',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 30,
+    width: '20%',
+    justifyContent: 'center',
+    marginRight: 3,
+  },
+  text5: {
+    fontSize: 16,
+    color: '#eeeeee',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 const stylesRec = StyleSheet.create({

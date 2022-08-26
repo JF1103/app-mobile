@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  Button,
   StyleSheet,
   Text,
   View,
@@ -9,7 +8,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -71,10 +69,13 @@ const HomeScreen = ({navigation}) => {
                 <Text style={styles.welcome}>{employee?.nivel}</Text>
 
                 <View style={styles.containerb2}>
-                <TouchableOpacity >
+                  
+                <TouchableOpacity style={styles.btn1}>
                     <Text style={styles.text}>Iniciar Ruta</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
+                
+                
+                <TouchableOpacity style={styles.btn2} onPress={() => {
                     const aux = employee['0'];
                     const tareas = aux.tareas?.find(i => i);
                     navigation.navigate('FormOne', {tareas, latitud, longitud});
@@ -107,13 +108,10 @@ const styles = StyleSheet.create({
   },
   containerb2: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    backgroundColor: '#c88719',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 0.5,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
     height: 30,
+    alignItems: 'center',
   },
   text2: {
     flex: 1,
@@ -161,21 +159,22 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
   },
   text: {
-    flex: 1,
     fontSize: 16,
     color: '#eeeeee',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   text1: {
-    flex: 1,
     fontSize: 16,
     color: '#eeeeee',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   welcome: {
     fontSize: 18,
     marginBottom: 15,
     color: '#000000',
+    textAlign: 'center',
   },
   row: {
     backgroundColor: '#f5f5f5',
@@ -193,6 +192,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000000',
     padding: 10,
+  },
+  btn1: {
+    flex: 1,
+    backgroundColor: '#ffb74d',
+    borderRadius: 10,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 30,
+    width: '50%',
+    justifyContent: 'center',
+    color: '#f5f5f5',
+  },
+  btn2: {
+    flex: 1,
+    backgroundColor: '#ffb74d',
+    borderRadius: 10,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 30,
+    width: '50%',
+    justifyContent: 'center',
+    marginLeft: 10,
+    color: '#f5f5f5',
   },
 });
 

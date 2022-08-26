@@ -154,6 +154,8 @@ const FormOne = ({navigation, route}) => {
                           onSelect={item => {
                             handleRest(pregunta.id, item.value);
                           }}
+                          placeholder="Elegir opción"
+                          width="100%"
                         />
                       </View>
                     ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
@@ -167,6 +169,7 @@ const FormOne = ({navigation, route}) => {
                           onSelect={selectedItems =>
                             console.log('SelectedItems: ', selectedItems)
                           }
+                          placeholder="Elegir opción"
                         />
                       </View>
                     ) : pregunta.tiporespuesta === 'Texto' ? (
@@ -178,7 +181,7 @@ const FormOne = ({navigation, route}) => {
                           maxCharLimit={200}
                           placeholderTextColor="#000000"
                           exceedCharCountColor="#990606"
-                          placeholder={'Escribir aquí ...'}
+                          placeholder={'Escriba aquí ...'}
                           onChangeText={text => {
                             pregunta.respuestas[0] = text;
                           }}
@@ -187,7 +190,7 @@ const FormOne = ({navigation, route}) => {
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                       <View key={pregunta.id} style={{height: 300}}>
                         <Text style={styles.geo}>{pregunta.pregunta}</Text>
-                        <Text>
+                        <Text style={styles.textarch}>
                           Latitud:{location.latitude} longitud:
                           {location.longitude}
                         </Text>
@@ -224,12 +227,11 @@ const FormOne = ({navigation, route}) => {
           );
         })}
 
-        <Button
-          title="Terminar formulario"
-          onPress={() => {
+            <TouchableOpacity style={styles.btn5} onPress={() => {
             navigation.navigate('');
-          }}
-        />
+          }}>
+                    <Text style={styles.text6}>Enviar formulario</Text>
+            </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -251,13 +253,12 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#ffb74d',
     borderWidth: 1.0,
-    fontWeight: 'bold',
   },
   welcome: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   icon: {
     fontSize: 40,
@@ -268,7 +269,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     textAlign: 'center',
-    fontWeight: 'bold',
     color: '#000000',
     marginTop: -50,
   },
@@ -280,43 +280,41 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   selsim: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   selmul: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   geo: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   textarea: {
-    borderRadius: 20,
+    borderRadius: 10,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     boxShadow: 5,
     borderColor: '#ffb74d',
     borderWidth: 1.0,
-    fontWeight: 'bold',
     color: '#212121',
   },
   sm: {
-    borderRadius: 30,
-
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     boxShadow: 5,
@@ -325,6 +323,29 @@ const styles = StyleSheet.create({
   },
   geolocalizacion: {
     flex: 1,
+  },
+  textarch: {
+    fontSize: 15,
+    color: '#000000',
+    padding: 5,
+  },
+  btn5: {
+    flex: 1,
+    backgroundColor: '#ffb74d',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 40,
+    width: '80%',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  text6: {
+    fontSize: 16,
+    color: '#eeeeee',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
