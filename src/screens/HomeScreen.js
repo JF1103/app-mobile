@@ -47,22 +47,18 @@ const HomeScreen = ({navigation}) => {
 
       <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>
-      <Icon style={styles.iconlogout} name="log-out"/>
       <Text style={styles.text2}>Cerrar Sesión</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.touch3}>
-      <Icon style={styles.iconcheckin} name="share-outline"/>
       <Text style={styles.text3}>CheckIn</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.touch4}>
-      <Icon style={styles.iconcheckout} name="enter-outline"/>
       <Text style={styles.text4}>CheckOut</Text>
       </TouchableOpacity>
       </View>
 
         {isLoading && <ActivityIndicator size="large" color="blue" />}
         <Text style={styles.title}>Agenda de Tareas</Text>
-        <Text style={styles.welcome1}>{userInfo.mensaje}</Text>
         {!isLoading &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
@@ -75,17 +71,14 @@ const HomeScreen = ({navigation}) => {
                 <Text style={styles.welcome}>{employee?.nivel}</Text>
 
                 <View style={styles.containerb2}>
-                <TouchableOpacity style={styles.touch}>
-                    <Icon style={styles.icon} name="navigate-circle-outline"/>
+                <TouchableOpacity >
                     <Text style={styles.text}>Iniciar Ruta</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.touch1} onPress={() => {
+                <TouchableOpacity onPress={() => {
                     const aux = employee['0'];
                     const tareas = aux.tareas?.find(i => i);
-                    console.log(employee);
                     navigation.navigate('FormOne', {tareas, latitud, longitud});
                   }}>
-                    <Icon style={styles.icon1} name="construct-outline"/>
                     <Text style={styles.text1}>Iniciar Tarea</Text>
                 </TouchableOpacity>
                 </View>
@@ -115,18 +108,12 @@ const styles = StyleSheet.create({
   containerb2: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fb8c00',
+    backgroundColor: '#c88719',
     borderRadius: 20,
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 0.5,
-  },
-  iconlogout: {
-    flex: 1,
-    fontSize: 30,
-    marginTop: 5,
-    color: '#eeeeee',
-    textAlign: 'center',
+    height: 30,
   },
   text2: {
     flex: 1,
@@ -150,13 +137,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
-  iconcheckin: {
-    flex: 1,
-    fontSize: 30,
-    marginTop: 5,
-    color: '#eeeeee',
-    textAlign: 'center',
-  },
   touch3: {
     flex: 1,
     backgroundColor: '#320b86',
@@ -164,13 +144,6 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#000000',
     borderWidth: 0.5,
-  },
-  iconcheckout: {
-    flex: 1,
-    fontSize: 30,
-    marginTop: 5,
-    color: '#eeeeee',
-    textAlign: 'center',
   },
   text4: {
     lex: 1,
@@ -187,72 +160,32 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     borderWidth: 0.5,
   },
-  icon: {
-    flex: 1,
-    fontSize: 30,
-    marginTop: 5,
-    color: '#eeeeee',
-    textAlign: 'center',
-  },
   text: {
     flex: 1,
-    fontSize: 15,
-    color: '#eeeeee',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  touch: {
-    flex: 1,
-    backgroundColor: '#002f6c',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
-  },
-  icon1: {
-    flex: 1,
-    fontSize: 30,
-    marginTop: 5,
+    fontSize: 16,
     color: '#eeeeee',
     textAlign: 'center',
   },
   text1: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 16,
     color: '#eeeeee',
     textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  touch1: {
-    flex: 1,
-    backgroundColor: '#005005',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
   },
   welcome: {
     fontSize: 18,
     marginBottom: 15,
     color: '#000000',
-    fontWeight: 'bold',
-  },
-  welcome1: {
-    fontSize: 20,
-    padding: 5,
-    color: '#000000',
-    textAlign: 'center',
-    fontWeight: 'bold',
   },
   row: {
-    backgroundColor: '#fb8c00',
+    backgroundColor: '#f5f5f5',
     marginHorizontal: '6%',
     marginVertical: '5%',
     padding: '5%',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
+    borderColor: '#ffb74d',
+    borderWidth: 1.0,
   },
   title: {
     fontSize: 40,
@@ -260,7 +193,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000000',
     padding: 10,
-    marginBottom: -20,
   },
 });
 

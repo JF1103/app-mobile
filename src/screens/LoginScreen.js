@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from '../context/AuthContext';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState(null);
@@ -43,14 +42,11 @@ const LoginScreen = ({navigation}) => {
               secureTextEntry
             />
 
-            <View style={styles.container2}>
             <TouchableOpacity style={styles.touch} onPress={() => {
                 login(email, password);
               }}>
-            <Icon style={styles.icon} name="person-circle-outline"/>
             <Text style={styles.text}>Iniciar Sesión</Text>
             </TouchableOpacity> 
-            </View>
 
           </View>
         </View>
@@ -63,7 +59,6 @@ const styles = StyleSheet.create({
   img: {
     width: 360,
     height: 240,
-    marginTop: 50,
     backgroundColor: '#ffffff',
   },
   container: {
@@ -71,10 +66,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
-  },
-  container2: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   wrapper: {
     width: '80%',
@@ -86,28 +77,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
+    borderColor: '#ffb74d',
+    borderWidth: 1.0,
+    fontWeight: 'bold',
+    color: '#212121',
   },
   touch: {
-    flex: 1,
-    backgroundColor: '#fb8c00',
+    textAlign: 'center',
+    marginBottom: 150,
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#000000',
+    borderColor: '#b0bec5',
     borderWidth: 0.5,
-  },
-  icon: {
-    flex: 1,
-    fontSize: 30,
-    marginTop: 5,
-    color: '#eeeeee',
-    textAlign: 'center',
+    backgroundColor: '#ffb74d',
+    height: 50,
+    justifyContent: 'center',
   },
   text: {
-    flex: 1,
-    fontSize: 15,
-    color: '#eeeeee',
+    fontSize: 16,
+    color: '#f5f5f5',
     textAlign: 'center',
     fontWeight: 'bold',
   },
