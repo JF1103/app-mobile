@@ -23,18 +23,36 @@ import Geolocation from '@react-native-community/geolocation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
+import {check, PERMISSIONS, request} from 'react-native-permissions';
 
 const FormOne = ({navigation, route}) => {
   const [location, setLocation] = useState({});
   let nbr_latitud = 0;
   let nbr_longitud = 0;
   useEffect(() => {
-    Geolocation.getCurrentPosition(info => console.log(info));
+    Geolocation.getCurrentPosition(info => {
+      setLocation(info.coords);
+      nbr_latitud = Number(info.coords.latitude);
+      nbr_longitud = Number(info.coords.longitude);
+    });
   }, []);
 
+  const checkLocationPermissions = async () => {
+    if (Platform.OS === 'ios') {
+      let permissionsStatus = await request(
+        PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+      );
+      console.log('permiso' + permissionsStatus);
+    }
+    if (Platform.OS === 'android') {
+      let permissionsStatus = await request(
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      );
+      console.log('permiso' + permissionsStatus);
+    }
+  };
+  checkLocationPermissions();
   const {tareas, latitud, longitud} = route.params;
-  nbr_latitud = Number(latitud);
-  nbr_longitud = Number(longitud);
 
   //console.log('tareas', tareas);
   const {userInfo} = useContext(AuthContext);

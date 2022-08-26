@@ -15,11 +15,10 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName='Login'
+        initialRouteName="Login"
         screenOptions={{
           headerShown: false,
-        }}
-      >
+        }}>
         {splashLoading ? (
           <Stack.Screen
             name="Splash Screen"
@@ -36,13 +35,12 @@ const Navigation = () => {
               options={{headerShown: false}}
             />
           </>
-        )
-        }
-        <Stack.Screen 
-              name="FormOne" 
-              component={FormOne}
-              options={{headerShown: false}}
-            />
+        )}
+        <Stack.Screen
+          name="FormOne"
+          component={FormOne}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -9,17 +9,127 @@ import {
   Switch,
   TouchableOpacity,
   Image,
+  PermissionsAndroid,
 } from 'react-native';
-import {Buffer} from 'buffer';
-import Permissions from 'react-native-permissions';
+import AudioRecorderPlayer, {
+  AVEncoderAudioQualityIOSType,
+  AVEncodingOption,
+  AudioEncoderAndroidType,
+  AudioSet,
+  AudioSourceAndroidType,
+} from 'react-native-audio-recorder-player';
+import {PERMISSIONS} from 'react-native-permissions';
 
 export const GetFiles = ({pregunta}) => {
-  const options = {
-    sampleRate: 16000, // default 44100
-    channels: 1, // 1 or 2, default 1
-    bitsPerSample: 16, // 8 or 16, default 16
-    audioSource: 6, // android only (see below)
-    wavFile: 'test.wav', // default 'audio.wav'
+  const [stateRecord, setStateRecord] = useState({
+    isLoggingIn: false,
+    recordSecs: 0,
+    recordTime: '00:00:00',
+    currentPositionSec: 0,
+    currentDurationSec: 0,
+    playTime: '00:00:00',
+    duration: '00:00:00',
+  });
+  PERMISSIONS.ANDROID.RECORD_AUDIO;
+  PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE;
+  PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE;
+  const getPermision = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const grants = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        ]);
+
+        console.log('write external stroage', grants);
+
+        if (
+          grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          grants['android.permission.READ_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          grants['android.permission.RECORD_AUDIO'] ===
+            PermissionsAndroid.RESULTS.GRANTED
+        ) {
+          console.log('Permissions granted');
+        } else {
+          console.log('All required permissions not granted');
+          return;
+        }
+      } catch (err) {
+        console.warn(err);
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    getPermision();
+  }, []);
+  const audioRecorderPlayer = new AudioRecorderPlayer();
+  audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
+
+  const onStartRecord = async () => {
+    console.log('onStartRecord');
+
+    //if (result === 'granted') {
+    const path = 'recorded.mp4';
+    const audioSet = {
+      AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+      AVNumberOfChannelsKeyIOS: 2,
+      AVSampleRateKeyIOS: 44100.0,
+      AVEncoderAudioQualityKey: AudioEncoderAndroidType.aac,
+      AVEncoderBitRateKeyAndroid: 32000,
+      AVNumberOfChannelsKey: 2,
+      AVSampleRateKey: 44100.0,
+      AVFormatIDKey: AudioSourceAndroidType.default,
+    };
+    const uri = await audioRecorderPlayer.startRecorder(path, audioSet);
+    audioRecorderPlayer.addRecordBackListener(e => {
+      setStateRecord({
+        recordSecs: e.current_position,
+        recordTime: audioRecorderPlayer.mmssss(Math.floor(e.current_position)),
+      });
+      return;
+    });
+    console.log(`uri: ${uri}`);
+  };
+  //};
+
+  const onStopRecord = async () => {
+    const result = await audioRecorderPlayer.stopRecorder();
+    audioRecorderPlayer.removeRecordBackListener();
+    setStateRecord({
+      recordSecs: 0,
+    });
+    console.log(result);
+  };
+
+  const onStartPlay = async () => {
+    console.log('onStartPlay');
+    const msg = await audioRecorderPlayer.startPlayer();
+    console.log(msg);
+    audioRecorderPlayer.addPlayBackListener(e => {
+      if (e.current_position === e.duration) {
+        console.log('finished');
+        audioRecorderPlayer.stopPlayer();
+      }
+      setStateRecord({
+        currentPositionSec: e.current_position,
+        currentDurationSec: e.duration,
+        playTime: audioRecorderPlayer.mmssss(Math.floor(e.current_position)),
+        duration: audioRecorderPlayer.mmssss(Math.floor(e.duration)),
+      });
+    });
+  };
+
+  const onPausePlay = async () => {
+    await audioRecorderPlayer.pausePlayer();
+  };
+
+  const onResumePlay = async () => {
+    await audioRecorderPlayer.resumePlayer();
   };
 
   const [tempUri, setTempUri] = useState('');
@@ -81,6 +191,49 @@ export const GetFiles = ({pregunta}) => {
   };
 
   return (
+    <>
+      <Text>{stateRecord.recordTime}</Text>
+      <Button
+        mode="contained"
+        icon="record"
+        onPress={() => onStartRecord()}
+        title="grabar"
+      />
+
+      <Button
+        icon="stop"
+        mode="outlined"
+        onPress={() => onStopRecord()}
+        title="STOP"
+      />
+
+      <Text>
+        {stateRecord.playTime} / {stateRecord.duration}
+      </Text>
+      <Button
+        mode="contained"
+        icon="play"
+        onPress={() => onStartPlay()}
+        title="Play"
+      />
+
+      <Button
+        icon="pause"
+        mode="contained"
+        onPress={() => onPausePlay()}
+        title="pause"
+      />
+
+      <Button
+        icon="stop"
+        mode="outlined"
+        onPress={() => onStopPlay()}
+        title="STOP"
+      />
+    </>
+  );
+
+  /* return (
     <View key={pregunta.id}>
       <Text style={styles.archivo}>{pregunta.pregunta}</Text>
       <View
@@ -108,6 +261,7 @@ export const GetFiles = ({pregunta}) => {
       )}
     </View>
   );
+ */
 };
 const styles = StyleSheet.create({
   container: {
