@@ -23,6 +23,7 @@ import Geolocation from '@react-native-community/geolocation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
+import { ItemSeparator } from './ItemSeparator';
 
 const FormOne = ({navigation, route}) => {
   const [location, setLocation] = useState({});
@@ -123,6 +124,7 @@ const FormOne = ({navigation, route}) => {
           return (
             <View style={styles.row} key={index}>
               <Text style={styles.welcome}>{tarea.formulario}</Text>
+              <ItemSeparator/>
               {preguntas?.map((pregunta, index2) => {
                 const IditemSelect = 0;
 
@@ -157,6 +159,7 @@ const FormOne = ({navigation, route}) => {
                           placeholder="Elegir opción"
                           width="100%"
                         />
+                        <ItemSeparator/>
                       </View>
                     ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
                       <View key={pregunta.id}>
@@ -171,6 +174,7 @@ const FormOne = ({navigation, route}) => {
                           }
                           placeholder="Elegir opción"
                         />
+                        <ItemSeparator/>
                       </View>
                     ) : pregunta.tiporespuesta === 'Texto' ? (
                       <View key={pregunta.id}>
@@ -186,6 +190,7 @@ const FormOne = ({navigation, route}) => {
                             pregunta.respuestas[0] = text;
                           }}
                         />
+                        <ItemSeparator/>
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                       <View key={pregunta.id} style={{height: 300}}>
@@ -212,15 +217,21 @@ const FormOne = ({navigation, route}) => {
                             description="Some description"
                           />
                         </MapView>
+                        <ItemSeparator/>
                       </View>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <GetFiles pregunta={pregunta} />
+                      ) : pregunta.tiporespuesta === 'Firma' ? (
+                        <View key={pregunta.id}>
+                          <Text style={styles.textfirma}>{pregunta.pregunta}</Text>
+                          </View>
                     ) : (
                       <></>
                     )}
                     {/* <View>
                     </View> */}
                   </View>
+                  
                 );
               })}
             </View>
@@ -245,7 +256,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   row: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ffffff',
     marginHorizontal: '6%',
     marginVertical: '5%',
     padding: '5%',
@@ -259,7 +270,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   icon: {
     fontSize: 40,
@@ -282,7 +292,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   selsim: {
     fontSize: 18,
@@ -290,7 +299,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   selmul: {
     fontSize: 18,
@@ -298,7 +306,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   geo: {
     fontSize: 18,
@@ -306,7 +313,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   textarea: {
     borderRadius: 10,
@@ -336,7 +342,7 @@ const styles = StyleSheet.create({
   },
   btn5: {
     flex: 1,
-    backgroundColor: '#ffb74d',
+    backgroundColor: '#ffffff',
     borderRadius: 20,
     boxShadow: 5,
     borderColor: '#fb8c00',
@@ -348,9 +354,15 @@ const styles = StyleSheet.create({
   },
   text6: {
     fontSize: 16,
-    color: '#eeeeee',
+    color: '#fb8c00',
     textAlign: 'center',
-    fontWeight: 'bold',
+  },
+  textfirma: {
+    fontSize: 18,
+    color: '#000000',
+    padding: 5,
+    marginVertical: '5%',
+    textAlign: 'center',
   },
 });
 

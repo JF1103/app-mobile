@@ -89,15 +89,14 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1.0,
-    backgroundColor: '#ffb74d',
+    backgroundColor: '#ffffff',
     height: 50,
     justifyContent: 'center',
   },
   text: {
     fontSize: 16,
-    color: '#f5f5f5',
+    color: '#fb8c00',
     textAlign: 'center',
-    fontWeight: 'bold',
   },
 });
 

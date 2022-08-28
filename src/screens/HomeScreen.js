@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { ItemSeparator } from '../components/ItemSeparator';
 import {AuthContext} from '../context/AuthContext';
 
 const HomeScreen = ({navigation}) => {
@@ -63,9 +64,13 @@ const HomeScreen = ({navigation}) => {
             return (
               <View style={styles.row} key={employee?.id}>
                 <Text style={styles.welcome}>{employee?.fecha}</Text>
+                <ItemSeparator/>
                 <Text style={styles.welcome}>{employee?.cliente}</Text>
+                <ItemSeparator/>
                 <Text style={styles.welcome}>{employee?.sucursal}</Text>
+                <ItemSeparator/>
                 <Text style={styles.welcome}>{employee?.actividad}</Text>
+                <ItemSeparator/>
                 <Text style={styles.welcome}>{employee?.nivel}</Text>
 
                 <View style={styles.containerb2}>
@@ -160,25 +165,22 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: '#eeeeee',
+    color: '#fb8c00',
     textAlign: 'center',
-    fontWeight: 'bold',
   },
   text1: {
     fontSize: 16,
-    color: '#eeeeee',
+    color: '#fb8c00',
     textAlign: 'center',
-    fontWeight: 'bold',
   },
   welcome: {
     fontSize: 18,
     marginBottom: 15,
     color: '#000000',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   row: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ffffff',
     marginHorizontal: '6%',
     marginVertical: '5%',
     padding: '5%',
@@ -190,13 +192,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     textAlign: 'center',
-    fontWeight: 'bold',
     color: '#000000',
-    padding: 10,
   },
   btn1: {
     flex: 1,
-    backgroundColor: '#ffb74d',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     boxShadow: 5,
     borderColor: '#fb8c00',
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   btn2: {
     flex: 1,
-    backgroundColor: '#ffb74d',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     boxShadow: 5,
     borderColor: '#fb8c00',

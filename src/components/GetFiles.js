@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {Buffer} from 'buffer';
 import Permissions from 'react-native-permissions';
+import { ItemSeparator } from './ItemSeparator';
 
 export const GetFiles = ({pregunta}) => {
   const options = {
@@ -102,6 +103,7 @@ export const GetFiles = ({pregunta}) => {
         <Text style={styles.text5}>Galería</Text>
       </TouchableOpacity>
       </View>
+      <ItemSeparator/>
 
       {tempUri && (
         <Image
@@ -202,11 +204,10 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   btn: {
     flex: 1,
-    backgroundColor: '#ffb74d',
+    backgroundColor: '#ffffff',
     borderRadius: 20,
     boxShadow: 5,
     borderColor: '#fb8c00',
@@ -218,9 +219,8 @@ const styles = StyleSheet.create({
   },
   text5: {
     fontSize: 16,
-    color: '#eeeeee',
+    color: '#fb8c00',
     textAlign: 'center',
-    fontWeight: 'bold',
   },
 });
 const stylesRec = StyleSheet.create({
