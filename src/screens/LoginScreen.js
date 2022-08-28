@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from '../context/AuthContext';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState(null);

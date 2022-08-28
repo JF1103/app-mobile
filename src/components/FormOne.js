@@ -17,43 +17,17 @@ import RNMultiSelect, {
   IMultiSelectDataTypes,
 } from '@freakycoder/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
-import MapView from 'react-native-maps';
-import {Marker} from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
 import {check, PERMISSIONS, request} from 'react-native-permissions';
+import {Maps} from './Maps';
 
 const FormOne = ({navigation, route}) => {
-  const [location, setLocation] = useState({});
-  let nbr_latitud = 0;
-  let nbr_longitud = 0;
-  useEffect(() => {
-    Geolocation.getCurrentPosition(info => {
-      setLocation(info.coords);
-      nbr_latitud = Number(info.coords.latitude);
-      nbr_longitud = Number(info.coords.longitude);
-    });
-  }, []);
-
-  const checkLocationPermissions = async () => {
-    if (Platform.OS === 'ios') {
-      let permissionsStatus = await request(
-        PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-      );
-      console.log('permiso' + permissionsStatus);
-    }
-    if (Platform.OS === 'android') {
-      let permissionsStatus = await request(
-        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      );
-      console.log('permiso' + permissionsStatus);
-    }
-  };
-  checkLocationPermissions();
   const {tareas, latitud, longitud} = route.params;
 
+  const cordsOt = {latitud: latitud, longitud: longitud};
   //console.log('tareas', tareas);
   const {userInfo} = useContext(AuthContext);
   const [respuestas, setRespuestas] = useState({});
@@ -203,31 +177,7 @@ const FormOne = ({navigation, route}) => {
                         />
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
-                      <View key={pregunta.id} style={{height: 300}}>
-                        <Text style={styles.geo}>{pregunta.pregunta}</Text>
-                        <Text>
-                          Latitud:{location.latitude} longitud:
-                          {location.longitude}
-                        </Text>
-                        <MapView
-                          showsUserLocation={true}
-                          style={styles.geolocalizacion}
-                          initialRegion={{
-                            latitude: nbr_latitud,
-                            longitude: nbr_longitud,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                          }}>
-                          <Marker
-                            coordinate={{
-                              latitude: nbr_latitud,
-                              longitude: nbr_longitud,
-                            }}
-                            title="My Marker"
-                            description="Some description"
-                          />
-                        </MapView>
-                      </View>
+                      <Maps cordsOt={cordsOt} pregunta={pregunta} />
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <GetFiles pregunta={pregunta} />
                     ) : (
