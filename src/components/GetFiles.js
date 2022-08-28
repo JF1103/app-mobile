@@ -4,24 +4,58 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   Button,
-  Switch,
-  TouchableOpacity,
   Image,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
-import {Buffer} from 'buffer';
-import Permissions from 'react-native-permissions';
-import { ItemSeparator } from './ItemSeparator';
+import AudioRecorderPlayer, {
+  AVEncoderAudioQualityIOSType,
+  AVEncodingOption,
+  AudioEncoderAndroidType,
+  AudioSet,
+  AudioSourceAndroidType,
+  PlayBackType,
+  RecordBackType,
+} from 'react-native-audio-recorder-player';
+import {
+  check,
+  PERMISSIONS,
+  PermissionStatus,
+  request,
+  openSettings,
+} from 'react-native-permissions';
+
+import Page from './Recaudio';
 
 export const GetFiles = ({pregunta}) => {
-  const options = {
-    sampleRate: 16000, // default 44100
-    channels: 1, // 1 or 2, default 1
-    bitsPerSample: 16, // 8 or 16, default 16
-    audioSource: 6, // android only (see below)
-    wavFile: 'test.wav', // default 'audio.wav'
+  const [visualizaAudio, setvisualizaAudio] = useState(false);
+
+  const checkLocationPermissions = async () => {
+    let permissionStatus, permissionStatus2;
+    if (Platform.OS === 'android') {
+      let permissionsStatus = await request(
+        PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+      );
+      let permissionsStatus2 = await request(
+        PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+      );
+      let permissionsStatus3 = await request(PERMISSIONS.ANDROID.CAMERA);
+      let permissionsStatus4 = await request(PERMISSIONS.ANDROID.RECORD_AUDIO);
+      let permissionsStatus5 = await request(
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      );
+
+      permissionStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      permissionStatus2 = await check(
+        PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+      );
+    }
   };
+
+  useEffect(() => {
+    checkLocationPermissions();
+  }, []);
 
   const [tempUri, setTempUri] = useState('');
 
@@ -36,7 +70,7 @@ export const GetFiles = ({pregunta}) => {
         if (resp.didCancel) return;
         if (resp.assets[0].uri) {
           console.log('entre');
-          setTempUri(resp.assets[0].uri);
+          resp.assets[0] && setTempUri(resp.assets[0].uri);
         } else return;
       },
     );
@@ -74,10 +108,10 @@ export const GetFiles = ({pregunta}) => {
   };
 
   const takeAudio = () => {
-    AudioRecord.init(options);
-    AudioRecord.start();
+    onStartRecord();
+
     setTimeout(() => {
-      AudioRecord.stop();
+      onStopRecord();
     }, 5000);
   };
 
@@ -89,22 +123,18 @@ export const GetFiles = ({pregunta}) => {
           flexDirection: 'row',
           marginTop: 5,
         }}>
+        <Button title="Foto" onPress={takePhoto} />
+        <Button title="Video" onPress={takeVideo} />
 
-      <TouchableOpacity style={styles.btn} onPress={takePhoto}>
-        <Text style={styles.text5}>Foto</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btn} onPress={takeVideo}>
-        <Text style={styles.text5}>Video</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btn} onPress={takeAudio}>
-        <Text style={styles.text5}>Audio</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btn} onPress={takePhotoFromGallery}>
-        <Text style={styles.text5}>Galería</Text>
-      </TouchableOpacity>
+        <Button title="Galería" onPress={takePhotoFromGallery} />
+        <Button
+          title="Audio"
+          onPress={() => {
+            visualizaAudio ? setvisualizaAudio(false) : setvisualizaAudio(true);
+          }}
+        />
       </View>
-      <ItemSeparator/>
-
+      {visualizaAudio && <Page />}
       {tempUri && (
         <Image
           source={{uri: tempUri}}

@@ -10,12 +10,14 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from '../context/AuthContext';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const {isLoading, login} = useContext(AuthContext);
-
+  console.log(email);
+  console.log(password);
   return (
     <>
       <ScrollView>
@@ -42,12 +44,16 @@ const LoginScreen = ({navigation}) => {
               secureTextEntry
             />
 
-            <TouchableOpacity style={styles.touch} onPress={() => {
-                login(email, password);
-              }}>
-            <Text style={styles.text}>Iniciar Sesión</Text>
-            </TouchableOpacity> 
-
+            <View style={styles.container2}>
+              <TouchableOpacity
+                style={styles.touch}
+                onPress={() => {
+                  login(email, password);
+                }}>
+                <Icon style={styles.icon} name="person-circle-outline" />
+                <Text style={styles.text}>Iniciar Sesión</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>

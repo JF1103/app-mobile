@@ -17,26 +17,21 @@ import RNMultiSelect, {
   IMultiSelectDataTypes,
 } from '@freakycoder/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
-import MapView from 'react-native-maps';
-import {Marker} from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
-import { ItemSeparator } from './ItemSeparator';
+
+import {check, PERMISSIONS, request} from 'react-native-permissions';
+import {Maps} from './Maps';
+import Page from './Recaudio';
+
+import {ItemSeparator} from './ItemSeparator';
 
 const FormOne = ({navigation, route}) => {
-  const [location, setLocation] = useState({});
-  let nbr_latitud = 0;
-  let nbr_longitud = 0;
-  useEffect(() => {
-    Geolocation.getCurrentPosition(info => console.log(info));
-  }, []);
-
   const {tareas, latitud, longitud} = route.params;
-  nbr_latitud = Number(latitud);
-  nbr_longitud = Number(longitud);
 
+  const cordsOt = {latitud: latitud, longitud: longitud};
   //console.log('tareas', tareas);
   const {userInfo} = useContext(AuthContext);
   const [respuestas, setRespuestas] = useState({});
@@ -124,7 +119,7 @@ const FormOne = ({navigation, route}) => {
           return (
             <View style={styles.row} key={index}>
               <Text style={styles.welcome}>{tarea.formulario}</Text>
-              <ItemSeparator/>
+              <ItemSeparator />
               {preguntas?.map((pregunta, index2) => {
                 const IditemSelect = 0;
 
@@ -159,7 +154,7 @@ const FormOne = ({navigation, route}) => {
                           placeholder="Elegir opción"
                           width="100%"
                         />
-                        <ItemSeparator/>
+                        <ItemSeparator />
                       </View>
                     ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
                       <View key={pregunta.id}>
@@ -174,7 +169,7 @@ const FormOne = ({navigation, route}) => {
                           }
                           placeholder="Elegir opción"
                         />
-                        <ItemSeparator/>
+                        <ItemSeparator />
                       </View>
                     ) : pregunta.tiporespuesta === 'Texto' ? (
                       <View key={pregunta.id}>
@@ -190,59 +185,41 @@ const FormOne = ({navigation, route}) => {
                             pregunta.respuestas[0] = text;
                           }}
                         />
-                        <ItemSeparator/>
+                        <ItemSeparator />
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
-                      <View key={pregunta.id} style={{height: 300}}>
-                        <Text style={styles.geo}>{pregunta.pregunta}</Text>
-                        <Text style={styles.textarch}>
-                          Latitud:{location.latitude} longitud:
-                          {location.longitude}
-                        </Text>
-                        <MapView
-                          showsUserLocation={true}
-                          style={styles.geolocalizacion}
-                          initialRegion={{
-                            latitude: nbr_latitud,
-                            longitude: nbr_longitud,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                          }}>
-                          <Marker
-                            coordinate={{
-                              latitude: nbr_latitud,
-                              longitude: nbr_longitud,
-                            }}
-                            title="My Marker"
-                            description="Some description"
-                          />
-                        </MapView>
-                        <ItemSeparator/>
-                      </View>
+                      <Maps cordsOt={cordsOt} pregunta={pregunta} />
+                    ) : pregunta.tiporespuesta === 'Archivo' ? (
+                      <>
+                        <GetFiles pregunta={pregunta} />
+                      </>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <GetFiles pregunta={pregunta} />
-                      ) : pregunta.tiporespuesta === 'Firma' ? (
-                        <View key={pregunta.id}>
-                          <Text style={styles.textfirma}>{pregunta.pregunta}</Text>
-                          </View>
+                    ) : pregunta.tiporespuesta === 'Firma' ? (
+                      <View key={pregunta.id}>
+                        <Text style={styles.textfirma}>
+                          {pregunta.pregunta}
+                        </Text>
+                      </View>
                     ) : (
                       <></>
                     )}
                     {/* <View>
                     </View> */}
                   </View>
-                  
                 );
               })}
             </View>
           );
         })}
 
-            <TouchableOpacity style={styles.btn5} onPress={() => {
+        <TouchableOpacity
+          style={styles.btn5}
+          onPress={() => {
             navigation.navigate('');
           }}>
-                    <Text style={styles.text6}>Enviar formulario</Text>
-            </TouchableOpacity>
+          <Text style={styles.text6}>Enviar formulario</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
