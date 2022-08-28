@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   btn: {
     flex: 1,
