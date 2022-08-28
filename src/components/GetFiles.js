@@ -121,8 +121,7 @@ export const GetFiles = ({pregunta}) => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-around',
-          marginTop: 10,
+          marginTop: 5,
         }}>
         <Button title="Foto" onPress={takePhoto} />
         <Button title="Video" onPress={takeVideo} />
@@ -214,23 +213,45 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   textarea: {
     borderRadius: 20,
     height: 70,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   sm: {
     borderRadius: 30,
-
     alignItems: 'center',
     justifyContent: 'center',
   },
   geolocalizacion: {
     flex: 1,
     borderRadius: 30,
+  },
+  archivo: {
+    fontSize: 18,
+    color: '#000000',
+    padding: 5,
+    marginVertical: '5%',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+  },
+  btn: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 30,
+    width: '20%',
+    justifyContent: 'center',
+    marginRight: 3,
+  },
+  text5: {
+    fontSize: 16,
+    color: '#fb8c00',
+    textAlign: 'center',
   },
 });
 const stylesRec = StyleSheet.create({

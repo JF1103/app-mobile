@@ -21,9 +21,13 @@ import RNTextArea from '@freakycoder/react-native-text-area';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
+<<<<<<< HEAD
 import {check, PERMISSIONS, request} from 'react-native-permissions';
 import {Maps} from './Maps';
 import Page from './Recaudio';
+=======
+import { ItemSeparator } from './ItemSeparator';
+>>>>>>> main
 
 const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud} = route.params;
@@ -116,6 +120,7 @@ const FormOne = ({navigation, route}) => {
           return (
             <View style={styles.row} key={index}>
               <Text style={styles.welcome}>{tarea.formulario}</Text>
+              <ItemSeparator/>
               {preguntas?.map((pregunta, index2) => {
                 const IditemSelect = 0;
 
@@ -147,7 +152,10 @@ const FormOne = ({navigation, route}) => {
                           onSelect={item => {
                             handleRest(pregunta.id, item.value);
                           }}
+                          placeholder="Elegir opción"
+                          width="100%"
                         />
+                        <ItemSeparator/>
                       </View>
                     ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
                       <View key={pregunta.id}>
@@ -160,7 +168,9 @@ const FormOne = ({navigation, route}) => {
                           onSelect={selectedItems =>
                             console.log('SelectedItems: ', selectedItems)
                           }
+                          placeholder="Elegir opción"
                         />
+                        <ItemSeparator/>
                       </View>
                     ) : pregunta.tiporespuesta === 'Texto' ? (
                       <View key={pregunta.id}>
@@ -171,36 +181,72 @@ const FormOne = ({navigation, route}) => {
                           maxCharLimit={200}
                           placeholderTextColor="#000000"
                           exceedCharCountColor="#990606"
-                          placeholder={'Escribir aquí ...'}
+                          placeholder={'Escriba aquí ...'}
                           onChangeText={text => {
                             pregunta.respuestas[0] = text;
                           }}
                         />
+                        <ItemSeparator/>
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
+<<<<<<< HEAD
                       <Maps cordsOt={cordsOt} pregunta={pregunta} />
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <>
                         <GetFiles pregunta={pregunta} />
                       </>
+=======
+                      <View key={pregunta.id} style={{height: 300}}>
+                        <Text style={styles.geo}>{pregunta.pregunta}</Text>
+                        <Text style={styles.textarch}>
+                          Latitud:{location.latitude} longitud:
+                          {location.longitude}
+                        </Text>
+                        <MapView
+                          showsUserLocation={true}
+                          style={styles.geolocalizacion}
+                          initialRegion={{
+                            latitude: nbr_latitud,
+                            longitude: nbr_longitud,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                          }}>
+                          <Marker
+                            coordinate={{
+                              latitude: nbr_latitud,
+                              longitude: nbr_longitud,
+                            }}
+                            title="My Marker"
+                            description="Some description"
+                          />
+                        </MapView>
+                        <ItemSeparator/>
+                      </View>
+                    ) : pregunta.tiporespuesta === 'Archivo' ? (
+                      <GetFiles pregunta={pregunta} />
+                      ) : pregunta.tiporespuesta === 'Firma' ? (
+                        <View key={pregunta.id}>
+                          <Text style={styles.textfirma}>{pregunta.pregunta}</Text>
+                          </View>
+>>>>>>> main
                     ) : (
                       <></>
                     )}
                     {/* <View>
                     </View> */}
                   </View>
+                  
                 );
               })}
             </View>
           );
         })}
 
-        <Button
-          title="Terminar formulario"
-          onPress={() => {
+            <TouchableOpacity style={styles.btn5} onPress={() => {
             navigation.navigate('');
-          }}
-        />
+          }}>
+                    <Text style={styles.text6}>Enviar formulario</Text>
+            </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -214,7 +260,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   row: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ffffff',
     marginHorizontal: '6%',
     marginVertical: '5%',
     padding: '5%',
@@ -222,13 +268,13 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#ffb74d',
     borderWidth: 1.0,
-    fontWeight: 'bold',
   },
   welcome: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
-    fontWeight: 'bold',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   icon: {
     fontSize: 40,
@@ -239,7 +285,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     textAlign: 'center',
-    fontWeight: 'bold',
     color: '#000000',
     marginTop: -50,
   },
@@ -251,43 +296,45 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   selsim: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   selmul: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   geo: {
     fontSize: 18,
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   textarea: {
-    borderRadius: 20,
+    borderRadius: 10,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     boxShadow: 5,
     borderColor: '#ffb74d',
     borderWidth: 1.0,
-    fontWeight: 'bold',
     color: '#212121',
   },
   sm: {
-    borderRadius: 30,
-
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     boxShadow: 5,
@@ -296,6 +343,35 @@ const styles = StyleSheet.create({
   },
   geolocalizacion: {
     flex: 1,
+  },
+  textarch: {
+    fontSize: 15,
+    color: '#000000',
+    padding: 5,
+  },
+  btn5: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 40,
+    width: '80%',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  text6: {
+    fontSize: 16,
+    color: '#fb8c00',
+    textAlign: 'center',
+  },
+  textfirma: {
+    fontSize: 18,
+    color: '#000000',
+    padding: 5,
+    marginVertical: '5%',
+    textAlign: 'center',
   },
 });
 

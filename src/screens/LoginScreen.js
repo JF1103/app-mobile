@@ -90,20 +90,19 @@ const styles = StyleSheet.create({
   },
   touch: {
     textAlign: 'center',
-    marginBottom: 150,
+    marginBottom: 110,
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#b0bec5',
-    borderWidth: 0.5,
-    backgroundColor: '#ffb74d',
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    backgroundColor: '#ffffff',
     height: 50,
     justifyContent: 'center',
   },
   text: {
     fontSize: 16,
-    color: '#f5f5f5',
+    color: '#fb8c00',
     textAlign: 'center',
-    fontWeight: 'bold',
   },
 });
 
