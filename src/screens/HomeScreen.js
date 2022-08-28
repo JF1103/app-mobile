@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: '#000000',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   row: {
     backgroundColor: '#ffffff',

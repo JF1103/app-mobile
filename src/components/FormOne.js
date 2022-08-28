@@ -270,6 +270,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   icon: {
     fontSize: 40,
@@ -292,6 +293,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   selsim: {
     fontSize: 18,
@@ -299,6 +301,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   selmul: {
     fontSize: 18,
@@ -306,6 +309,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   geo: {
     fontSize: 18,
@@ -313,6 +317,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   textarea: {
     borderRadius: 10,
