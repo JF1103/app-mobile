@@ -25,9 +25,12 @@ import {
   request,
   openSettings,
 } from 'react-native-permissions';
-import RNFetchBlob from 'rn-fetch-blob';
+
+import Page from './Recaudio';
 
 export const GetFiles = ({pregunta}) => {
+  const [visualizaAudio, setvisualizaAudio] = useState(false);
+
   const checkLocationPermissions = async () => {
     let permissionStatus, permissionStatus2;
     if (Platform.OS === 'android') {
@@ -42,122 +45,17 @@ export const GetFiles = ({pregunta}) => {
       let permissionsStatus5 = await request(
         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       );
-      console.log('permiso externo1 ' + permissionsStatus);
-      console.log('permiso externo 2' + permissionsStatus2);
-      console.log('permiso externo 3' + permissionsStatus3);
-      console.log('permiso externo 4' + permissionsStatus4);
+
       permissionStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       permissionStatus2 = await check(
         PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
       );
     }
-
-    console.log('permiso externo 5' + permissionStatus);
-    console.log('permiso externo 6' + permissionStatus2);
   };
 
   useEffect(() => {
     checkLocationPermissions();
   }, []);
-
-  /*   const dirs = RNFetchBlob.fs.dirs;
-  const path = Platform.select({
-    ios: 'hello.m4a',
-    android: `${this.dirs.CacheDir}/hello.mp3`,
-  }); */
-
-  const [recState, setRecState] = useState({
-    isLoggingIn: false,
-    recordSecs: 0,
-    recordTime: '00:00:00',
-    currentPositionSec: 0,
-    currentDurationSec: 0,
-    playTime: '00:00:00',
-    duration: '00:00:00',
-  });
-
-  let audioRecorderPlayer = new AudioRecorderPlayer();
-
-  audioRecorderPlayer.setSubscriptionDuration(0.1);
-
-  const onStartRecord = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const grants = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        ]);
-
-        console.log('write external stroage', grants);
-
-        if (
-          grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          grants['android.permission.READ_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          grants['android.permission.RECORD_AUDIO'] ===
-            PermissionsAndroid.RESULTS.GRANTED
-        ) {
-          console.log('permissions granted');
-        } else {
-          console.log('All required permissions not granted');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-
-    const audioSet = {
-      AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-      AudioSourceAndroid: AudioSourceAndroidType.MIC,
-      AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-      AVNumberOfChannelsKeyIOS: 2,
-      AVFormatIDKeyIOS: AVEncodingOption.aac,
-    };
-
-    console.log('audioSet', audioSet);
-    //? Custom path
-    // const uri = await this.audioRecorderPlayer.startRecorder(
-    //   this.path,
-    //   audioSet,
-    // );
-
-    //? Default path
-    const uri = await audioRecorderPlayer.startRecorder(undefined, audioSet);
-
-    audioRecorderPlayer.addRecordBackListener(e => {
-      // console.log('record-back', e);
-      setRecState({
-        recordSecs: e.currentPosition,
-        recordTime: audioRecorderPlayer.mmssss(Math.floor(e.currentPosition)),
-      });
-    });
-    console.log(`uri: ${uri}`);
-  };
-  const onStopRecord = async () => {
-    const result = await audioRecorderPlayer.stopRecorder();
-    audioRecorderPlayer.removeRecordBackListener();
-    setRecState({
-      recordSecs: 0,
-    });
-    console.log(result);
-  };
-
-  const onPauseRecord = async () => {
-    try {
-      const r = await audioRecorderPlayer.pauseRecorder();
-      console.log(r);
-    } catch (err) {
-      console.log('pauseRecord', err);
-    }
-  };
-
-  const onResumeRecord = async () => {
-    await audioRecorderPlayer.resumeRecorder();
-  };
 
   const [tempUri, setTempUri] = useState('');
 
@@ -217,49 +115,6 @@ export const GetFiles = ({pregunta}) => {
     }, 5000);
   };
 
-  /*  return (
-    <>
-      <Text>{stateRecord.recordTime}</Text>
-      <Button
-        mode="contained"
-        icon="record"
-        onPress={() => onStartRecord()}
-        title="grabar"
-      />
-
-      <Button
-        icon="stop"
-        mode="outlined"
-        onPress={() => onStopRecord()}
-        title="STOP"
-      />
-
-      <Text>
-        {stateRecord.playTime} / {stateRecord.duration}
-      </Text>
-      <Button
-        mode="contained"
-        icon="play"
-        onPress={() => onStartPlay()}
-        title="Play"
-      />
-
-      <Button
-        icon="pause"
-        mode="contained"
-        onPress={() => onPausePlay()}
-        title="pause"
-      />
-
-      <Button
-        icon="stop"
-        mode="outlined"
-        onPress={() => onStopPlay()}
-        title="STOP"
-      />
-    </>
-  ); */
-
   return (
     <View key={pregunta.id}>
       <Text style={styles.archivo}>{pregunta.pregunta}</Text>
@@ -271,11 +126,16 @@ export const GetFiles = ({pregunta}) => {
         }}>
         <Button title="Foto" onPress={takePhoto} />
         <Button title="Video" onPress={takeVideo} />
-        <Button title="Audio" onPress={takeAudio} />
 
         <Button title="Galería" onPress={takePhotoFromGallery} />
+        <Button
+          title="Audio"
+          onPress={() => {
+            visualizaAudio ? setvisualizaAudio(false) : setvisualizaAudio(true);
+          }}
+        />
       </View>
-
+      {visualizaAudio && <Page />}
       {tempUri && (
         <Image
           source={{uri: tempUri}}

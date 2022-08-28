@@ -23,6 +23,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
 import {check, PERMISSIONS, request} from 'react-native-permissions';
 import {Maps} from './Maps';
+import Page from './Recaudio';
 
 const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud} = route.params;
@@ -179,7 +180,9 @@ const FormOne = ({navigation, route}) => {
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                       <Maps cordsOt={cordsOt} pregunta={pregunta} />
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
-                      <GetFiles pregunta={pregunta} />
+                      <>
+                        <GetFiles pregunta={pregunta} />
+                      </>
                     ) : (
                       <></>
                     )}

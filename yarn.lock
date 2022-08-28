@@ -6728,7 +6728,7 @@ react-is@^17.0.1:
 
 react-native-animated-spinkit@^1.5.2:
   version "1.5.2"
-  resolved "https://registry.npmjs.org/react-native-animated-spinkit/-/react-native-animated-spinkit-1.5.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-animated-spinkit/-/react-native-animated-spinkit-1.5.2.tgz#b1c00ecbadf48634273e6a843f8dfbcb7c006186"
   integrity sha512-YCQGR3HzEQvyaAnepiyf/hv88Sta3UIZ2CFZPtFqwu+VbFJfMgjJZniOx4157TuR5AAYajEJP9Fgy+JLIU3jzQ==
 
 react-native-audio-record@^0.2.2:
