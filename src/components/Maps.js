@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
+import { ItemSeparator } from './ItemSeparator';
 
 export const Maps = ({cordsOt, pregunta}) => {
   console.log(pregunta);
@@ -81,6 +82,7 @@ export const Maps = ({cordsOt, pregunta}) => {
           description="Some description"
         />
       </MapView>
+      <ItemSeparator />
     </View>
   );
 };
@@ -151,14 +153,14 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     marginVertical: '5%',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   geoText: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#000000',
     padding: 5,
   },
-  textarea: {
+  tarea: {
     borderRadius: 20,
     height: 50,
     alignItems: 'center',

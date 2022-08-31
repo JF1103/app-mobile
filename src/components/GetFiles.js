@@ -8,6 +8,7 @@ import {
   Image,
   Platform,
   PermissionsAndroid,
+  TouchableOpacity,
 } from 'react-native';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -27,6 +28,7 @@ import {
 } from 'react-native-permissions';
 
 import Page from './Recaudio';
+import { ItemSeparator } from './ItemSeparator';
 
 export const GetFiles = ({pregunta}) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
@@ -123,16 +125,20 @@ export const GetFiles = ({pregunta}) => {
           flexDirection: 'row',
           marginTop: 5,
         }}>
-        <Button title="Foto" onPress={takePhoto} />
-        <Button title="Video" onPress={takeVideo} />
-
-        <Button title="Galería" onPress={takePhotoFromGallery} />
-        <Button
-          title="Audio"
-          onPress={() => {
+        <TouchableOpacity style={styles.btn} onPress={takePhoto}>
+          <Text style={styles.text5}>Foto</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={takeVideo}>
+          <Text style={styles.text5}>Video</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={takePhotoFromGallery}>
+          <Text style={styles.text5}>Galería</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={() => {
             visualizaAudio ? setvisualizaAudio(false) : setvisualizaAudio(true);
-          }}
-        />
+          }}>
+          <Text style={styles.text5}>Audio</Text>
+        </TouchableOpacity>
       </View>
       {visualizaAudio && <Page />}
       {tempUri && (
@@ -145,6 +151,7 @@ export const GetFiles = ({pregunta}) => {
           }}
         />
       )}
+      <ItemSeparator />
     </View>
   );
 };
@@ -234,14 +241,13 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '5%',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   btn: {
     flex: 1,
     backgroundColor: '#ffffff',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#fb8c00',
+    borderColor: '#ffb74d',
     borderWidth: 1.0,
     height: 30,
     width: '20%',
@@ -250,7 +256,7 @@ const styles = StyleSheet.create({
   },
   text5: {
     fontSize: 16,
-    color: '#fb8c00',
+    color: '#ffb74d',
     textAlign: 'center',
   },
 });

@@ -1,17 +1,15 @@
 import React from 'react'
 import { View } from 'react-native'
 
-
 export const ItemSeparator = () => {
-   
     return (
             <View style={{
-                    borderBottomWidth: 1,
-                    opacity: 0.4,
+                    borderBottomWidth: 1.5,
                     marginVertical: 8,
-                    borderColor: '#fb8c00'
-                    
-                                }}>
-           </View>
+                    borderColor: '#fb8c00',
+                    backgroundColor: '#fb8c00',
+                    borderRadius: 30,
+                }}>
+            </View>
     )
 }

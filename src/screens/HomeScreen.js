@@ -186,8 +186,8 @@ const styles = StyleSheet.create({
     padding: '5%',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#ffb74d',
-    borderWidth: 1.0,
+    borderColor: '#fb8c00',
+    borderWidth: 2,
   },
   title: {
     fontSize: 40,
