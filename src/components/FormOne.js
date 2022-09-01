@@ -4,23 +4,18 @@ import {
   Text,
   View,
   ScrollView,
-  Button,
-  Switch,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
-import RNSingleSelect, {
-  ISingleSelectDataType,
-} from '@freakycoder/react-native-single-select';
-import RNMultiSelect, {
-  IMultiSelectDataTypes,
-} from '@freakycoder/react-native-multiple-select';
+import RNSingleSelect, { ISingleSelectDataType } from '@freakycoder/react-native-single-select';
+import RNMultiSelect, { IMultiSelectDataTypes } from '@freakycoder/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
+
+import Firma from './Firma';
 
 import {check, PERMISSIONS, request} from 'react-native-permissions';
 import {Maps} from './Maps';
@@ -29,6 +24,7 @@ import {ItemSeparator} from './ItemSeparator';
 
 const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud} = route.params;
+
 
   const cordsOt = {latitud: latitud, longitud: longitud};
   //console.log('tareas', tareas);
@@ -50,26 +46,7 @@ const FormOne = ({navigation, route}) => {
       setRespuestas(prev => ({...prev, ...data}));
     }
   };
-
-  const isSelect = React.useCallback(
-    (id, respuesta) => {
-      const resp = Object.keys(respuestas || {});
-      const hasId = resp.includes(String(id));
-      console.log(
-        'isSelect',
-        resp,
-        hasId,
-        id,
-        respuestas[String(id)],
-        respuestas[String(id)]?.respuesta,
-        respuesta,
-      );
-      return hasId && respuestas[String(id)] == respuesta;
-    },
-    [respuestas],
-  );
-
-
+  
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
 
@@ -139,6 +116,7 @@ const FormOne = ({navigation, route}) => {
                   },
                 );
 
+                
                 return (
                   <View style={styles.container2} key={index2}>
                     {pregunta.tiporespuesta === 'Seleccion Simple' ? (
@@ -186,6 +164,8 @@ const FormOne = ({navigation, route}) => {
                           }}
                         />
                         <ItemSeparator />
+
+
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                       <Maps cordsOt={cordsOt} pregunta={pregunta} />
@@ -195,12 +175,17 @@ const FormOne = ({navigation, route}) => {
                       </>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <GetFiles pregunta={pregunta} />
+
+
                     ) : pregunta.tiporespuesta === 'Firma' ? (
                       <View key={pregunta.id}>
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
                         <ItemSeparator />
+                        <Firma/>
+
+
                       </View>
                     ) : (
                       <></>

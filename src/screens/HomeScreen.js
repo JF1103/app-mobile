@@ -44,6 +44,7 @@ const HomeScreen = ({navigation}) => {
     <ScrollView>
       <View style={styles.container}>
 
+
       <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>
       <Text style={styles.text2}>Cerrar Sesión</Text>
