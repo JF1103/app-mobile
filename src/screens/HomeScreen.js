@@ -44,6 +44,7 @@ const HomeScreen = ({navigation}) => {
     <ScrollView>
       <View style={styles.container}>
 
+
       <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>
       <Text style={styles.text2}>Cerrar Sesión</Text>
@@ -186,8 +187,8 @@ const styles = StyleSheet.create({
     padding: '5%',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#ffb74d',
-    borderWidth: 1.0,
+    borderColor: '#fb8c00',
+    borderWidth: 2,
   },
   title: {
     fontSize: 40,

@@ -4,28 +4,22 @@ import {
   Text,
   View,
   ScrollView,
-  Button,
-  Switch,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
-import RNSingleSelect, {
-  ISingleSelectDataType,
-} from '@freakycoder/react-native-single-select';
-import RNMultiSelect, {
-  IMultiSelectDataTypes,
-} from '@freakycoder/react-native-multiple-select';
+import RNSingleSelect, { ISingleSelectDataType } from '@freakycoder/react-native-single-select';
+import RNMultiSelect, { IMultiSelectDataTypes } from '@freakycoder/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetFiles} from './GetFiles';
 
+import Firma from './Firma';
+
 import {check, PERMISSIONS, request} from 'react-native-permissions';
 import {Maps} from './Maps';
 import Page from './Recaudio';
-
 import {ItemSeparator} from './ItemSeparator';
 
 const FormOne = ({navigation, route}) => {
@@ -152,6 +146,7 @@ const FormOne = ({navigation, route}) => {
                   },
                 );
 
+                
                 return (
                   <View style={styles.container2} key={index2}>
                     {pregunta.tiporespuesta === 'Seleccion Simple' ? (
@@ -199,6 +194,8 @@ const FormOne = ({navigation, route}) => {
                           }}
                         />
                         <ItemSeparator />
+
+
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                       <Maps cordsOt={cordsOt} pregunta={pregunta} />
@@ -208,11 +205,17 @@ const FormOne = ({navigation, route}) => {
                       </>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <GetFiles pregunta={pregunta} />
+
+
                     ) : pregunta.tiporespuesta === 'Firma' ? (
                       <View key={pregunta.id}>
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
+                        <ItemSeparator />
+                        <Firma/>
+
+
                       </View>
                     ) : (
                       <></>
@@ -248,12 +251,12 @@ const styles = StyleSheet.create({
   row: {
     backgroundColor: '#ffffff',
     marginHorizontal: '6%',
-    marginVertical: '5%',
+    marginVertical: '1%',
     padding: '5%',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#ffb74d',
-    borderWidth: 1.0,
+    borderColor: '#fb8c00',
+    borderWidth: 2,
   },
   welcome: {
     fontSize: 18,
@@ -262,16 +265,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   icon: {
-    fontSize: 40,
+    fontSize: 30,
     marginRight: 300,
-    color: '#c88719',
-    marginTop: 20,
+    color: '#000000',
+    marginTop: 5,
   },
   title: {
     fontSize: 40,
     textAlign: 'center',
     color: '#000000',
-    marginTop: -50,
+    marginTop: -45,
   },
   container2: {
     justifyContent: 'center',
@@ -307,12 +310,10 @@ const styles = StyleSheet.create({
   textarea: {
     borderRadius: 10,
     height: 50,
-    alignItems: 'center',
     justifyContent: 'center',
     boxShadow: 5,
     borderColor: '#ffb74d',
     borderWidth: 1.0,
-    color: '#212121',
   },
   sm: {
     borderRadius: 10,
@@ -335,16 +336,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#fb8c00',
+    borderColor: '#ffb74d',
     borderWidth: 1.0,
     height: 40,
     width: '80%',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
+    marginTop: 10,
   },
   text6: {
     fontSize: 16,
-    color: '#fb8c00',
+    color: '#ffb74d',
     textAlign: 'center',
   },
   textfirma: {

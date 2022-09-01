@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from '../context/AuthContext';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState(null);
@@ -20,40 +19,35 @@ const LoginScreen = ({navigation}) => {
   console.log(password);
   return (
     <>
-      <ScrollView>
-        <Image
+      <ScrollView style={styles.scroll} >
+        <View style={styles.container}>
+          <Spinner visible={isLoading} />
+          <Image
           style={styles.img}
           resizeMode="cover"
           source={require('./../assets/img/expo-bg1.png')}
         />
-        <View style={styles.container}>
-          <Spinner visible={isLoading} />
           <View style={styles.wrapper}>
+          <Text style={styles.subtitle}>Email</Text>
             <TextInput
               style={styles.input}
               value={email}
-              placeholder="Email"
               onChangeText={text => setEmail(text)}
             />
-
+            <Text style={styles.subtitle}>Contraseña</Text>
             <TextInput
               style={styles.input}
               value={password}
-              placeholder="Contraseña"
               onChangeText={text => setPassword(text)}
               secureTextEntry
             />
-
-            <View style={styles.container2}>
               <TouchableOpacity
                 style={styles.touch}
                 onPress={() => {
                   login(email, password);
                 }}>
-                <Icon style={styles.icon} name="person-circle-outline" />
                 <Text style={styles.text}>Iniciar Sesión</Text>
               </TouchableOpacity>
-            </View>
           </View>
         </View>
       </ScrollView>
@@ -62,47 +56,57 @@ const LoginScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  img: {
-    width: 360,
-    height: 240,
-    backgroundColor: '#ffffff',
-  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: '100%',
+  },
+  img: {
+    width: '100%',
+    height: 240,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#ffffff',
+    marginBottom: 30,
+    marginTop: 30,
   },
   wrapper: {
-    width: '80%',
-    marginTop: 40,
+    width: '70%',
+    backgroundColor: '#ffffff',
+  },
+  subtitle: {
+    color: '#000000',
+    marginLeft: 10,
+    padding: 2,
   },
   input: {
-    textAlign: 'center',
     marginBottom: 12,
     paddingHorizontal: 14,
     borderRadius: 20,
     boxShadow: 5,
     borderColor: '#ffb74d',
-    borderWidth: 1.0,
-    fontWeight: 'bold',
-    color: '#212121',
+    borderWidth: 1,
+    color: '#000000',
+    textAlign: 'center',
   },
   touch: {
     textAlign: 'center',
-    marginBottom: 110,
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 1.0,
-    backgroundColor: '#ffffff',
+    borderColor: '#ffb74d',
+    borderWidth: 1,
     height: 50,
     justifyContent: 'center',
+    marginBottom: 10,
   },
   text: {
     fontSize: 16,
-    color: '#fb8c00',
+    color: '#ffb74d',
     textAlign: 'center',
+  },
+  scroll: {
+    backgroundColor: '#ffffff',
   },
 });
 
