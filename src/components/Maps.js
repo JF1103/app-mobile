@@ -19,22 +19,6 @@ export const Maps = ({cordsOt, pregunta}) => {
   const [location, setLocation] = useState({});
   let nbr_latitud = 0;
   let nbr_longitud = 0;
-  const checkLocationPermissions = async () => {
-    if (Platform.OS === 'ios') {
-      let permissionsStatus = await request(
-        PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-      );
-    }
-    if (Platform.OS === 'android') {
-      let permissionsStatus = await request(
-        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      );
-    }
-  };
-
-  useEffect(() => {
-    checkLocationPermissions();
-  }, []);
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -61,7 +45,9 @@ export const Maps = ({cordsOt, pregunta}) => {
         Latitud:{location.nbr_latitud} longitud:
         {location.nbr_longitud}
       </Text>
+      <ItemSeparator />
       <MapView
+      style={styles.map}
         showsUserLocation={true}
         style={styles.geolocalizacion}
         initialRegion={{
@@ -70,6 +56,7 @@ export const Maps = ({cordsOt, pregunta}) => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}>
+          
         <Marker
           coordinate={{
             latitude: nbr_latitud,
@@ -85,22 +72,11 @@ export const Maps = ({cordsOt, pregunta}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ffffff',
-  },
-  row: {
-    backgroundColor: '#f5f5f5',
-    marginHorizontal: '6%',
-    marginVertical: '5%',
-    padding: '5%',
-    borderRadius: 20,
+  map: {
     boxShadow: 5,
-    borderColor: '#ffb74d',
-    borderWidth: 1.0,
-    fontWeight: 'bold',
+    borderColor: '#fb8c00',
+    borderWidth: 2,
+    backgroundColor: 'red',
   },
   welcome: {
     fontSize: 18,

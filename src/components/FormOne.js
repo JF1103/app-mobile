@@ -231,8 +231,9 @@ const FormOne = ({navigation, route}) => {
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
-                        <ItemSeparator />
-                        <Firma />
+                        <Firma/>
+
+
                       </View>
                     ) : (
                       <></>
@@ -288,10 +289,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   title: {
-    fontSize: 40,
+    fontSize: 25,
     textAlign: 'center',
     color: '#000000',
-    marginTop: -45,
+    marginTop: -35,
   },
   container2: {
     justifyContent: 'center',
