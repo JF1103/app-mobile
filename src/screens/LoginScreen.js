@@ -72,13 +72,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   img: {
-    width: windowWidth,
-    height: windowHeight * 0.3,
+    width: windowWidth * 0.99,
+    height: windowHeight * 0.4,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     marginBottom: 30,
-    marginTop: 30,
   },
   wrapper: {
     width: '70%',
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginLeft: 10,
     padding: 2,
+    backgroundColor: '#ffffff', 
   },
   input: {
     marginBottom: 12,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#ffb74d',
+    borderColor: '#fb8c00',
     borderWidth: 1,
     height: 50,
     justifyContent: 'center',
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: '#ffb74d',
+    color: '#fb8c00',
     textAlign: 'center',
   },
   scroll: {

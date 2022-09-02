@@ -15,7 +15,7 @@ import {AuthContext} from '../context/AuthContext';
 import {check, PERMISSIONS, request} from 'react-native-permissions';
 
 const HomeScreen = ({navigation}) => {
-  const {userInfo} = useContext(AuthContext);
+  const {userInfo, logout} = useContext(AuthContext);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   console.log(data);
@@ -66,17 +66,6 @@ const HomeScreen = ({navigation}) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.containerb1}>
-          <TouchableOpacity style={styles.touch2} onPress={logout}>
-            <Text style={styles.text2}>Cerrar Sesión</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.touch3}>
-            <Text style={styles.text3}>CheckIn</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.touch4}>
-            <Text style={styles.text4}>CheckOut</Text>
-          </TouchableOpacity>
-        </View>
 
         <Navbar />
 

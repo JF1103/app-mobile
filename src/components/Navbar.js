@@ -1,10 +1,12 @@
 import React, {useState} from "react";
-import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, View, StyleSheet, Dimensions, useWindowDimensions } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import Botones from "./Botones";
 
 export const Navbar = () => {
-    const [visualizaNavbar, setvisualizaNavbar] = useState(false);
+    const [visualizaNavbar, setvisualizaNavbar] = useState(false)
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
 
     return (
         <>
@@ -25,9 +27,8 @@ export const Navbar = () => {
 const styles = StyleSheet.create({
     text: {
         justifyContent: 'center',
-        marginLeft: 50,
+        marginLeft: 40,
         fontSize: 25,
         color: '#000000',
-
     },
 });

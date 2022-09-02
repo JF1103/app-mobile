@@ -174,6 +174,7 @@ const FormOne = ({navigation, route}) => {
                     {pregunta.tiporespuesta === 'Seleccion Simple' ? (
                       <View key={pregunta.id}>
                         <Text style={styles.selsim}>{pregunta.pregunta}</Text>
+                        <View style={{borderColor: '#fb8c00', borderWidth: 1, borderRadius: 10}}>
                         <RNSingleSelect
                           key={pregunta.id}
                           data={data}
@@ -185,6 +186,7 @@ const FormOne = ({navigation, route}) => {
                           placeholder="Elegir opción"
                           width="100%"
                         />
+                        </View>
                         <ItemSeparator />
                       </View>
                     ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
@@ -330,7 +332,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     boxShadow: 5,
-    borderColor: '#ffb74d',
+    borderColor: '#fb8c00',
     borderWidth: 1.0,
   },
   sm: {
@@ -338,7 +340,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     boxShadow: 5,
-    borderColor: '#ffb74d',
+    borderColor: '#fb8c00',
     borderWidth: 1.0,
   },
   geolocalizacion: {
@@ -354,7 +356,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#ffb74d',
+    borderColor: '#fb8c00',
     borderWidth: 1.0,
     height: 40,
     width: '80%',
@@ -364,7 +366,7 @@ const styles = StyleSheet.create({
   },
   text6: {
     fontSize: 16,
-    color: '#ffb74d',
+    color: '#fb8c00',
     textAlign: 'center',
   },
   textfirma: {

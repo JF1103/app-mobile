@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#ffb74d',
+    borderColor: '#fb8c00',
     borderWidth: 1.0,
     height: 30,
     width: '20%',
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   text5: {
     fontSize: 16,
-    color: '#ffb74d',
+    color: '#fb8c00',
     textAlign: 'center',
   },
 });

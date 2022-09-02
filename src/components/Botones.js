@@ -69,7 +69,7 @@ const Botones = () => {
                 },
                 touch3: {
                         flex: 1,
-                        backgroundColor: '#fb8c00',
+                        backgroundColor: '#ffffff', 
                         borderRadius: 10,
                         boxShadow: 5,
                         borderColor: '#fb8c00',
@@ -82,9 +82,8 @@ const Botones = () => {
                 },
                 text3: {
                         fontSize: 15,
-                        color: '#eeeeee',
+                        color: '#fb8c00',
                         textAlign: 'center',
-                        fontWeight: 'bold',
                 },
                 touch4: {
                         flex: 1,
@@ -103,7 +102,6 @@ const Botones = () => {
                         fontSize: 15,
                         color: '#eeeeee',
                         textAlign: 'center',
-                        fontWeight: 'bold',
                 },
         });
 
