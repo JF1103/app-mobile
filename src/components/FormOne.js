@@ -25,13 +25,24 @@ import {ItemSeparator} from './ItemSeparator';
 const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud} = route.params;
 
+  const [formularioPreguntas, setFormularioPreguntas] = useState([{}]);
 
   const cordsOt = {latitud: latitud, longitud: longitud};
-  //console.log('tareas', tareas);
+
   const {userInfo} = useContext(AuthContext);
+  const [IditemSelect, setIditemSelect] = useState(0);
   const [respuestas, setRespuestas] = useState({});
   /*   const {form, onChange, setFormValue} = UseForm(); */
+
   const handleRest = (id, respuesta) => {
+    setIditemSelect(respuesta);
+
+    setRespuestas({
+      ...respuestas,
+      [id]: respuesta,
+    });
+
+    console.log('id: ' + id + ' respuesta: ' + respuesta);
     const resp = Object.keys(respuestas || {});
     const hasId = resp.includes(String(id));
     const data = {[id]: respuesta};
@@ -46,7 +57,26 @@ const FormOne = ({navigation, route}) => {
       setRespuestas(prev => ({...prev, ...data}));
     }
   };
-  
+  console.log('RESPUESTAS:' + respuestas);
+
+  const isSelect = React.useCallback(
+    (id, respuesta) => {
+      const resp = Object.keys(respuestas || {});
+      const hasId = resp.includes(String(id));
+      console.log(
+        'isSelect',
+        resp,
+        hasId,
+        id,
+        respuestas[String(id)],
+        respuestas[String(id)]?.respuesta,
+        respuesta,
+      );
+      return hasId && respuestas[String(id)] == respuesta;
+    },
+    [respuestas],
+  );
+
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
 
@@ -98,14 +128,14 @@ const FormOne = ({navigation, route}) => {
               <Text style={styles.welcome}>{tarea.formulario}</Text>
               <ItemSeparator />
               {preguntas?.map((pregunta, index2) => {
-                const IditemSelect = 0;
-
                 const data = pregunta.respuestas.map((respuesta, index) => {
                   return {
                     id: respuesta.id,
                     value: respuesta.leyenda,
                   };
                 });
+
+                console.log('data' + JSON.stringify(data));
                 const dataMulti = pregunta.respuestas.map(
                   (respuesta, index) => {
                     return {
@@ -127,7 +157,7 @@ const FormOne = ({navigation, route}) => {
                           data={data}
                           selectedItem={IditemSelect}
                           onSelect={item => {
-                            handleRest(pregunta.id, item.value);
+                            handleRest(pregunta.id, item.id);
                           }}
                           placeholder="Elegir opción"
                           width="100%"
