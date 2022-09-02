@@ -26,8 +26,9 @@ class Firma extends Component {
                     showNativeButtons={false}
                     showTitleLabel={false}
                     viewMode={"portrait"}/>
-                    <ItemSeparator/>
- 
+
+<ItemSeparator/>
+
                 <View style={{ flexDirection: "row" }}>
                     <TouchableHighlight style={styles.buttonStyle}
                         onPress={() => { this.saveSign() } } >
@@ -65,12 +66,17 @@ class Firma extends Component {
 }
  
 const styles = StyleSheet.create({
+    marco: {
+    backgroundColor: '#ffffff',
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 2,
+    },
     signature: {
         borderWidth: 1.5,
-        height: 150,
+        height: 200,
         boxShadow: 5,
         borderColor: '#fb8c00',
-        marginBottom: 20,
     },
     buttonStyle: {
         flex: 1,
@@ -82,6 +88,7 @@ const styles = StyleSheet.create({
         height: 30,
         justifyContent: 'center',
         marginHorizontal: 40,
+        marginBottom: 10,
     },
     text: {
         fontSize: 16,

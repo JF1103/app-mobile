@@ -7,14 +7,37 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import Botones from '../components/Botones';
 import { ItemSeparator } from '../components/ItemSeparator';
+import { Navbar } from '../components/Navbar';
+import { Ruta } from '../components/Ruta';
 import {AuthContext} from '../context/AuthContext';
+import {check, PERMISSIONS, request} from 'react-native-permissions';
 
 const HomeScreen = ({navigation}) => {
-  const {userInfo, logout} = useContext(AuthContext);
+  const {userInfo} = useContext(AuthContext);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   console.log(data);
+
+  const checkLocationPermissions = async () => {
+    if (Platform.OS === 'ios') {
+      let permissionsStatus = await request(
+        PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+      );
+      console.log('permiso' + permissionsStatus);
+    }
+    if (Platform.OS === 'android') {
+      let permissionsStatus = await request(
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      );
+      console.log('permiso' + permissionsStatus);
+    }
+  };
+
+  useEffect(() => {
+    checkLocationPermissions();
+  }, []);
 
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
@@ -44,21 +67,10 @@ const HomeScreen = ({navigation}) => {
     <ScrollView>
       <View style={styles.container}>
 
-
-      <View style={styles.containerb1}>
-      <TouchableOpacity style={styles.touch2} onPress={logout}>
-      <Text style={styles.text2}>Cerrar Sesión</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.touch3}>
-      <Text style={styles.text3}>CheckIn</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.touch4}>
-      <Text style={styles.text4}>CheckOut</Text>
-      </TouchableOpacity>
-      </View>
+        <Navbar />
 
         {isLoading && <ActivityIndicator size="large" color="blue" />}
-        <Text style={styles.title}>Agenda de Tareas</Text>
+        
         {!isLoading &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
@@ -76,7 +88,7 @@ const HomeScreen = ({navigation}) => {
 
                 <View style={styles.containerb2}>
                   
-                <TouchableOpacity style={styles.btn1}>
+                <TouchableOpacity style={styles.btn1} onPress={() => {navigation.navigate('Ruta', {latitud, longitud})}}>
                     <Text style={styles.text}>Iniciar Ruta</Text>
                 </TouchableOpacity>
                 
@@ -101,16 +113,8 @@ const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
-  },
-  containerb1: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    margin: 10,
   },
   containerb2: {
     flexDirection: 'row',
@@ -118,51 +122,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 30,
     alignItems: 'center',
-  },
-  text2: {
-    flex: 1,
-    fontSize: 15,
-    color: '#eeeeee',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  touch2: {
-    flex: 1,
-    backgroundColor: '#bb002f',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
-  },
-  text3: {
-    lex: 1,
-    fontSize: 15,
-    color: '#eeeeee',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  touch3: {
-    flex: 1,
-    backgroundColor: '#320b86',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
-  },
-  text4: {
-    lex: 1,
-    fontSize: 15,
-    color: '#eeeeee',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  touch4: {
-    flex: 1,
-    backgroundColor: '#29434e',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
   },
   text: {
     fontSize: 16,
@@ -189,11 +148,6 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 2,
-  },
-  title: {
-    fontSize: 40,
-    textAlign: 'center',
-    color: '#000000',
   },
   btn1: {
     flex: 1,

@@ -4,7 +4,7 @@ import { View } from 'react-native'
 export const ItemSeparator = () => {
     return (
             <View style={{
-                    borderBottomWidth: 1.5,
+                    borderBottomWidth: 2,
                     marginVertical: 8,
                     borderColor: '#fb8c00',
                     backgroundColor: '#fb8c00',

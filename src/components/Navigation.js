@@ -7,6 +7,7 @@ import LoginScreen from '../screens/LoginScreen';
 import {AuthContext} from '../context/AuthContext';
 import SplashScreen from '../screens/SplashScreen';
 import FormOne from './FormOne';
+import { Ruta } from './Ruta';
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
@@ -39,6 +40,11 @@ const Navigation = () => {
         <Stack.Screen
           name="FormOne"
           component={FormOne}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Ruta"
+          component={Ruta}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
