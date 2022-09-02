@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { ItemSeparator } from '../components/ItemSeparator';
+import {ItemSeparator} from '../components/ItemSeparator';
 import {AuthContext} from '../context/AuthContext';
 
 const HomeScreen = ({navigation}) => {
@@ -19,9 +19,9 @@ const HomeScreen = ({navigation}) => {
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
 
-  const printButtonLabel = (item) => {
+  const printButtonLabel = item => {
     console.log(item);
-  }
+  };
 
   useEffect(() => {
     fetch(
@@ -43,19 +43,17 @@ const HomeScreen = ({navigation}) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-
-
-      <View style={styles.containerb1}>
-      <TouchableOpacity style={styles.touch2} onPress={logout}>
-      <Text style={styles.text2}>Cerrar Sesión</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.touch3}>
-      <Text style={styles.text3}>CheckIn</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.touch4}>
-      <Text style={styles.text4}>CheckOut</Text>
-      </TouchableOpacity>
-      </View>
+        <View style={styles.containerb1}>
+          <TouchableOpacity style={styles.touch2} onPress={logout}>
+            <Text style={styles.text2}>Cerrar Sesión</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.touch3}>
+            <Text style={styles.text3}>CheckIn</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.touch4}>
+            <Text style={styles.text4}>CheckOut</Text>
+          </TouchableOpacity>
+        </View>
 
         {isLoading && <ActivityIndicator size="large" color="blue" />}
         <Text style={styles.title}>Agenda de Tareas</Text>
@@ -65,31 +63,35 @@ const HomeScreen = ({navigation}) => {
             return (
               <View style={styles.row} key={employee?.id}>
                 <Text style={styles.welcome}>{employee?.fecha}</Text>
-                <ItemSeparator/>
+                <ItemSeparator />
                 <Text style={styles.welcome}>{employee?.cliente}</Text>
-                <ItemSeparator/>
+                <ItemSeparator />
                 <Text style={styles.welcome}>{employee?.sucursal}</Text>
-                <ItemSeparator/>
+                <ItemSeparator />
                 <Text style={styles.welcome}>{employee?.actividad}</Text>
-                <ItemSeparator/>
+                <ItemSeparator />
                 <Text style={styles.welcome}>{employee?.nivel}</Text>
 
                 <View style={styles.containerb2}>
-                  
-                <TouchableOpacity style={styles.btn1}>
+                  <TouchableOpacity style={styles.btn1}>
                     <Text style={styles.text}>Iniciar Ruta</Text>
-                </TouchableOpacity>
-                
-                
-                <TouchableOpacity style={styles.btn2} onPress={() => {
-                    const aux = employee['0'];
-                    const tareas = aux.tareas?.find(i => i);
-                    navigation.navigate('FormOne', {tareas, latitud, longitud});
-                  }}>
-                    <Text style={styles.text1}>Iniciar Tarea</Text>
-                </TouchableOpacity>
-                </View>
+                  </TouchableOpacity>
 
+                  <TouchableOpacity
+                    style={styles.btn2}
+                    onPress={() => {
+                      const aux = employee['0'];
+                      const tareas = aux.tareas?.find(i => i);
+                      navigation.navigate('FormOne', {
+                        employee,
+                        tareas,
+                        latitud,
+                        longitud,
+                      });
+                    }}>
+                    <Text style={styles.text1}>Iniciar Tarea</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             );
           })}

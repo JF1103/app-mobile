@@ -7,8 +7,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
-import RNSingleSelect, { ISingleSelectDataType } from '@freakycoder/react-native-single-select';
-import RNMultiSelect, { IMultiSelectDataTypes } from '@freakycoder/react-native-multiple-select';
+import RNSingleSelect, {
+  ISingleSelectDataType,
+} from '@freakycoder/react-native-single-select';
+import RNMultiSelect, {
+  IMultiSelectDataTypes,
+} from '@freakycoder/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -23,26 +27,47 @@ import Page from './Recaudio';
 import {ItemSeparator} from './ItemSeparator';
 
 const FormOne = ({navigation, route}) => {
-  const {tareas, latitud, longitud} = route.params;
+  const {tareas, latitud, longitud, employee} = route.params;
+  const initialFormState = {
+    id_ot: employee.id,
+    fecha: employee.fecha,
+    fechafin: employee.fechafin,
+    preguntas: [],
+  };
 
-  const [formularioPreguntas, setFormularioPreguntas] = useState([{}]);
+  const [formularioPreguntas, setFormularioPreguntas] =
+    useState(initialFormState);
+  useState;
+
+  const [selectedItem, setSelectedItem] = useState();
+  const [respuestas, setRespuestas] = useState();
 
   const cordsOt = {latitud: latitud, longitud: longitud};
 
   const {userInfo} = useContext(AuthContext);
   const [IditemSelect, setIditemSelect] = useState(0);
-  const [respuestas, setRespuestas] = useState({});
+
   /*   const {form, onChange, setFormValue} = UseForm(); */
 
-  const handleRest = (id, respuesta) => {
-    setIditemSelect(respuesta);
+  const handleRest = (id, respuesta, tipo) => {
+    switch (tipo) {
+      case 'texto':
+        console.log('entre texto');
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          preguntas: formularioPreguntas.preguntas.map(pregunta =>
+            pregunta.id === id ? {id: id, respuesta: respuesta} : pregunta,
+          ),
+        });
+        break;
+      case 'Multiple':
+        break;
+      case 'Simple':
+        break;
+    }
 
-    setRespuestas({
-      ...respuestas,
-      [id]: respuesta,
-    });
+    console.log(formularioPreguntas.preguntas[0]);
 
-    console.log('id: ' + id + ' respuesta: ' + respuesta);
     const resp = Object.keys(respuestas || {});
     const hasId = resp.includes(String(id));
     const data = {[id]: respuesta};
@@ -57,9 +82,8 @@ const FormOne = ({navigation, route}) => {
       setRespuestas(prev => ({...prev, ...data}));
     }
   };
-  console.log('RESPUESTAS:' + respuestas);
 
-  const isSelect = React.useCallback(
+  /* const isSelect = React.useCallback(
     (id, respuesta) => {
       const resp = Object.keys(respuestas || {});
       const hasId = resp.includes(String(id));
@@ -75,7 +99,7 @@ const FormOne = ({navigation, route}) => {
       return hasId && respuestas[String(id)] == respuesta;
     },
     [respuestas],
-  );
+  ); */
 
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
@@ -135,7 +159,6 @@ const FormOne = ({navigation, route}) => {
                   };
                 });
 
-                console.log('data' + JSON.stringify(data));
                 const dataMulti = pregunta.respuestas.map(
                   (respuesta, index) => {
                     return {
@@ -146,7 +169,6 @@ const FormOne = ({navigation, route}) => {
                   },
                 );
 
-                
                 return (
                   <View style={styles.container2} key={index2}>
                     {pregunta.tiporespuesta === 'Seleccion Simple' ? (
@@ -155,9 +177,10 @@ const FormOne = ({navigation, route}) => {
                         <RNSingleSelect
                           key={pregunta.id}
                           data={data}
+                          initialValue={selectedItem}
                           selectedItem={IditemSelect}
-                          onSelect={item => {
-                            handleRest(pregunta.id, item.id);
+                          onSelect={selectedItem => {
+                            handleRest(pregunta.id, selectedItem, 'Simple');
                           }}
                           placeholder="Elegir opción"
                           width="100%"
@@ -173,7 +196,7 @@ const FormOne = ({navigation, route}) => {
                           disableAbsolute
                           data={dataMulti}
                           onSelect={selectedItems =>
-                            console.log('SelectedItems: ', selectedItems)
+                            handleRest(pregunta.id, selectedItems, 'multiple')
                           }
                           placeholder="Elegir opción"
                         />
@@ -190,12 +213,10 @@ const FormOne = ({navigation, route}) => {
                           exceedCharCountColor="#990606"
                           placeholder={'Escriba aquí ...'}
                           onChangeText={text => {
-                            pregunta.respuestas[0] = text;
+                            handleRest(pregunta.id, text, 'texto');
                           }}
                         />
                         <ItemSeparator />
-
-
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                       <Maps cordsOt={cordsOt} pregunta={pregunta} />
@@ -205,17 +226,13 @@ const FormOne = ({navigation, route}) => {
                       </>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <GetFiles pregunta={pregunta} />
-
-
                     ) : pregunta.tiporespuesta === 'Firma' ? (
                       <View key={pregunta.id}>
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
                         <ItemSeparator />
-                        <Firma/>
-
-
+                        <Firma />
                       </View>
                     ) : (
                       <></>

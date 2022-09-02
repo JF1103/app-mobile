@@ -7,9 +7,14 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  useWindowDimensions,
+  Dimensions,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from '../context/AuthContext';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState(null);
@@ -19,17 +24,21 @@ const LoginScreen = ({navigation}) => {
   console.log(password);
   return (
     <>
-      <ScrollView style={styles.scroll} >
+      <ScrollView style={styles.scroll}>
         <View style={styles.container}>
           <Spinner visible={isLoading} />
           <Image
-          style={styles.img}
-          resizeMode="cover"
-          source={require('./../assets/img/expo-bg1.png')}
-        />
+            style={styles.img}
+            resizeMode="cover"
+            source={require('./../assets/img/expo-bg1.png')}
+          />
           <View style={styles.wrapper}>
-          <Text style={styles.subtitle}>Email</Text>
+            <Text style={styles.subtitle}>Email</Text>
             <TextInput
+              keyboardType="email-address"
+              autoCompleteType="email"
+              autoCorrect={false}
+              autoFocus={true}
               style={styles.input}
               value={email}
               onChangeText={text => setEmail(text)}
@@ -41,13 +50,13 @@ const LoginScreen = ({navigation}) => {
               onChangeText={text => setPassword(text)}
               secureTextEntry
             />
-              <TouchableOpacity
-                style={styles.touch}
-                onPress={() => {
-                  login(email, password);
-                }}>
-                <Text style={styles.text}>Iniciar Sesión</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.touch}
+              onPress={() => {
+                login(email, password);
+              }}>
+              <Text style={styles.text}>Iniciar Sesión</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -57,14 +66,14 @@ const LoginScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%',
+    height: windowHeight,
+    backgroundColor: '#ffffff',
   },
   img: {
-    width: '100%',
-    height: 240,
+    width: windowWidth,
+    height: windowHeight * 0.3,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',

@@ -13,10 +13,9 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
-import { ItemSeparator } from './ItemSeparator';
+import {ItemSeparator} from './ItemSeparator';
 
 export const Maps = ({cordsOt, pregunta}) => {
-  console.log(pregunta);
   const [location, setLocation] = useState({});
   let nbr_latitud = 0;
   let nbr_longitud = 0;
@@ -25,13 +24,11 @@ export const Maps = ({cordsOt, pregunta}) => {
       let permissionsStatus = await request(
         PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
       );
-      console.log('permiso' + permissionsStatus);
     }
     if (Platform.OS === 'android') {
       let permissionsStatus = await request(
         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       );
-      console.log('permiso' + permissionsStatus);
     }
   };
 
