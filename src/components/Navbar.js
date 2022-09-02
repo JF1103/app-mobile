@@ -3,10 +3,12 @@ import { TouchableOpacity, Text, View, StyleSheet, Dimensions, useWindowDimensio
 import Icon from 'react-native-vector-icons/Ionicons';
 import Botones from "./Botones";
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 export const Navbar = () => {
     const [visualizaNavbar, setvisualizaNavbar] = useState(false)
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
+    
 
     return (
         <>
@@ -30,5 +32,6 @@ const styles = StyleSheet.create({
         marginLeft: 40,
         fontSize: 25,
         color: '#000000',
+        width: windowWidth,
     },
 });

@@ -35,6 +35,8 @@ const FormOne = ({navigation, route}) => {
     preguntas: [],
   };
 
+  const [visualizaFirma, setvisualizaFirma] = useState(false)
+
   const [formularioPreguntas, setFormularioPreguntas] =
     useState(initialFormState);
   useState;
@@ -233,7 +235,8 @@ const FormOne = ({navigation, route}) => {
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
-                        <Firma/>
+
+                          <Firma/>
 
 
                       </View>

@@ -1,63 +1,89 @@
-var React = require('react');
-var ReactNative = require('react-native');
+import React, {Component, useState, useRef} from 'react';
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
 import {ItemSeparator} from './ItemSeparator';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-var {Component} = React;
+const Firma = () => {
+  const [visualizaFirma, setVisualizaFirma] = useState(false);
+  console.log(visualizaFirma);
+  const saveBtn = useRef(null);
+  const height = visualizaFirma ? '100%' : 0;
+  const stylesE = StyleSheet.create(
+    visualizaFirma === true
+      ? {height: 260}
+      : {height: 0, width: 0, borderColor: 'transparent'},
+  );
 
-var {AppRegistry, StyleSheet, Text, View, TouchableHighlight} = ReactNative;
+  return (
+    <>
+      <TouchableOpacity
+        onPress={() => {
+          visualizaFirma ? setVisualizaFirma(false) : setVisualizaFirma(true);
+        }}>
+        <Icon name="reorder-three-outline" size={40} color="#000000" />
+      </TouchableOpacity>
+      <View style={{...styles.marco, ...stylesE}}>
+        <SignatureCapture
+          ref={saveBtn}
+          style={{...styles.signature}}
+          onSaveEvent={_onSaveEvent}
+          onDragEvent={_onDragEvent}
+          saveImageFileInExtStorage={false}
+          showNativeButtons={false}
+          showTitleLabel={false}
+          viewMode={'portrait'}
+        />
 
-class Firma extends Component {
-    render() {
-        return (
-            <View style={styles.marco}>
-                <SignatureCapture
-                    style={styles.signature}
-                    ref="sign"
-                    onSaveEvent={this._onSaveEvent}
-                    onDragEvent={this._onDragEvent}
-                    saveImageFileInExtStorage={false}
-                    showNativeButtons={false}
-                    showTitleLabel={false}
-                    viewMode={"portrait"}/>
+        <ItemSeparator />
 
-<ItemSeparator/>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableHighlight
+            style={styles.buttonStyle}
+            onPress={() => {
+              saveSign(saveBtn);
+            }}>
+            <Text style={styles.text}>Guardar</Text>
+          </TouchableHighlight>
 
-                <View style={{ flexDirection: "row" }}>
-                    <TouchableHighlight style={styles.buttonStyle}
-                        onPress={() => { this.saveSign() } } >
-                        <Text style={styles.text}>Guardar</Text>
-                    </TouchableHighlight>
- 
-                    <TouchableHighlight style={styles.buttonStyle}
-                        onPress={() => { this.resetSign() } } >
-                        <Text style={styles.text}>Borrar</Text>
-                    </TouchableHighlight>
- 
-                </View>
- 
-            </View>
-        );
-    }
- 
-    saveSign() {
-        this.refs["sign"].saveImage();
-    }
- 
-    resetSign() {
-        this.refs["sign"].resetImage();
-    }
- 
-    _onSaveEvent(result) {
-        //result.encoded - for the base64 encoded png
-        //result.pathName - for the file path name
-        console.log(result);
-    }
-    _onDragEvent() {
-         // This callback will be called when the user enters signature
-        console.log("dragged");
-    }
-}
+          <TouchableHighlight
+            style={styles.buttonStyle}
+            onPress={() => {
+              resetSign(saveBtn);
+            }}>
+            <Text style={styles.text}>Borrar</Text>
+          </TouchableHighlight>
+        </View>
+      </View>
+    </>
+  );
+};
+const saveSign = saveBtn => {
+  saveBtn.current.saveImage();
+};
+
+const resetSign = saveBtn => {
+  saveBtn.current.resetImage();
+};
+
+const _onSaveEvent = result => {
+  //result.encoded - for the base64 encoded png
+  //result.pathName - for the file path name
+  console.log(result);
+};
+const _onDragEvent = () => {
+  // This callback will be called when the user enters signature
+  console.log('dragged');
+};
+        
+        
 
 const styles = StyleSheet.create({
     marco: {
@@ -91,6 +117,6 @@ const styles = StyleSheet.create({
     },
 });
 
-AppRegistry.registerComponent('Firma', () => Firma);
-
 export default Firma;
+
+

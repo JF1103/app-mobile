@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 20,
     boxShadow: 5,
-    borderColor: '#ffb74d',
+    borderColor: '#fb8c00',
     borderWidth: 1,
     color: '#000000',
     textAlign: 'center',
