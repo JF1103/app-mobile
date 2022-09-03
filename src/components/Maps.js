@@ -15,7 +15,12 @@ import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import {ItemSeparator} from './ItemSeparator';
 
-export const Maps = ({cordsOt, pregunta}) => {
+export const Maps = ({
+  cordsOt,
+  pregunta,
+  formularioPreguntas,
+  setFormularioPreguntas,
+}) => {
   const [location, setLocation] = useState({});
   let nbr_latitud = 0;
   let nbr_longitud = 0;
@@ -29,15 +34,39 @@ export const Maps = ({cordsOt, pregunta}) => {
         });
       },
 
-      /* ,
-          err => {
-            console.log('entre error');
-            console.log(err);
-          },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}, */
+      err => {
+        console.log('entre error');
+        console.log(err);
+      },
     );
   }, []);
 
+  useEffect(() => {
+    handleRespLocation(pregunta.id, location, pregunta.tiporespuesta);
+  }, [location]);
+
+  const handleRespLocation = (id, respuesta, tipo) => {
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+
+    if (index === -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: respuesta},
+        ],
+      });
+    } else {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
+        ),
+      });
+    }
+  };
   return (
     <View key={pregunta.id} style={{height: 300}}>
       <Text style={styles.geo}>{pregunta.pregunta}</Text>
@@ -46,27 +75,31 @@ export const Maps = ({cordsOt, pregunta}) => {
         {location.nbr_longitud}
       </Text>
       <ItemSeparator />
-      <MapView
-      style={styles.map}
-        showsUserLocation={true}
-        style={styles.geolocalizacion}
-        initialRegion={{
-          latitude: location.nbr_latitud,
-          longitude: location.nbr_longitud,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}>
-          
-        <Marker
-          coordinate={{
-            latitude: nbr_latitud,
-            longitude: nbr_longitud,
-          }}
-          title="My Marker"
-          description="Some description"
-        />
-      </MapView>
-      <ItemSeparator />
+      {location.nbr_latitud && location.nbr_longitud ? (
+        <>
+          <MapView
+            showsUserLocation={true}
+            style={styles.geolocalizacion}
+            initialRegion={{
+              latitude: location.nbr_latitud,
+              longitude: location.nbr_longitud,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}>
+            <Marker
+              coordinate={{
+                latitude: nbr_latitud,
+                longitude: nbr_longitud,
+              }}
+              title="My Marker"
+              description="Some description"
+            />
+          </MapView>
+          <ItemSeparator />
+        </>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };

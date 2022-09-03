@@ -20,7 +20,6 @@ const Firma = ({
 }) => {
   const [visualizaFirma, setVisualizaFirma] = useState(false);
 
-  console.log('firma' + JSON.stringify(formularioPreguntas));
   const saveSign = saveBtn => {
     saveBtn.current.saveImage();
   };
@@ -31,7 +30,7 @@ const Firma = ({
     const index = formularioPreguntas.preguntas.findIndex(
       item => item.id === preguntaid,
     );
-    console.log(JSON.stringify(formularioPreguntas.preguntas));
+
     if (index > -1) {
       const auxform = formularioPreguntas.pregunta;
     }
@@ -68,7 +67,7 @@ const Firma = ({
     const index = formularioPreguntas.preguntas.findIndex(
       pregunta => pregunta.id === id,
     );
-    console.log('index', index);
+
     if (index === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,

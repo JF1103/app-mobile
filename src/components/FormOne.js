@@ -25,6 +25,7 @@ import {check, PERMISSIONS, request} from 'react-native-permissions';
 import {Maps} from './Maps';
 import Page from './Recaudio';
 import {ItemSeparator} from './ItemSeparator';
+import Geolocation from '@react-native-community/geolocation';
 
 const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud, employee} = route.params;
@@ -40,20 +41,19 @@ const FormOne = ({navigation, route}) => {
 
   const [selectedItem, setSelectedItem] = useState();
   const [respuestas, setRespuestas] = useState();
-  console.log(selectedItem);
 
   const cordsOt = {latitud: latitud, longitud: longitud};
 
   const {userInfo} = useContext(AuthContext);
   const [IditemSelect, setIditemSelect] = useState(0);
-
+  const [location, setLocation] = useState({});
   /*   const {form, onChange, setFormValue} = UseForm(); */
-  /*  console.log(JSON.stringify(formularioPreguntas)); */
+  console.log(JSON.stringify(formularioPreguntas));
   const handleResptext = (id, respuesta, tipo) => {
     const index = formularioPreguntas.preguntas.findIndex(
       pregunta => pregunta.id === id,
     );
-    console.log('index', index);
+
     if (index === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
@@ -76,7 +76,7 @@ const FormOne = ({navigation, route}) => {
     const index = formularioPreguntas.preguntas.findIndex(
       pregunta => pregunta.id === id,
     );
-    console.log('index', index);
+
     if (index === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
@@ -99,7 +99,7 @@ const FormOne = ({navigation, route}) => {
     const index = formularioPreguntas.preguntas.findIndex(
       pregunta => pregunta.id === id,
     );
-    console.log('index', index);
+
     if (index === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
@@ -131,37 +131,7 @@ const FormOne = ({navigation, route}) => {
           <Icon style={styles.icon} name="arrow-back-outline" />
         </TouchableOpacity>
         <Text style={styles.title}>Formulario</Text>
-        {/* {tareas?.formularios?.map((tarea, index) => {
-          const preguntas = tarea.preguntas;
-          return (
-            <View style={styles.row} key={index}>
-              <Text style={styles.welcome}>{tarea.formulario}</Text>
-              {preguntas?.map((pregunta, index) => {
-                return (
-                  <View key={pregunta.id}>
-                    <Text>{pregunta.pregunta}</Text>
-                    {pregunta?.respuestas?.map((respuesta, index) => {
-                      return (
-                        <Button
-                          key={respuesta.id}
-                          title={respuesta?.respuesta}
-                          color={
-                            isSelect(pregunta.id, respuesta.respuesta)
-                              ? 'red'
-                              : 'green'
-                          }
-                          onPress={() =>
-                            handleRest(pregunta.id, respuesta.respuesta)
-                          }
-                        />
-                      );
-                    })}
-                  </View>
-                );
-              })}
-            </View>
-          );
-        })} */}
+
         {tareas?.formularios?.map((tarea, index) => {
           const preguntas = tarea.preguntas;
           return (
@@ -249,19 +219,32 @@ const FormOne = ({navigation, route}) => {
                           exceedCharCountColor="#990606"
                           placeholder={'Escriba aquí ...'}
                           onChangeText={text => {
-                            handleResptext(pregunta.id, text, 'texto');
+                            handleResptext(
+                              pregunta.id,
+                              text,
+                              pregunta.tiporespuesta,
+                            );
                           }}
                         />
                         <ItemSeparator />
                       </View>
                     ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
-                      <Maps cordsOt={cordsOt} pregunta={pregunta} />
-                    ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <>
-                        <GetFiles pregunta={pregunta} />
+                        <Maps
+                          cordsOt={cordsOt}
+                          pregunta={pregunta}
+                          formularioPreguntas={formularioPreguntas}
+                          setFormularioPreguntas={setFormularioPreguntas}
+                        />
                       </>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
-                      <GetFiles pregunta={pregunta} />
+                      <>
+                        <GetFiles
+                          pregunta={pregunta}
+                          formularioPreguntas={formularioPreguntas}
+                          setFormularioPreguntas={setFormularioPreguntas}
+                        />
+                      </>
                     ) : pregunta.tiporespuesta === 'Firma' ? (
                       <View key={pregunta.id}>
                         <Text style={styles.textfirma}>
@@ -278,8 +261,6 @@ const FormOne = ({navigation, route}) => {
                     ) : (
                       <></>
                     )}
-                    {/* <View>
-                    </View> */}
                   </View>
                 );
               })}
@@ -290,7 +271,8 @@ const FormOne = ({navigation, route}) => {
         <TouchableOpacity
           style={styles.btn5}
           onPress={() => {
-            navigation.navigate('');
+            handleRespLocation('gfgf', 'gfg');
+            /*   navigation.navigate(''); */
           }}>
           <Text style={styles.text6}>Enviar formulario</Text>
         </TouchableOpacity>

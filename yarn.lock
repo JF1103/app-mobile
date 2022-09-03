@@ -6721,7 +6721,7 @@ react-native-animated-spinkit@^1.5.2:
 
 react-native-audio-record@^0.2.2:
   version "0.2.2"
-  resolved "https://registry.npmjs.org/react-native-audio-record/-/react-native-audio-record-0.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-audio-record/-/react-native-audio-record-0.2.2.tgz#9cbb0ddd3cbdd18f5edfabae812c0bc9c680e928"
   integrity sha512-+JEY3AWz21xylePbXZ81DLHcqU5oJYztn3Uel3ay53P3ZrvJlwfmOmyOuoavA9boPV1O0dLLQIu9gC7xbKwNvQ==
 
 react-native-audio-recorder-player@^3.5.1:

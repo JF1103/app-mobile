@@ -27,10 +27,14 @@ import {
   openSettings,
 } from 'react-native-permissions';
 
-import Page from './Recaudio';
-import { ItemSeparator } from './ItemSeparator';
+import {ItemSeparator} from './ItemSeparator';
+import Recaudio from './Recaudio';
 
-export const GetFiles = ({pregunta}) => {
+export const GetFiles = ({
+  pregunta,
+  formularioPreguntas,
+  setFormularioPreguntas,
+}) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
 
   const checkLocationPermissions = async () => {
@@ -67,12 +71,20 @@ export const GetFiles = ({pregunta}) => {
         mediaType: 'photo',
         quality: 0.5,
         saveToPhotos: true,
+        includeBase64: true,
       },
       resp => {
         if (resp.didCancel) return;
         if (resp.assets[0].uri) {
-          console.log('entre');
+          /* console.log(resp.assets[0].base64); */
+
           resp.assets[0] && setTempUri(resp.assets[0].uri);
+          resp.assets[0] &&
+            handleRespFoto(
+              pregunta.id,
+              resp.assets[0].base64,
+              pregunta.tiporespuesta,
+            );
         } else return;
       },
     );
@@ -82,12 +94,14 @@ export const GetFiles = ({pregunta}) => {
     launchCamera(
       {
         mediaType: 'video',
-        quality: 0.5,
+        durationLimit: 6,
+        videoQuality: 'low',
+        saveToPhotos: true,
       },
       resp => {
+        console.log(resp);
         if (resp.didCancel) return;
         if (resp.assets[0].uri) {
-          console.log('entre');
           setTempUri(resp.assets[0].uri);
         } else return;
       },
@@ -100,21 +114,42 @@ export const GetFiles = ({pregunta}) => {
         mediaType: 'mixed',
         saveToPhotos: true,
         quality: 0.5,
+        includeBase64: true,
       },
       resp => {
         if (resp.didCancel) return;
-        if (!resp.uri) return;
-        setTempUri(resp.uri);
+
+        if (!resp.assets[0].uri) return;
+        setTempUri(resp.assets[0].uri);
+        handleRespFoto(
+          pregunta.id,
+          resp.assets[0].base64,
+          pregunta.tiporespuesta,
+        );
       },
     );
   };
 
-  const takeAudio = () => {
-    onStartRecord();
-
-    setTimeout(() => {
-      onStopRecord();
-    }, 5000);
+  const handleRespFoto = (id, respuesta, tipo) => {
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+    if (index !== -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
+        ),
+      });
+    } else {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: respuesta},
+        ],
+      });
+    }
   };
 
   return (
@@ -134,13 +169,15 @@ export const GetFiles = ({pregunta}) => {
         <TouchableOpacity style={styles.btn} onPress={takePhotoFromGallery}>
           <Text style={styles.text5}>Galería</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={() => {
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => {
             visualizaAudio ? setvisualizaAudio(false) : setvisualizaAudio(true);
           }}>
           <Text style={styles.text5}>Audio</Text>
         </TouchableOpacity>
       </View>
-      {visualizaAudio && <Page />}
+      {visualizaAudio && <Recaudio />}
       {tempUri && (
         <Image
           source={{uri: tempUri}}
