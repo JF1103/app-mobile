@@ -1,96 +1,166 @@
-var React = require('react');
-var ReactNative = require('react-native');
+import React, {Component, useState, useRef} from 'react';
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
 import {ItemSeparator} from './ItemSeparator';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-var {Component} = React;
+const Firma = ({
+  preguntaid,
+  formularioPreguntas,
+  setFormularioPreguntas,
+  preguntatiporespuesta,
+}) => {
+  const [visualizaFirma, setVisualizaFirma] = useState(false);
 
-var {AppRegistry, StyleSheet, Text, View, TouchableHighlight} = ReactNative;
+  console.log('firma' + JSON.stringify(formularioPreguntas));
+  const saveSign = saveBtn => {
+    saveBtn.current.saveImage();
+  };
 
-class Firma extends Component {
-    render() {
-        return (
-            <View style={styles.marco}>
-                <SignatureCapture
-                    style={styles.signature}
-                    ref="sign"
-                    onSaveEvent={this._onSaveEvent}
-                    onDragEvent={this._onDragEvent}
-                    saveImageFileInExtStorage={false}
-                    showNativeButtons={false}
-                    showTitleLabel={false}
-                    viewMode={"portrait"}/>
+  const resetSign = saveBtn => {
+    saveBtn.current.resetImage();
+    //eliminr firma
+    const index = formularioPreguntas.preguntas.findIndex(
+      item => item.id === preguntaid,
+    );
+    console.log(JSON.stringify(formularioPreguntas.preguntas));
+    if (index > -1) {
+      const auxform = formularioPreguntas.pregunta;
+    }
 
-<ItemSeparator/>
+    setFormularioPreguntas({
+      ...formularioPreguntas,
+      preguntas: [
+        ...formularioPreguntas.preguntas.filter(item => item.id !== preguntaid),
+      ],
+    });
+  };
+  const saveBtn = useRef(null);
+  const height = visualizaFirma ? '100%' : 0;
+  const stylesE = StyleSheet.create(
+    visualizaFirma === true
+      ? {height: 280}
+      : {height: 0, width: 0, borderColor: 'transparent'},
+  );
 
-                <View style={{ flexDirection: "row" }}>
-                    <TouchableHighlight style={styles.buttonStyle}
-                        onPress={() => { this.saveSign() } } >
-                        <Text style={styles.text}>Guardar</Text>
-                    </TouchableHighlight>
- 
-                    <TouchableHighlight style={styles.buttonStyle}
-                        onPress={() => { this.resetSign() } } >
-                        <Text style={styles.text}>Borrar</Text>
-                    </TouchableHighlight>
- 
-                </View>
- 
-            </View>
-        );
+  const _onSaveEvent = result => {
+    handleRespFirma(
+      preguntaid,
+      {dat: result.encoded, tipo: preguntatiporespuesta},
+      preguntatiporespuesta,
+    );
+    //result.pathName - for the file path name
+  };
+  const _onDragEvent = () => {
+    // This callback will be called when the user enters signature
+    console.log('dragged');
+  };
+
+  const handleRespFirma = (id, respuesta, tipo) => {
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+    console.log('index', index);
+    if (index === -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: respuesta},
+        ],
+      });
+    } else {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
+        ),
+      });
     }
- 
-    saveSign() {
-        this.refs["sign"].saveImage();
-    }
- 
-    resetSign() {
-        this.refs["sign"].resetImage();
-    }
- 
-    _onSaveEvent(result) {
-        //result.encoded - for the base64 encoded png
-        //result.pathName - for the file path name
-        console.log(result);
-    }
-    _onDragEvent() {
-         // This callback will be called when the user enters signature
-        console.log("dragged");
-    }
-}
+  };
+
+  return (
+    <>
+      <TouchableOpacity
+        onPress={() => {
+          visualizaFirma ? setVisualizaFirma(false) : setVisualizaFirma(true);
+        }}>
+        <Icon name="reorder-three-outline" size={40} color="#000000" />
+      </TouchableOpacity>
+      <SafeAreaView style={{...styles.marco, ...stylesE}}>
+        <SignatureCapture
+          ref={saveBtn}
+          style={{...styles.signature}}
+          onSaveEvent={_onSaveEvent}
+          onDragEvent={_onDragEvent}
+          saveImageFileInExtStorage={false}
+          showNativeButtons={false}
+          showTitleLabel={false}
+          viewMode={'portrait'}
+        />
+
+        <ItemSeparator />
+
+        <View style={{flexDirection: 'row'}}>
+          <TouchableHighlight
+            style={styles.buttonStyle}
+            onPress={() => {
+              saveSign(saveBtn);
+            }}>
+            <Text style={styles.text}>Guardar</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            style={styles.buttonStyle}
+            onPress={() => {
+              resetSign(saveBtn);
+            }}>
+            <Text style={styles.text}>Borrar</Text>
+          </TouchableHighlight>
+        </View>
+      </SafeAreaView>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
-    marco: {
+  marco: {
     backgroundColor: '#ffffff',
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 2,
-    },
-    signature: {
-        borderWidth: 1.5,
-        height: 200,
-        boxShadow: 5,
-        borderColor: '#fb8c00',
-    },
-    buttonStyle: {
-        flex: 1,
-        backgroundColor: '#ffffff',
-        borderRadius: 20,
-        boxShadow: 5,
-        borderColor: '#fb8c00',
-        borderWidth: 1,
-        height: 30,
-        justifyContent: 'center',
-        marginHorizontal: 40,
-        marginBottom: 10,
-    },
-    text: {
-        fontSize: 16,
-        color: '#fb8c00',
-        textAlign: 'center',
-    },
+  },
+  signature: {
+    borderWidth: 1.5,
+    height: 200,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+  },
+  buttonStyle: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1,
+    height: 30,
+    justifyContent: 'center',
+    marginHorizontal: 40,
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 16,
+    color: '#fb8c00',
+    textAlign: 'center',
+  },
 });
-
-AppRegistry.registerComponent('Firma', () => Firma);
 
 export default Firma;

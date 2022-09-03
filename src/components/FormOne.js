@@ -37,10 +37,10 @@ const FormOne = ({navigation, route}) => {
 
   const [formularioPreguntas, setFormularioPreguntas] =
     useState(initialFormState);
-  useState;
 
   const [selectedItem, setSelectedItem] = useState();
   const [respuestas, setRespuestas] = useState();
+  console.log(selectedItem);
 
   const cordsOt = {latitud: latitud, longitud: longitud};
 
@@ -48,58 +48,75 @@ const FormOne = ({navigation, route}) => {
   const [IditemSelect, setIditemSelect] = useState(0);
 
   /*   const {form, onChange, setFormValue} = UseForm(); */
-
-  const handleRest = (id, respuesta, tipo) => {
-    switch (tipo) {
-      case 'texto':
-        console.log('entre texto');
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          preguntas: formularioPreguntas.preguntas.map(pregunta =>
-            pregunta.id === id ? {id: id, respuesta: respuesta} : pregunta,
-          ),
-        });
-        break;
-      case 'Multiple':
-        break;
-      case 'Simple':
-        break;
-    }
-
-    console.log(formularioPreguntas.preguntas[0]);
-
-    const resp = Object.keys(respuestas || {});
-    const hasId = resp.includes(String(id));
-    const data = {[id]: respuesta};
-
-    if (hasId) {
-      setRespuestas(prev => {
-        let resAux = prev;
-        delete resAux[String(id)];
-        return resAux;
+  /*  console.log(JSON.stringify(formularioPreguntas)); */
+  const handleResptext = (id, respuesta, tipo) => {
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+    console.log('index', index);
+    if (index === -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: respuesta},
+        ],
       });
     } else {
-      setRespuestas(prev => ({...prev, ...data}));
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
+        ),
+      });
     }
   };
 
-  /* const isSelect = React.useCallback(
-    (id, respuesta) => {
-      const resp = Object.keys(respuestas || {});
-      const hasId = resp.includes(String(id));
-      console.log(
-        'isSelect',
-        resp,
-        hasId,
-        id,
-        respuestas[String(id)],
-        respuestas[String(id)]?.respuesta,
-        respuesta,
-      );
-      return hasId && respuestas[String(id)] == respuesta;
-    },
-    [respuestas],
-  ); */
+  const handleRespSelect = (id, respuesta, tipo) => {
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+    console.log('index', index);
+    if (index === -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: respuesta},
+        ],
+      });
+    } else {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
+        ),
+      });
+    }
+  };
+
+  const handleRespSelectMultiple = (id, respuesta, tipo) => {
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+    console.log('index', index);
+    if (index === -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: respuesta},
+        ],
+      });
+    } else {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
+        ),
+      });
+    }
+  };
 
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
@@ -174,18 +191,29 @@ const FormOne = ({navigation, route}) => {
                     {pregunta.tiporespuesta === 'Seleccion Simple' ? (
                       <View key={pregunta.id}>
                         <Text style={styles.selsim}>{pregunta.pregunta}</Text>
-                        <View style={{borderColor: '#fb8c00', borderWidth: 1, borderRadius: 10}}>
-                        <RNSingleSelect
-                          key={pregunta.id}
-                          data={data}
-                          initialValue={selectedItem}
-                          selectedItem={IditemSelect}
-                          onSelect={selectedItem => {
-                            handleRest(pregunta.id, selectedItem, 'Simple');
-                          }}
-                          placeholder="Elegir opción"
-                          width="100%"
-                        />
+                        <View
+                          style={{
+                            borderColor: '#fb8c00',
+                            borderWidth: 1,
+                            borderRadius: 10,
+                          }}>
+                          <RNSingleSelect
+                            key={pregunta.id}
+                            searchEnabled={false}
+                            data={data}
+                            initialValue={selectedItem}
+                            selectedItem={selectedItem}
+                            onSelect={selectedItem => {
+                              setSelectedItem(selectedItem),
+                                handleRespSelect(
+                                  pregunta.id,
+                                  selectedItem.value,
+                                  pregunta.tiporespuesta,
+                                );
+                            }}
+                            placeholder="Elegir opción"
+                            width="100%"
+                          />
                         </View>
                         <ItemSeparator />
                       </View>
@@ -197,9 +225,14 @@ const FormOne = ({navigation, route}) => {
                           style={styles.sm}
                           disableAbsolute
                           data={dataMulti}
-                          onSelect={selectedItems =>
-                            handleRest(pregunta.id, selectedItems, 'multiple')
-                          }
+                          onSelect={selectedItems => {
+                            setIditemSelect(selectedItems),
+                              handleRespSelectMultiple(
+                                pregunta.id,
+                                selectedItems,
+                                pregunta.tiporespuesta,
+                              );
+                          }}
                           placeholder="Elegir opción"
                         />
                         <ItemSeparator />
@@ -209,13 +242,14 @@ const FormOne = ({navigation, route}) => {
                         <Text style={styles.text}>{pregunta.pregunta}</Text>
                         <RNTextArea
                           key={pregunta.id}
+                          textInputStyle={{fontSize: 15, color: 'black'}}
                           style={styles.textarea}
                           maxCharLimit={200}
                           placeholderTextColor="#000000"
                           exceedCharCountColor="#990606"
                           placeholder={'Escriba aquí ...'}
                           onChangeText={text => {
-                            handleRest(pregunta.id, text, 'texto');
+                            handleResptext(pregunta.id, text, 'texto');
                           }}
                         />
                         <ItemSeparator />
@@ -233,9 +267,13 @@ const FormOne = ({navigation, route}) => {
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
-                        <Firma/>
 
-
+                        <Firma
+                          preguntaid={pregunta.id}
+                          formularioPreguntas={formularioPreguntas}
+                          setFormularioPreguntas={setFormularioPreguntas}
+                          preguntatiporespuesta={pregunta.tiporespuesta}
+                        />
                       </View>
                     ) : (
                       <></>
