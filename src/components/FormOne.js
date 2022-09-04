@@ -37,6 +37,8 @@ const FormOne = ({navigation, route}) => {
     tareas: [],
   };
 
+  const [visualizaFirma, setvisualizaFirma] = useState(false)
+
   const [formularioPreguntas, setFormularioPreguntas] =
     useState(initialFormState);
 
