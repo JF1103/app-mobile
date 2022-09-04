@@ -298,8 +298,14 @@ class Page extends Component {
       recordSecs: 0,
       grabando: false,
     });
+    console.log(result);
     /*  const base64 = await RNFS.readFile(result, 'base64'); */
-    this.props.handleRespAudio(this.props.pregunta.id, result, 'test');
+    /*  this.props.handleRespAudio(
+      this.props.tareaId,
+      this.props.pregunta.id,
+      result,
+      this.props.pregunta.tiporespuesta,
+    ); */
   };
 
   onStartPlay = async () => {

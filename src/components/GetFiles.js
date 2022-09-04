@@ -32,6 +32,7 @@ import {ItemSeparator} from './ItemSeparator';
 import Recaudio from './Recaudio';
 
 export const GetFiles = ({
+  tareaId,
   pregunta,
   formularioPreguntas,
   setFormularioPreguntas,
@@ -79,13 +80,17 @@ export const GetFiles = ({
         if (resp.assets[0].uri) {
           /* console.log(resp.assets[0].base64); */
 
-          resp.assets[0] && setTempUri(resp.assets[0].uri);
-          resp.assets[0] &&
-            handleRespFoto(
-              pregunta.id,
-              resp.assets[0].base64,
-              pregunta.tiporespuesta,
-            );
+          resp.assets[0] && setTempUri(resp.assets[0].uri),
+            resp.assets[0] &&
+              handleRespFoto(
+                tareaId,
+                pregunta.id,
+                resp.assets[0].fileName,
+                resp.assets[0].type,
+                resp.assets[0].uri,
+                resp.assets[0].base64,
+                pregunta.tiporespuesta,
+              );
         } else return;
       },
     );
@@ -104,8 +109,12 @@ export const GetFiles = ({
         if (resp.assets[0].uri) {
           setTempUri(resp.assets[0].uri);
           handleRespVideo(
+            tareaId,
             pregunta.id,
+            resp.assets[0].fileName,
+            resp.assets[0].type,
             resp.assets[0].uri,
+            resp.assets[0].base64,
             pregunta.tiporespuesta,
           );
         } else return;
@@ -127,7 +136,11 @@ export const GetFiles = ({
         if (!resp.assets[0].uri) return;
         setTempUri(resp.assets[0].uri);
         handleRespFoto(
+          tareaId,
           pregunta.id,
+          resp.assets[0].fileName,
+          resp.assets[0].type,
+          resp.assets[0].uri,
           resp.assets[0].base64,
           pregunta.tiporespuesta,
         );
@@ -135,55 +148,170 @@ export const GetFiles = ({
     );
   };
 
-  const handleRespFoto = (id, respuesta, tipo) => {
-    const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
-    );
-    if (index !== -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
-        ),
+  const handleRespFoto = async (
+    tareaId,
+    id,
+    fileName,
+    fileType,
+    tempUri,
+    respuesta,
+    tipo,
+  ) => {
+    const base64 = await RNFS.readFile(tempUri, 'base64');
+
+    let path = RNFS.DocumentDirectoryPath + `${fileName}`;
+    RNFS.writeFile(path, base64, 'utf8')
+      .then(success => {
+        console.log('FILE WRITTEN!');
+      })
+      .catch(err => {
+        console.log(err.message);
       });
-    } else {
+
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
+    );
+
+    if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: respuesta},
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [
+              {id: id, respuesta: {base64: path, tempUri: tempUri}, tipo: tipo},
+            ],
+          },
         ],
       });
+    } else {
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: {base64: path, tempUri: tempUri}},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: {base64: path, tempUri: tempUri},
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   };
 
-  const handleRespVideo = async (id, path, tipo) => {
-    const base64 = await RNFS.readFile(path, 'base64');
+  const handleRespVideo = async (
+    tareaId,
+    id,
+    fileName,
+    fileType,
+    tempUri,
+    respuesta,
+    tipo,
+  ) => {
+    const base64 = await RNFS.readFile(tempUri, 'base64');
 
-    const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
-    );
-    if (index !== -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: base64} : pregunta,
-        ),
+    let path = RNFS.DocumentDirectoryPath + `${fileName}`;
+    RNFS.writeFile(path, base64, 'utf8')
+      .then(success => {
+        console.log('FILE WRITTEN!');
+      })
+      .catch(err => {
+        console.log(err.message);
       });
-    } else {
+
+    console.log(path);
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
+    );
+
+    if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: base64},
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [
+              {id: id, respuesta: {base64: path, tempUri: tempUri}, tipo: tipo},
+            ],
+          },
         ],
       });
+    } else {
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: {base64: path, tempUri: tempUri}},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: {base64: path, tempUri: tempUri},
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   };
 
-  const handleRespAudio = async (id, path, tipo) => {
-    console.log('entre');
+  const handleRespAudio = async (tareaId, id, tempUri, tipo) => {
     const base64 = await RNFS.readFile(path, 'base64');
+
+    let path = RNFS.DocumentDirectoryPath + `${fileName}`;
+    RNFS.writeFile(path, base64, 'utf8')
+      .then(success => {
+        console.log('FILE WRITTEN!');
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
 
     const index = formularioPreguntas.preguntas.findIndex(
       pregunta => pregunta.id === id,
@@ -232,7 +360,11 @@ export const GetFiles = ({
         </TouchableOpacity>
       </View>
       {visualizaAudio && (
-        <Recaudio handleRespAudio={handleRespAudio} pregunta={pregunta} />
+        <Recaudio
+          handleRespAudio={handleRespAudio}
+          pregunta={pregunta}
+          tareaId={tareaId}
+        />
       )}
       {tempUri && (
         <Image

@@ -37,8 +37,6 @@ const FormOne = ({navigation, route}) => {
     tareas: [],
   };
 
-  const [visualizaFirma, setvisualizaFirma] = useState(false)
-
   const [formularioPreguntas, setFormularioPreguntas] =
     useState(initialFormState);
 
@@ -341,12 +339,12 @@ const FormOne = ({navigation, route}) => {
                       </>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <>
-                        {/* <GetFiles
-                          tareaid={tarea.id}
+                        <GetFiles
+                          tareaId={tarea.id}
                           pregunta={pregunta}
                           formularioPreguntas={formularioPreguntas}
                           setFormularioPreguntas={setFormularioPreguntas}
-                        /> */}
+                        />
                       </>
                     ) : pregunta.tiporespuesta === 'Firma' ? (
                       <View key={pregunta.id}>
