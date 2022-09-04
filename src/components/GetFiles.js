@@ -26,6 +26,7 @@ import {
   request,
   openSettings,
 } from 'react-native-permissions';
+import RNFS from 'react-native-fs';
 
 import {ItemSeparator} from './ItemSeparator';
 import Recaudio from './Recaudio';
@@ -99,10 +100,14 @@ export const GetFiles = ({
         saveToPhotos: true,
       },
       resp => {
-        console.log(resp);
         if (resp.didCancel) return;
         if (resp.assets[0].uri) {
           setTempUri(resp.assets[0].uri);
+          handleRespVideo(
+            pregunta.id,
+            resp.assets[0].uri,
+            pregunta.tiporespuesta,
+          );
         } else return;
       },
     );
@@ -152,6 +157,55 @@ export const GetFiles = ({
     }
   };
 
+  const handleRespVideo = async (id, path, tipo) => {
+    const base64 = await RNFS.readFile(path, 'base64');
+
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+    if (index !== -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: base64} : pregunta,
+        ),
+      });
+    } else {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: base64},
+        ],
+      });
+    }
+  };
+
+  const handleRespAudio = async (id, path, tipo) => {
+    console.log('entre');
+    const base64 = await RNFS.readFile(path, 'base64');
+
+    const index = formularioPreguntas.preguntas.findIndex(
+      pregunta => pregunta.id === id,
+    );
+    if (index !== -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: formularioPreguntas.preguntas.map(pregunta =>
+          pregunta.id === id ? {...pregunta, respuesta: base64} : pregunta,
+        ),
+      });
+    } else {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        preguntas: [
+          ...formularioPreguntas.preguntas,
+          {id: id, respuesta: base64},
+        ],
+      });
+    }
+  };
+
   return (
     <View key={pregunta.id}>
       <Text style={styles.archivo}>{pregunta.pregunta}</Text>
@@ -177,7 +231,9 @@ export const GetFiles = ({
           <Text style={styles.text5}>Audio</Text>
         </TouchableOpacity>
       </View>
-      {visualizaAudio && <Recaudio />}
+      {visualizaAudio && (
+        <Recaudio handleRespAudio={handleRespAudio} pregunta={pregunta} />
+      )}
       {tempUri && (
         <Image
           source={{uri: tempUri}}

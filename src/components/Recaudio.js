@@ -18,6 +18,7 @@ import {
   View,
 } from 'react-native';
 import React, {Component} from 'react';
+import RNFS from 'react-native-fs';
 
 import Button from './Button';
 /* import RNFetchBlob from 'rn-fetch-blob'; */
@@ -130,6 +131,7 @@ class Page extends Component {
   }
 
   render() {
+    console.log();
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56);
@@ -296,7 +298,8 @@ class Page extends Component {
       recordSecs: 0,
       grabando: false,
     });
-    console.log(result);
+    /*  const base64 = await RNFS.readFile(result, 'base64'); */
+    this.props.handleRespAudio(this.props.pregunta.id, result, 'test');
   };
 
   onStartPlay = async () => {

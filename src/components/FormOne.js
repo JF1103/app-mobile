@@ -26,6 +26,7 @@ import {Maps} from './Maps';
 import Page from './Recaudio';
 import {ItemSeparator} from './ItemSeparator';
 import Geolocation from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud, employee} = route.params;
@@ -33,7 +34,7 @@ const FormOne = ({navigation, route}) => {
     id_ot: employee.id,
     fecha: employee.fecha,
     fechafin: employee.fechafin,
-    preguntas: [],
+    tareas: [],
   };
 
   const [formularioPreguntas, setFormularioPreguntas] =
@@ -49,72 +50,167 @@ const FormOne = ({navigation, route}) => {
   const [location, setLocation] = useState({});
   /*   const {form, onChange, setFormValue} = UseForm(); */
   console.log(JSON.stringify(formularioPreguntas));
-  const handleResptext = (id, respuesta, tipo) => {
-    const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
-    );
 
-    if (index === -1) {
+  const handleResptext = (tareaId, id, respuesta, tipo) => {
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
+    );
+    if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: respuesta},
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
+          },
         ],
       });
     } else {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
-        ),
-      });
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: respuesta},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: respuesta,
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   };
 
-  const handleRespSelect = (id, respuesta, tipo) => {
-    const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
+  const handleRespSelect = (tareaId, id, respuesta, tipo) => {
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
     );
 
-    if (index === -1) {
+    if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: respuesta},
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
+          },
         ],
       });
     } else {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
-        ),
-      });
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: respuesta},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: respuesta,
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   };
-
-  const handleRespSelectMultiple = (id, respuesta, tipo) => {
-    const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
+  const handleRespSelectMultiple = (tareaId, id, respuesta, tipo) => {
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
     );
 
-    if (index === -1) {
+    if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: respuesta},
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
+          },
         ],
       });
     } else {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
-        ),
-      });
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: respuesta},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: respuesta,
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   };
 
@@ -176,6 +272,7 @@ const FormOne = ({navigation, route}) => {
                             onSelect={selectedItem => {
                               setSelectedItem(selectedItem),
                                 handleRespSelect(
+                                  tarea.id,
                                   pregunta.id,
                                   selectedItem.value,
                                   pregunta.tiporespuesta,
@@ -198,6 +295,7 @@ const FormOne = ({navigation, route}) => {
                           onSelect={selectedItems => {
                             setIditemSelect(selectedItems),
                               handleRespSelectMultiple(
+                                tarea.id,
                                 pregunta.id,
                                 selectedItems,
                                 pregunta.tiporespuesta,
@@ -220,6 +318,7 @@ const FormOne = ({navigation, route}) => {
                           placeholder={'Escriba aquí ...'}
                           onChangeText={text => {
                             handleResptext(
+                              tarea.id,
                               pregunta.id,
                               text,
                               pregunta.tiporespuesta,
@@ -233,30 +332,33 @@ const FormOne = ({navigation, route}) => {
                         <Maps
                           cordsOt={cordsOt}
                           pregunta={pregunta}
+                          tareaId={tarea.id}
                           formularioPreguntas={formularioPreguntas}
                           setFormularioPreguntas={setFormularioPreguntas}
                         />
                       </>
                     ) : pregunta.tiporespuesta === 'Archivo' ? (
                       <>
-                        <GetFiles
+                        {/* <GetFiles
+                          tareaid={tarea.id}
                           pregunta={pregunta}
                           formularioPreguntas={formularioPreguntas}
                           setFormularioPreguntas={setFormularioPreguntas}
-                        />
+                        /> */}
                       </>
                     ) : pregunta.tiporespuesta === 'Firma' ? (
                       <View key={pregunta.id}>
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
-
+                        {/* 
                         <Firma
+                          tareaid={tarea.id}
                           preguntaid={pregunta.id}
                           formularioPreguntas={formularioPreguntas}
                           setFormularioPreguntas={setFormularioPreguntas}
                           preguntatiporespuesta={pregunta.tiporespuesta}
-                        />
+                        /> */}
                       </View>
                     ) : (
                       <></>

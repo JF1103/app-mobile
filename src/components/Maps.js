@@ -18,6 +18,7 @@ import {ItemSeparator} from './ItemSeparator';
 export const Maps = ({
   cordsOt,
   pregunta,
+  tareaId,
   formularioPreguntas,
   setFormularioPreguntas,
 }) => {
@@ -42,11 +43,64 @@ export const Maps = ({
   }, []);
 
   useEffect(() => {
-    handleRespLocation(pregunta.id, location, pregunta.tiporespuesta);
+    handleRespLocation(tareaId, pregunta.id, location, pregunta.tiporespuesta);
   }, [location]);
 
-  const handleRespLocation = (id, respuesta, tipo) => {
-    const index = formularioPreguntas.preguntas.findIndex(
+  const handleRespLocation = (tareaId, id, respuesta, tipo) => {
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
+    );
+
+    if (indexTarea === -1) {
+      setFormularioPreguntas({
+        ...formularioPreguntas,
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
+          },
+        ],
+      });
+    } else {
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: respuesta},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: respuesta,
+                },
+              ],
+            },
+          ],
+        });
+      }
+    }
+
+    /* const index = formularioPreguntas.preguntas.findIndex(
       pregunta => pregunta.id === id,
     );
 
@@ -65,7 +119,7 @@ export const Maps = ({
           pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
         ),
       });
-    }
+    } */
   };
   return (
     <View key={pregunta.id} style={{height: 300}}>
