@@ -1,10 +1,13 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export const SetStorage = async formularioPreguntas => {
   try {
-    await AsyncStorage.setItem('form', value);
+    await AsyncStorage.setItem(
+      'form',
+      JSON.stringify(formularioPreguntas).toString(),
+    );
   } catch (e) {
-    // saving error
+    console.log(e);
   }
-  return <div>SetStorage</div>;
 };

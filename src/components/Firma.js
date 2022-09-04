@@ -7,12 +7,15 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   SafeAreaView,
+  LogBox,
 } from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
 import {ItemSeparator} from './ItemSeparator';
 import Icon from 'react-native-vector-icons/Ionicons';
+import RNFS from 'react-native-fs';
 
 const Firma = ({
+  tareaId,
   preguntaid,
   formularioPreguntas,
   setFormularioPreguntas,
@@ -51,38 +54,88 @@ const Firma = ({
   );
 
   const _onSaveEvent = result => {
+    console.log(result.pathName);
     handleRespFirma(
+      tareaId,
       preguntaid,
-      {dat: result.encoded, tipo: preguntatiporespuesta},
+      {dat: result.encoded, tempUri: result.pathName},
       preguntatiporespuesta,
     );
-    //result.pathName - for the file path name
   };
   const _onDragEvent = () => {
     // This callback will be called when the user enters signature
     console.log('dragged');
   };
 
-  const handleRespFirma = (id, respuesta, tipo) => {
-    const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
+  const handleRespFirma = async (tareaId, id, respuesta, tipo) => {
+    const base64 = await RNFS.readFile(respuesta.tempUri, 'base64');
+
+    let path = RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${id}.png`;
+    RNFS.writeFile(path, base64, 'utf8')
+      .then(success => {
+        console.log('FILE WRITTEN!');
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
     );
 
-    if (index === -1) {
+    if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: respuesta},
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [
+              {
+                id: id,
+                respuesta: {base64: path, tempUri: respuesta.tempUri},
+                tipo: tipo,
+              },
+            ],
+          },
         ],
       });
     } else {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
-        ),
-      });
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: {base64: path, tempUri: respuesta.tempUri}},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: {base64: path, tempUri: respuesta.tempUri},
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   };
 
@@ -100,7 +153,7 @@ const Firma = ({
           style={{...styles.signature}}
           onSaveEvent={_onSaveEvent}
           onDragEvent={_onDragEvent}
-          saveImageFileInExtStorage={false}
+          saveImageFileInExtStorage={true}
           showNativeButtons={false}
           showTitleLabel={false}
           viewMode={'portrait'}
@@ -163,5 +216,3 @@ const styles = StyleSheet.create({
 });
 
 export default Firma;
-
-

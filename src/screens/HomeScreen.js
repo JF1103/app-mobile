@@ -8,17 +8,21 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Botones from '../components/Botones';
-import { ItemSeparator } from '../components/ItemSeparator';
-import { Navbar } from '../components/Navbar';
-import { Ruta } from '../components/Ruta';
+import {ItemSeparator} from '../components/ItemSeparator';
+import {Navbar} from '../components/Navbar';
+import {Ruta} from '../components/Ruta';
 import {AuthContext} from '../context/AuthContext';
 import {check, PERMISSIONS, request} from 'react-native-permissions';
+import {GetStorage} from '../components/GetStorage';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  console.log(data);
+
+  useEffect(() => {
+    const form = GetStorage();
+  }, []);
 
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
@@ -66,11 +70,10 @@ const HomeScreen = ({navigation}) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-
         <Navbar />
 
         {isLoading && <ActivityIndicator size="large" color="blue" />}
-        
+
         {!isLoading &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
@@ -87,8 +90,11 @@ const HomeScreen = ({navigation}) => {
                 <Text style={styles.welcome}>{employee?.nivel}</Text>
 
                 <View style={styles.containerb2}>
-                  
-                <TouchableOpacity style={styles.btn1} onPress={() => {navigation.navigate('Ruta', {latitud, longitud})}}>
+                  <TouchableOpacity
+                    style={styles.btn1}
+                    onPress={() => {
+                      navigation.navigate('Ruta', {latitud, longitud});
+                    }}>
                     <Text style={styles.text}>Iniciar Ruta</Text>
                   </TouchableOpacity>
 

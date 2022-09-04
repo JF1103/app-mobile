@@ -27,6 +27,8 @@ import Page from './Recaudio';
 import {ItemSeparator} from './ItemSeparator';
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SetStorage} from './SetStorage';
+import {GetStorage} from './GetStorage';
 
 const FormOne = ({navigation, route}) => {
   const {tareas, latitud, longitud, employee} = route.params;
@@ -351,14 +353,14 @@ const FormOne = ({navigation, route}) => {
                         <Text style={styles.textfirma}>
                           {pregunta.pregunta}
                         </Text>
-                        {/* 
+
                         <Firma
                           tareaid={tarea.id}
                           preguntaid={pregunta.id}
                           formularioPreguntas={formularioPreguntas}
                           setFormularioPreguntas={setFormularioPreguntas}
                           preguntatiporespuesta={pregunta.tiporespuesta}
-                        /> */}
+                        />
                       </View>
                     ) : (
                       <></>
@@ -373,7 +375,7 @@ const FormOne = ({navigation, route}) => {
         <TouchableOpacity
           style={styles.btn5}
           onPress={() => {
-            handleRespLocation('gfgf', 'gfg');
+            SetStorage(formularioPreguntas);
             /*   navigation.navigate(''); */
           }}>
           <Text style={styles.text6}>Enviar formulario</Text>

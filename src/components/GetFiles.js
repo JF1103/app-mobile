@@ -159,7 +159,8 @@ export const GetFiles = ({
   ) => {
     const base64 = await RNFS.readFile(tempUri, 'base64');
 
-    let path = RNFS.DocumentDirectoryPath + `${fileName}`;
+    let path = RNFS.DocumentDirectoryPath + `/${fileName}`;
+
     RNFS.writeFile(path, base64, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!');
@@ -235,7 +236,7 @@ export const GetFiles = ({
   ) => {
     const base64 = await RNFS.readFile(tempUri, 'base64');
 
-    let path = RNFS.DocumentDirectoryPath + `${fileName}`;
+    let path = RNFS.DocumentDirectoryPath + `/${fileName}`;
     RNFS.writeFile(path, base64, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!');
@@ -302,9 +303,8 @@ export const GetFiles = ({
   };
 
   const handleRespAudio = async (tareaId, id, tempUri, tipo) => {
-    const base64 = await RNFS.readFile(path, 'base64');
-
-    let path = RNFS.DocumentDirectoryPath + `${fileName}`;
+    const base64 = await RNFS.readFile(tempUri, 'base64');
+    let path = RNFS.DocumentDirectoryPath + `/audio_${tareaId}${id}.mp4`;
     RNFS.writeFile(path, base64, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!');
@@ -313,24 +313,63 @@ export const GetFiles = ({
         console.log(err.message);
       });
 
-    const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
     );
-    if (index !== -1) {
+
+    if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: base64} : pregunta,
-        ),
-      });
-    } else {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: base64},
+        tareas: [
+          ...formularioPreguntas.tareas,
+          {
+            TareaId: tareaId,
+            preguntas: [
+              {
+                id: id,
+                respuesta: {base64: path},
+                tipo: tipo,
+              },
+            ],
+          },
         ],
       });
+    } else {
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === id);
+
+      if (indexPregunta === -1) {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas,
+                {id: id, respuesta: {base64: path}},
+              ],
+            },
+          ],
+        });
+      } else {
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea].preguntas[
+                    indexPregunta
+                  ],
+                  respuesta: {base64: path},
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   };
 
