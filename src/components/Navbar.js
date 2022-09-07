@@ -29,7 +29,7 @@ export const Navbar = () => {
 const styles = StyleSheet.create({
     text: {
         justifyContent: 'center',
-        marginLeft: 40,
+        marginLeft: '15%',
         fontSize: 25,
         color: '#000000',
         width: windowWidth,
