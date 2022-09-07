@@ -13,6 +13,7 @@ import SignatureCapture from 'react-native-signature-capture';
 import {ItemSeparator} from './ItemSeparator';
 import Icon from 'react-native-vector-icons/Ionicons';
 import RNFS from 'react-native-fs';
+import {SetStorage} from './SetStorage';
 
 const Firma = ({
   tareaId,
@@ -21,6 +22,7 @@ const Firma = ({
   setFormularioPreguntas,
   preguntatiporespuesta,
 }) => {
+  console.log(tareaId, preguntaid);
   const [visualizaFirma, setVisualizaFirma] = useState(false);
 
   const saveSign = saveBtn => {
@@ -30,20 +32,51 @@ const Firma = ({
   const resetSign = saveBtn => {
     saveBtn.current.resetImage();
     //eliminr firma
-    const index = formularioPreguntas.preguntas.findIndex(
-      item => item.id === preguntaid,
+
+    let path =
+      RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
+    console.log('path', path);
+    RNFS.unlink(path)
+      .then(() => {
+        console.log('FILE DELETED');
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+
+    //actualizar formularioPreguntas
+    const indexTarea = formularioPreguntas.tareas.findIndex(
+      tarea => tarea.TareaId === tareaId,
     );
 
-    if (index > -1) {
-      const auxform = formularioPreguntas.pregunta;
-    }
+    if (indexTarea !== -1) {
+      const indexPregunta = formularioPreguntas.tareas[
+        indexTarea
+      ].preguntas.findIndex(pregunta => pregunta.id === preguntaid);
 
-    setFormularioPreguntas({
-      ...formularioPreguntas,
-      preguntas: [
-        ...formularioPreguntas.preguntas.filter(item => item.id !== preguntaid),
-      ],
-    });
+      if (indexPregunta !== -1) {
+        console.log('entre eliminarrrr');
+        setFormularioPreguntas({
+          ...formularioPreguntas,
+          tareas: [
+            {
+              //elimino la pregunta
+              ...formularioPreguntas.tareas[indexTarea],
+              preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
+              ],
+            },
+          ],
+        });
+      }
+    }
+    SetStorage(formularioPreguntas);
   };
   const saveBtn = useRef(null);
   const height = visualizaFirma ? '100%' : 0;
@@ -67,10 +100,11 @@ const Firma = ({
     console.log('dragged');
   };
 
-  const handleRespFirma = async (tareaId, id, respuesta, tipo) => {
+  const handleRespFirma = async (tareaId, preguntaid, respuesta, tipo) => {
     const base64 = await RNFS.readFile(respuesta.tempUri, 'base64');
-
-    let path = RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${id}.png`;
+    console.log(preguntaid);
+    let path =
+      RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
     RNFS.writeFile(path, base64, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!');
@@ -92,7 +126,7 @@ const Firma = ({
             TareaId: tareaId,
             preguntas: [
               {
-                id: id,
+                id: preguntaid,
                 respuesta: {base64: path, tempUri: respuesta.tempUri},
                 tipo: tipo,
               },
@@ -103,7 +137,7 @@ const Firma = ({
     } else {
       const indexPregunta = formularioPreguntas.tareas[
         indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
+      ].preguntas.findIndex(pregunta => pregunta.id === preguntaid);
 
       if (indexPregunta === -1) {
         setFormularioPreguntas({
@@ -113,7 +147,10 @@ const Firma = ({
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
                 ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: {base64: path, tempUri: respuesta.tempUri}},
+                {
+                  id: preguntaid,
+                  respuesta: {base64: path, tempUri: respuesta.tempUri},
+                },
               ],
             },
           ],
@@ -125,18 +162,26 @@ const Firma = ({
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: {base64: path, tempUri: respuesta.tempUri},
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],
         });
       }
     }
+    SetStorage(formularioPreguntas);
   };
 
   return (

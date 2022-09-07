@@ -30,6 +30,7 @@ import RNFS from 'react-native-fs';
 
 import {ItemSeparator} from './ItemSeparator';
 import Recaudio from './Recaudio';
+import {SetStorage} from './SetStorage';
 
 export const GetFiles = ({
   tareaId,
@@ -211,18 +212,26 @@ export const GetFiles = ({
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: {base64: path, tempUri: tempUri},
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],
         });
       }
     }
+    SetStorage(formularioPreguntas);
   };
 
   const handleRespVideo = async (
@@ -288,18 +297,26 @@ export const GetFiles = ({
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: {base64: path, tempUri: tempUri},
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],
         });
       }
     }
+    SetStorage(formularioPreguntas);
   };
 
   const handleRespAudio = async (tareaId, id, tempUri, tipo) => {
@@ -359,18 +376,26 @@ export const GetFiles = ({
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: {base64: path},
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],
         });
       }
     }
+    SetStorage(formularioPreguntas);
   };
 
   return (

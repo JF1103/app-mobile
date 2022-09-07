@@ -20,10 +20,23 @@ const HomeScreen = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
+  const [cargandoAsync, setcargandoAsync] = useState(false);
+  const [formAsync, setformAsync] = useState();
+
+  const inicializaformularioPreguntas = async () => {
+    const form = await GetStorage();
+    if (form !== null) {
+      setformAsync(form);
+    }
+    setcargandoAsync(false);
+  };
+
   useEffect(() => {
-    const form = GetStorage();
+    setcargandoAsync(true);
+    inicializaformularioPreguntas();
   }, []);
 
+  console.log(JSON.stringify(formAsync));
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(
@@ -72,9 +85,12 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.container}>
         <Navbar />
 
-        {isLoading && <ActivityIndicator size="large" color="blue" />}
+        {isLoading && cargandoAsync && (
+          <ActivityIndicator size="large" color="blue" />
+        )}
 
         {!isLoading &&
+          !cargandoAsync &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
             return (
@@ -108,6 +124,7 @@ const HomeScreen = ({navigation}) => {
                         tareas,
                         latitud,
                         longitud,
+                        formAsync,
                       });
                     }}>
                     <Text style={styles.text1}>Iniciar Tarea</Text>

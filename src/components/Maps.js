@@ -87,12 +87,19 @@ export const Maps = ({
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: respuesta,
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],

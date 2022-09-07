@@ -87,24 +87,33 @@ const FormOne = ({navigation, route}) => {
           ],
         });
       } else {
+        //modifico pregunta
         setFormularioPreguntas({
           ...formularioPreguntas,
           tareas: [
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: respuesta,
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],
         });
       }
     }
+    SetStorage(formularioPreguntas);
   };
 
   const handleRespSelect = (tareaId, id, respuesta, tipo) => {
@@ -148,18 +157,26 @@ const FormOne = ({navigation, route}) => {
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: respuesta,
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],
         });
       }
     }
+    SetStorage(formularioPreguntas);
   };
   const handleRespSelectMultiple = (tareaId, id, respuesta, tipo) => {
     const indexTarea = formularioPreguntas.tareas.findIndex(
@@ -202,18 +219,26 @@ const FormOne = ({navigation, route}) => {
             {
               ...formularioPreguntas.tareas[indexTarea],
               preguntas: [
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  0,
+                  indexPregunta,
+                ),
                 {
                   ...formularioPreguntas.tareas[indexTarea].preguntas[
                     indexPregunta
                   ],
                   respuesta: respuesta,
                 },
+                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
+                  indexPregunta + 1,
+                ),
               ],
             },
           ],
         });
       }
     }
+    SetStorage(formularioPreguntas);
   };
 
   const formData = new FormData();
@@ -355,7 +380,7 @@ const FormOne = ({navigation, route}) => {
                         </Text>
 
                         <Firma
-                          tareaid={tarea.id}
+                          tareaId={tarea.id}
                           preguntaid={pregunta.id}
                           formularioPreguntas={formularioPreguntas}
                           setFormularioPreguntas={setFormularioPreguntas}
