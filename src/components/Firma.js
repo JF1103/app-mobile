@@ -190,7 +190,7 @@ const Firma = ({
         onPress={() => {
           visualizaFirma ? setVisualizaFirma(false) : setVisualizaFirma(true);
         }}>
-        <Icon name="reorder-three-outline" size={40} color="#000000" />
+        <Text style={styles.text1}>Presione aquí para firmar</Text>
       </TouchableOpacity>
       <SafeAreaView style={{...styles.marco, ...stylesE}}>
         <SignatureCapture
@@ -233,13 +233,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     boxShadow: 5,
     borderColor: '#fb8c00',
-    borderWidth: 2,
+    borderWidth: 1,
   },
   signature: {
-    borderWidth: 1.5,
+    borderWidth: 1,
     height: 200,
     boxShadow: 5,
     borderColor: '#fb8c00',
+    margin: 10,
   },
   buttonStyle: {
     flex: 1,
@@ -256,6 +257,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: '#fb8c00',
+    textAlign: 'center',
+  },
+  text1: {
+    fontSize: 16,
+    color: '#000000',
+    marginVertical: '2%',
     textAlign: 'center',
   },
 });

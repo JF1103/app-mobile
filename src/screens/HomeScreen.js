@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     boxShadow: 5,
     borderColor: '#fb8c00',
-    borderWidth: 2,
+    borderWidth: 1,
   },
   btn1: {
     flex: 1,
