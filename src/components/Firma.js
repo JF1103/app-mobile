@@ -17,12 +17,13 @@ import {SetStorage} from './SetStorage';
 
 const Firma = ({
   tareaId,
+  formularioId,
   preguntaid,
   formularioPreguntas,
   setFormularioPreguntas,
   preguntatiporespuesta,
 }) => {
-  console.log(tareaId, preguntaid);
+  //console.log(tareaId, preguntaid);
   const [visualizaFirma, setVisualizaFirma] = useState(false);
 
   const saveSign = saveBtn => {
@@ -50,6 +51,48 @@ const Firma = ({
     );
 
     if (indexTarea !== -1) {
+      const indexFormulario = formularioPreguntas.tareas[
+        indexTarea
+      ].formularios.findIndex(
+        formulario => formulario.FormularioId === formularioId,
+      );
+      if (indexFormulario !== -1) {
+        const indexPregunta = formularioPreguntas.tareas[
+          indexTarea
+        ].formularios[indexFormulario].preguntas.findIndex(
+          pregunta => pregunta.id === preguntaid,
+        );
+        if (indexPregunta !== -1) {
+          setFormularioPreguntas({
+            ...formularioPreguntas,
+            tareas: [
+              {
+                ...formularioPreguntas.tareas[indexTarea],
+                formularios: [
+                  {
+                    ...formularioPreguntas.tareas[indexTarea].formularios[
+                      indexFormulario
+                    ],
+                    preguntas: [
+                      {
+                        ...formularioPreguntas.tareas[indexTarea].formularios[
+                          indexFormulario
+                        ].preguntas.filter(
+                          pregunta => pregunta.id !== preguntaid,
+                        ),
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        }
+      }
+    }
+  };
+
+  /*     if (indexTarea !== -1) {
       const indexPregunta = formularioPreguntas.tareas[
         indexTarea
       ].preguntas.findIndex(pregunta => pregunta.id === preguntaid);
@@ -76,8 +119,8 @@ const Firma = ({
         });
       }
     }
-    SetStorage(formularioPreguntas);
-  };
+    SetStorage(formularioPreguntas); 
+  };*/
   const saveBtn = useRef(null);
   const height = visualizaFirma ? '100%' : 0;
   const stylesE = StyleSheet.create(
@@ -90,6 +133,7 @@ const Firma = ({
     console.log(result.pathName);
     handleRespFirma(
       tareaId,
+      formularioId,
       preguntaid,
       {dat: result.encoded, tempUri: result.pathName},
       preguntatiporespuesta,
@@ -100,11 +144,20 @@ const Firma = ({
     console.log('dragged');
   };
 
-  const handleRespFirma = async (tareaId, preguntaid, respuesta, tipo) => {
+  const handleRespFirma = async (
+    tareaId,
+    formularioId,
+    id,
+    respuesta,
+    tipo,
+  ) => {
+    console.log('ITEMS', respuesta, tipo);
+
     const base64 = await RNFS.readFile(respuesta.tempUri, 'base64');
     console.log(preguntaid);
     let path =
-      RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
+      RNFS.DocumentDirectoryPath +
+      `/firma_${tareaId}_${formularioId}_${id}.png`;
     RNFS.writeFile(path, base64, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!');
@@ -116,72 +169,120 @@ const Firma = ({
     const indexTarea = formularioPreguntas.tareas.findIndex(
       tarea => tarea.TareaId === tareaId,
     );
-
     if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
         tareas: [
-          ...formularioPreguntas.tareas,
           {
             TareaId: tareaId,
-            preguntas: [
+            formularios: [
               {
-                id: preguntaid,
-                respuesta: {base64: path, tempUri: respuesta.tempUri},
-                tipo: tipo,
+                FormularioId: formularioId,
+                preguntas: [
+                  {
+                    id: id,
+                    respuesta: {base64: path, tempUri: respuesta.tempUri},
+                    tipo: tipo,
+                  },
+                ],
               },
             ],
           },
         ],
       });
     } else {
-      const indexPregunta = formularioPreguntas.tareas[
+      const indexFormulario = formularioPreguntas.tareas[
         indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === preguntaid);
+      ].formularios.findIndex(
+        formulario => formulario.FormularioId === formularioId,
+      );
 
-      if (indexPregunta === -1) {
+      if (indexFormulario === -1) {
         setFormularioPreguntas({
           ...formularioPreguntas,
           tareas: [
             {
               ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
+              formularios: [
                 {
-                  id: preguntaid,
-                  respuesta: {base64: path, tempUri: respuesta.tempUri},
+                  FormularioId: formularioId,
+                  preguntas: [
+                    {
+                      id: id,
+                      respuesta: {base64: path, tempUri: respuesta.tempUri},
+                      tipo: tipo,
+                    },
+                  ],
                 },
               ],
             },
           ],
         });
       } else {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: {base64: path, tempUri: respuesta.tempUri},
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
+        const indexPregunta = formularioPreguntas.tareas[
+          indexTarea
+        ].formularios[indexFormulario].preguntas.findIndex(
+          pregunta => pregunta.id === id,
+        );
+
+        if (indexPregunta === -1) {
+          setFormularioPreguntas({
+            ...formularioPreguntas,
+            tareas: [
+              {
+                ...formularioPreguntas.tareas[indexTarea],
+                formularios: [
+                  {
+                    ...formularioPreguntas.tareas[indexTarea].formularios[
+                      indexFormulario
+                    ],
+                    preguntas: [
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas,
+                      {
+                        id: id,
+                        respuesta: {base64: path, tempUri: respuesta.tempUri},
+                        tipo: tipo,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        } else {
+          setFormularioPreguntas({
+            ...formularioPreguntas,
+            tareas: [
+              {
+                ...formularioPreguntas.tareas[indexTarea],
+                formularios: [
+                  {
+                    ...formularioPreguntas.tareas[indexTarea].formularios[
+                      indexFormulario
+                    ],
+                    preguntas: [
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas.slice(0, indexPregunta),
+                      {
+                        id: id,
+                        respuesta: {base64: path, tempUri: respuesta.tempUri},
+                        tipo: tipo,
+                      },
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas.slice(indexPregunta + 1),
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        }
       }
     }
-    SetStorage(formularioPreguntas);
   };
 
   return (

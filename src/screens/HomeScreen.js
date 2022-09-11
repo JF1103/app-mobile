@@ -14,6 +14,7 @@ import {Ruta} from '../components/Ruta';
 import {AuthContext} from '../context/AuthContext';
 import {check, PERMISSIONS, request} from 'react-native-permissions';
 import {GetStorage} from '../components/GetStorage';
+import Tareas from '../components/Tareas';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -36,7 +37,7 @@ const HomeScreen = ({navigation}) => {
     inicializaformularioPreguntas();
   }, []);
 
-  console.log(JSON.stringify(formAsync));
+  //console.log(JSON.stringify(formAsync));
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(
@@ -113,22 +114,21 @@ const HomeScreen = ({navigation}) => {
                     }}>
                     <Text style={styles.text}>Iniciar Ruta</Text>
                   </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.btn2}
-                    onPress={() => {
-                      const aux = employee['0'];
-                      const tareas = aux.tareas?.find(i => i);
-                      navigation.navigate('FormOne', {
-                        employee,
-                        tareas,
-                        latitud,
-                        longitud,
-                        formAsync,
-                      });
-                    }}>
-                    <Text style={styles.text1}>Iniciar Tarea</Text>
-                  </TouchableOpacity>
+                  {employee['0'].tareas.map(tarea => {
+                    return (
+                      <>
+                        <Tareas
+                          key={tarea.id}
+                          tarea={tarea}
+                          employee={employee}
+                          latitud={latitud}
+                          longitud={longitud}
+                          formAsync={formAsync}
+                          navigation={navigation}
+                        />
+                      </>
+                    );
+                  })}
                 </View>
               </View>
             );
@@ -156,11 +156,7 @@ const styles = StyleSheet.create({
     color: '#fb8c00',
     textAlign: 'center',
   },
-  text1: {
-    fontSize: 16,
-    color: '#fb8c00',
-    textAlign: 'center',
-  },
+
   welcome: {
     fontSize: 18,
     marginBottom: 15,
@@ -187,19 +183,6 @@ const styles = StyleSheet.create({
     height: 30,
     width: '50%',
     justifyContent: 'center',
-    color: '#f5f5f5',
-  },
-  btn2: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
-    boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 1.0,
-    height: 30,
-    width: '50%',
-    justifyContent: 'center',
-    marginLeft: 10,
     color: '#f5f5f5',
   },
 });

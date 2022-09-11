@@ -34,6 +34,7 @@ import {SetStorage} from './SetStorage';
 
 export const GetFiles = ({
   tareaId,
+  formularioId,
   pregunta,
   formularioPreguntas,
   setFormularioPreguntas,
@@ -85,6 +86,7 @@ export const GetFiles = ({
             resp.assets[0] &&
               handleRespFoto(
                 tareaId,
+                formularioId,
                 pregunta.id,
                 resp.assets[0].fileName,
                 resp.assets[0].type,
@@ -111,6 +113,7 @@ export const GetFiles = ({
           setTempUri(resp.assets[0].uri);
           handleRespVideo(
             tareaId,
+            formularioId,
             pregunta.id,
             resp.assets[0].fileName,
             resp.assets[0].type,
@@ -138,6 +141,7 @@ export const GetFiles = ({
         setTempUri(resp.assets[0].uri);
         handleRespFoto(
           tareaId,
+          formularioId,
           pregunta.id,
           resp.assets[0].fileName,
           resp.assets[0].type,
@@ -151,6 +155,7 @@ export const GetFiles = ({
 
   const handleRespFoto = async (
     tareaId,
+    formularioId,
     id,
     fileName,
     fileType,
@@ -170,72 +175,130 @@ export const GetFiles = ({
         console.log(err.message);
       });
 
+    console.log('ITEMS', respuesta, tipo);
+
     const indexTarea = formularioPreguntas.tareas.findIndex(
       tarea => tarea.TareaId === tareaId,
     );
-
     if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
         tareas: [
-          ...formularioPreguntas.tareas,
           {
             TareaId: tareaId,
-            preguntas: [
-              {id: id, respuesta: {base64: path, tempUri: tempUri}, tipo: tipo},
+            formularios: [
+              {
+                FormularioId: formularioId,
+                preguntas: [
+                  {
+                    id: id,
+                    respuesta: {base64: path, tempUri: tempUri},
+                    tipo: tipo,
+                  },
+                ],
+              },
             ],
           },
         ],
       });
     } else {
-      const indexPregunta = formularioPreguntas.tareas[
+      const indexFormulario = formularioPreguntas.tareas[
         indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
+      ].formularios.findIndex(
+        formulario => formulario.FormularioId === formularioId,
+      );
 
-      if (indexPregunta === -1) {
+      if (indexFormulario === -1) {
         setFormularioPreguntas({
           ...formularioPreguntas,
           tareas: [
             {
               ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: {base64: path, tempUri: tempUri}},
+              formularios: [
+                {
+                  FormularioId: formularioId,
+                  preguntas: [
+                    {
+                      id: id,
+                      respuesta: {base64: path, tempUri: tempUri},
+                      tipo: tipo,
+                    },
+                  ],
+                },
               ],
             },
           ],
         });
       } else {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: {base64: path, tempUri: tempUri},
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
+        const indexPregunta = formularioPreguntas.tareas[
+          indexTarea
+        ].formularios[indexFormulario].preguntas.findIndex(
+          pregunta => pregunta.id === id,
+        );
+
+        if (indexPregunta === -1) {
+          setFormularioPreguntas({
+            ...formularioPreguntas,
+            tareas: [
+              {
+                ...formularioPreguntas.tareas[indexTarea],
+                formularios: [
+                  {
+                    ...formularioPreguntas.tareas[indexTarea].formularios[
+                      indexFormulario
+                    ],
+                    preguntas: [
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas,
+                      {
+                        id: id,
+                        respuesta: {base64: path, tempUri: tempUri},
+                        tipo: tipo,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        } else {
+          setFormularioPreguntas({
+            ...formularioPreguntas,
+            tareas: [
+              {
+                ...formularioPreguntas.tareas[indexTarea],
+                formularios: [
+                  {
+                    ...formularioPreguntas.tareas[indexTarea].formularios[
+                      indexFormulario
+                    ],
+                    preguntas: [
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas.slice(0, indexPregunta),
+                      {
+                        id: id,
+                        respuesta: {base64: path, tempUri: tempUri},
+                        tipo: tipo,
+                      },
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas.slice(indexPregunta + 1),
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        }
       }
     }
-    SetStorage(formularioPreguntas);
   };
 
   const handleRespVideo = async (
     tareaId,
+    formularioId,
     id,
     fileName,
     fileType,
@@ -254,7 +317,6 @@ export const GetFiles = ({
         console.log(err.message);
       });
 
-    console.log(path);
     const indexTarea = formularioPreguntas.tareas.findIndex(
       tarea => tarea.TareaId === tareaId,
     );
@@ -319,9 +381,11 @@ export const GetFiles = ({
     SetStorage(formularioPreguntas);
   };
 
-  const handleRespAudio = async (tareaId, id, tempUri, tipo) => {
+  const handleRespAudio = async (tareaId, formularioId, id, tempUri, tipo) => {
     const base64 = await RNFS.readFile(tempUri, 'base64');
-    let path = RNFS.DocumentDirectoryPath + `/audio_${tareaId}${id}.mp4`;
+    let path =
+      RNFS.DocumentDirectoryPath +
+      `/audio_${tareaId}_${formularioId}_${id}.mp4`;
     RNFS.writeFile(path, base64, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!');
@@ -426,8 +490,9 @@ export const GetFiles = ({
       {visualizaAudio && (
         <Recaudio
           handleRespAudio={handleRespAudio}
-          pregunta={pregunta}
           tareaId={tareaId}
+          formularioId={formularioId}
+          pregunta={pregunta}
         />
       )}
       {tempUri && (

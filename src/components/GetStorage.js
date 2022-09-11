@@ -5,7 +5,7 @@ export const GetStorage = async () => {
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('form');
-      console.log(jsonValue);
+      // console.log(jsonValue);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log(e);

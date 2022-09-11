@@ -29,217 +29,22 @@ import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SetStorage} from './SetStorage';
 import {GetStorage} from './GetStorage';
+import {handleResp} from '../helpers/handleRespt';
+import {Formularios} from './Formularios';
 
 const FormOne = ({navigation, route}) => {
-  const {tareas, latitud, longitud, employee} = route.params;
-  const initialFormState = {
-    id_ot: employee.id,
-    fecha: employee.fecha,
-    fechafin: employee.fechafin,
-    tareas: [],
-  };
+  const {tarea, latitud, longitud, employee, formAsync} = route.params;
 
-  const [formularioPreguntas, setFormularioPreguntas] =
-    useState(initialFormState);
-
-  const [selectedItem, setSelectedItem] = useState();
   const [respuestas, setRespuestas] = useState();
+  const [tex, setTex] = useState();
 
   const cordsOt = {latitud: latitud, longitud: longitud};
 
   const {userInfo} = useContext(AuthContext);
-  const [IditemSelect, setIditemSelect] = useState(0);
+
   const [location, setLocation] = useState({});
   /*   const {form, onChange, setFormValue} = UseForm(); */
-  console.log(JSON.stringify(formularioPreguntas));
-
-  const handleResptext = (tareaId, id, respuesta, tipo) => {
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          ...formularioPreguntas.tareas,
-          {
-            TareaId: tareaId,
-            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-          },
-        ],
-      });
-    } else {
-      const indexPregunta = formularioPreguntas.tareas[
-        indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
-
-      if (indexPregunta === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: respuesta},
-              ],
-            },
-          ],
-        });
-      } else {
-        //modifico pregunta
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: respuesta,
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
-      }
-    }
-    SetStorage(formularioPreguntas);
-  };
-
-  const handleRespSelect = (tareaId, id, respuesta, tipo) => {
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          ...formularioPreguntas.tareas,
-          {
-            TareaId: tareaId,
-            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-          },
-        ],
-      });
-    } else {
-      const indexPregunta = formularioPreguntas.tareas[
-        indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
-
-      if (indexPregunta === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: respuesta},
-              ],
-            },
-          ],
-        });
-      } else {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: respuesta,
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
-      }
-    }
-    SetStorage(formularioPreguntas);
-  };
-  const handleRespSelectMultiple = (tareaId, id, respuesta, tipo) => {
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          ...formularioPreguntas.tareas,
-          {
-            TareaId: tareaId,
-            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-          },
-        ],
-      });
-    } else {
-      const indexPregunta = formularioPreguntas.tareas[
-        indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
-
-      if (indexPregunta === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: respuesta},
-              ],
-            },
-          ],
-        });
-      } else {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: respuesta,
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
-      }
-    }
-    SetStorage(formularioPreguntas);
-  };
+  //console.log(JSON.stringify(formularioPreguntas));
 
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
@@ -254,149 +59,17 @@ const FormOne = ({navigation, route}) => {
           <Icon style={styles.icon} name="arrow-back-outline" />
         </TouchableOpacity>
         <Text style={styles.title}>Formulario</Text>
-
-        {tareas?.formularios?.map((tarea, index) => {
-          const preguntas = tarea.preguntas;
+        {tarea?.formularios.map(formualario => {
           return (
-            <View style={styles.row} key={index}>
-              <Text style={styles.welcome}>{tarea.formulario}</Text>
-              <ItemSeparator />
-              {preguntas?.map((pregunta, index2) => {
-                const data = pregunta.respuestas.map((respuesta, index) => {
-                  return {
-                    id: respuesta.id,
-                    value: respuesta.leyenda,
-                  };
-                });
-
-                const dataMulti = pregunta.respuestas.map(
-                  (respuesta, index) => {
-                    return {
-                      id: respuesta.id,
-                      value: respuesta.leyenda,
-                      isChecked: false,
-                    };
-                  },
-                );
-
-                return (
-                  <View style={styles.container2} key={index2}>
-                    {pregunta.tiporespuesta === 'Seleccion Simple' ? (
-                      <View key={pregunta.id}>
-                        <Text style={styles.selsim}>{pregunta.pregunta}</Text>
-                        <View
-                          style={{
-                            borderColor: '#fb8c00',
-                            borderWidth: 1,
-                            borderRadius: 10,
-                          }}>
-                          <RNSingleSelect
-                            key={pregunta.id}
-                            searchEnabled={false}
-                            data={data}
-                            initialValue={selectedItem}
-                            selectedItem={selectedItem}
-                            onSelect={selectedItem => {
-                              setSelectedItem(selectedItem),
-                                handleRespSelect(
-                                  tarea.id,
-                                  pregunta.id,
-                                  selectedItem.value,
-                                  pregunta.tiporespuesta,
-                                );
-                            }}
-                            placeholder="Elegir opción"
-                            width="100%"
-                          />
-                        </View>
-                        <ItemSeparator />
-                      </View>
-                    ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
-                      <View key={pregunta.id}>
-                        <Text style={styles.selmul}>{pregunta.pregunta}</Text>
-                        <RNMultiSelect
-                          key={pregunta.id}
-                          style={styles.sm}
-                          disableAbsolute
-                          data={dataMulti}
-                          onSelect={selectedItems => {
-                            setIditemSelect(selectedItems),
-                              handleRespSelectMultiple(
-                                tarea.id,
-                                pregunta.id,
-                                selectedItems,
-                                pregunta.tiporespuesta,
-                              );
-                          }}
-                          placeholder="Elegir opción"
-                        />
-                        <ItemSeparator />
-                      </View>
-                    ) : pregunta.tiporespuesta === 'Texto' ? (
-                      <View key={pregunta.id}>
-                        <Text style={styles.text}>{pregunta.pregunta}</Text>
-                        <RNTextArea
-                          key={pregunta.id}
-                          textInputStyle={{fontSize: 15, color: 'black'}}
-                          style={styles.textarea}
-                          maxCharLimit={200}
-                          placeholderTextColor="#000000"
-                          exceedCharCountColor="#990606"
-                          placeholder={'Escriba aquí ...'}
-                          onChangeText={text => {
-                            handleResptext(
-                              tarea.id,
-                              pregunta.id,
-                              text,
-                              pregunta.tiporespuesta,
-                            );
-                          }}
-                        />
-                        <ItemSeparator />
-                      </View>
-                    ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
-                      <>
-                        <Maps
-                          cordsOt={cordsOt}
-                          pregunta={pregunta}
-                          tareaId={tarea.id}
-                          formularioPreguntas={formularioPreguntas}
-                          setFormularioPreguntas={setFormularioPreguntas}
-                        />
-                      </>
-                    ) : pregunta.tiporespuesta === 'Archivo' ? (
-                      <>
-                        <GetFiles
-                          tareaId={tarea.id}
-                          pregunta={pregunta}
-                          formularioPreguntas={formularioPreguntas}
-                          setFormularioPreguntas={setFormularioPreguntas}
-                        />
-                      </>
-                    ) : pregunta.tiporespuesta === 'Firma' ? (
-                      <View key={pregunta.id}>
-                        <Text style={styles.textfirma}>
-                          {pregunta.pregunta}
-                        </Text>
-
-                        <Firma
-                          tareaId={tarea.id}
-                          preguntaid={pregunta.id}
-                          formularioPreguntas={formularioPreguntas}
-                          setFormularioPreguntas={setFormularioPreguntas}
-                          preguntatiporespuesta={pregunta.tiporespuesta}
-                        />
-                      </View>
-                    ) : (
-                      <></>
-                    )}
-                  </View>
-                );
-              })}
-            </View>
+            <Formularios
+              key={formualario.id}
+              formulario={formualario}
+              tarea={tarea}
+              employee={employee}
+              cordsOt={cordsOt}
+            />
           );
         })}
-
         <TouchableOpacity
           style={styles.btn5}
           onPress={() => {

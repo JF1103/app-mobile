@@ -8,10 +8,10 @@ const Botones = () => {
   const [visualizaCheck, setvisualizaCheck] = useState(true);
   const [location, setLocation] = useState({});
 
-  console.log(location);
+  //console.log(location);
   const CheckInOut = type => {
     Geolocation.getCurrentPosition(info => {
-      console.log(info);
+      // console.log(info);
       setLocation({
         nbr_latitud: Number(info.coords.latitude),
         nbr_longitud: Number(info.coords.longitude),

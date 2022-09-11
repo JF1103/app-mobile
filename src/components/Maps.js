@@ -14,11 +14,13 @@ import {
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import {ItemSeparator} from './ItemSeparator';
+import {handleResp} from '../helpers/handleRespt';
 
 export const Maps = ({
   cordsOt,
-  pregunta,
+  formularioId,
   tareaId,
+  pregunta,
   formularioPreguntas,
   setFormularioPreguntas,
 }) => {
@@ -43,10 +45,19 @@ export const Maps = ({
   }, []);
 
   useEffect(() => {
-    handleRespLocation(tareaId, pregunta.id, location, pregunta.tiporespuesta);
+    /* handleRespLocation(tareaId, pregunta.id, location, pregunta.tiporespuesta); */
+    handleResp(
+      tareaId,
+      formularioId,
+      pregunta.id,
+      location,
+      pregunta.tiporespuesta,
+      formularioPreguntas,
+      setFormularioPreguntas,
+    );
   }, [location]);
 
-  const handleRespLocation = (tareaId, id, respuesta, tipo) => {
+  /* const handleRespLocation = (tareaId, id, respuesta, tipo) => {
     const indexTarea = formularioPreguntas.tareas.findIndex(
       tarea => tarea.TareaId === tareaId,
     );
@@ -105,29 +116,10 @@ export const Maps = ({
           ],
         });
       }
-    }
+    } 
 
-    /* const index = formularioPreguntas.preguntas.findIndex(
-      pregunta => pregunta.id === id,
-    );
-
-    if (index === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: [
-          ...formularioPreguntas.preguntas,
-          {id: id, respuesta: respuesta},
-        ],
-      });
-    } else {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        preguntas: formularioPreguntas.preguntas.map(pregunta =>
-          pregunta.id === id ? {...pregunta, respuesta: respuesta} : pregunta,
-        ),
-      });
-    } */
-  };
+   
+  };*/
   return (
     <View key={pregunta.id} style={{height: 300}}>
       <Text style={styles.geo}>{pregunta.pregunta}</Text>
