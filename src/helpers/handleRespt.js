@@ -1,7 +1,7 @@
 import React from 'react';
 import {SetStorage} from '../components/SetStorage';
 
-export const handleResp = (
+export const handleResp = async (
   tareaId,
   formularioId,
   id,
@@ -12,6 +12,7 @@ export const handleResp = (
 ) => {
   console.log('ITEMS', respuesta, tipo);
 
+  console.log('FORMULARIO PREGUNTAS', JSON.stringify(respuesta));
   const indexTarea = formularioPreguntas.tareas.findIndex(
     tarea => tarea.TareaId === tareaId,
   );

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {ItemSeparator} from './ItemSeparator';
 import {AuthContext} from '../context/AuthContext';
@@ -13,8 +13,16 @@ import {GetFiles} from './GetFiles';
 import {Maps} from './Maps';
 import Firma from './Firma';
 import {handleResp} from '../helpers/handleRespt';
+import {SetStorage} from './SetStorage';
 
-export const Formularios = ({formulario, tarea, employee, cordsOt}) => {
+export const Formularios = ({
+  formulario,
+  tarea,
+  employee,
+  cordsOt,
+  formAsync,
+  setformAsync,
+}) => {
   const initialFormState = {
     id_ot: employee.id,
     fecha: employee.fecha,
@@ -27,13 +35,42 @@ export const Formularios = ({formulario, tarea, employee, cordsOt}) => {
   };
 
   //console.log('formAsync', formAsync);
-  const [formularioPreguntas, setFormularioPreguntas] =
-    useState(initialFormState);
+  const [formularioPreguntas, setFormularioPreguntas] = useState(
+    formAsync ? formAsync : initialFormState,
+  );
 
+  console.log('formularioPreguntas', JSON.stringify(formularioPreguntas));
+
+  const textAsync = formAsync?.tareas
+    ?.filter(item => item.TareaId === tarea.id)[0]
+    ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
+    ?.preguntas.filter(item => item.tipo === 'Texto')[0]?.respuesta;
+
+  const singleSelectInit = formAsync?.tareas
+    ?.filter(item => item.TareaId === tarea.id)[0]
+    ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
+    ?.preguntas.filter(item => item.tipo === 'Seleccion Simple')
+    ?.map(item => {
+      return {
+        id: item.id,
+        value: item.respuesta,
+      };
+    })[0];
+  // console.log('singleSelectInit', JSON.stringify(singleSelectInit));
+
+  useEffect(() => {
+    SetStorage(formularioPreguntas);
+    setformAsync(formularioPreguntas);
+  }, [formularioPreguntas]);
+
+  /*  console.log('formAsync', JSON.stringify(formAsync)); */
   const preguntas = formulario.preguntas;
+  const [text, setText] = useState(textAsync ? textAsync : '');
   const [IditemSelect, setIditemSelect] = useState(0);
-  const [selectedItem, setSelectedItem] = useState();
-  console.log('preguntas', JSON.stringify(formularioPreguntas));
+  const [selectedItem, setSelectedItem] = useState(singleSelectInit);
+
+  console.log(selectedItem);
+  //console.log('preguntas', JSON.stringify(formularioPreguntas));
   return (
     <View style={styles.row}>
       <Text style={styles.welcome}>{formulario.formulario}</Text>
@@ -47,10 +84,18 @@ export const Formularios = ({formulario, tarea, employee, cordsOt}) => {
         });
 
         const dataMulti = pregunta.respuestas.map((respuesta, index) => {
+          const multiresp = formAsync?.tareas
+            ?.filter(item => item.TareaId === tarea.id)[0]
+            ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
+            ?.preguntas.filter(
+              item => item.tipo === 'Seleccion Multiple',
+            )[0]?.respuesta;
+          const check = multiresp?.filter(item => item.id === respuesta.id)[0]
+            ?.isChecked;
           return {
             id: respuesta.id,
             value: respuesta.leyenda,
-            isChecked: false,
+            isChecked: check,
           };
         });
 
@@ -96,7 +141,9 @@ export const Formularios = ({formulario, tarea, employee, cordsOt}) => {
                   key={pregunta.id}
                   style={styles.sm}
                   disableAbsolute
+                  doneButtonBackgroundColor
                   data={dataMulti}
+                  doneButtonText="Listo"
                   onSelect={selectedItems => {
                     setIditemSelect(selectedItems),
                       handleResp(
@@ -133,8 +180,10 @@ export const Formularios = ({formulario, tarea, employee, cordsOt}) => {
                       pregunta.tiporespuesta,
                       formularioPreguntas,
                       setFormularioPreguntas,
-                    );
+                    ),
+                      setText(text);
                   }}
+                  value={text}
                 />
                 <ItemSeparator />
               </View>
@@ -157,20 +206,24 @@ export const Formularios = ({formulario, tarea, employee, cordsOt}) => {
                   pregunta={pregunta}
                   formularioPreguntas={formularioPreguntas}
                   setFormularioPreguntas={setFormularioPreguntas}
+                  formAsync={formAsync}
                 />
               </>
             ) : pregunta.tiporespuesta === 'Firma' ? (
               <View key={pregunta.id}>
                 <Text style={styles.textfirma}>{pregunta.pregunta}</Text>
 
-                <Firma
-                  tareaId={tarea.id}
-                  formularioId={formulario.id}
-                  preguntaid={pregunta.id}
-                  formularioPreguntas={formularioPreguntas}
-                  setFormularioPreguntas={setFormularioPreguntas}
-                  preguntatiporespuesta={pregunta.tiporespuesta}
-                />
+                {
+                  <Firma
+                    tareaId={tarea.id}
+                    formularioId={formulario.id}
+                    preguntaid={pregunta.id}
+                    formularioPreguntas={formularioPreguntas}
+                    setFormularioPreguntas={setFormularioPreguntas}
+                    preguntatiporespuesta={pregunta.tiporespuesta}
+                    formAsync={formAsync}
+                  />
+                }
               </View>
             ) : (
               <></>

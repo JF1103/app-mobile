@@ -8,9 +8,12 @@ export default function Tareas({
   latitud,
   longitud,
   formAsync,
+  setformAsync,
+  index,
 }) {
   return (
     <TouchableOpacity
+      key={employee?.id + tarea.id}
       style={styles.btn2}
       onPress={() => {
         navigation.navigate('FormOne', {
@@ -19,6 +22,7 @@ export default function Tareas({
           latitud,
           longitud,
           formAsync,
+          setformAsync,
         });
       }}>
       <Text style={styles.text1}>Iniciar Tarea</Text>

@@ -33,7 +33,8 @@ import {handleResp} from '../helpers/handleRespt';
 import {Formularios} from './Formularios';
 
 const FormOne = ({navigation, route}) => {
-  const {tarea, latitud, longitud, employee, formAsync} = route.params;
+  const {tarea, latitud, longitud, employee, formAsync, setformAsync} =
+    route.params;
 
   const [respuestas, setRespuestas] = useState();
   const [tex, setTex] = useState();
@@ -59,7 +60,7 @@ const FormOne = ({navigation, route}) => {
           <Icon style={styles.icon} name="arrow-back-outline" />
         </TouchableOpacity>
         <Text style={styles.title}>Formulario</Text>
-        {tarea?.formularios.map(formualario => {
+        {tarea?.formularios.map((formualario, index) => {
           return (
             <Formularios
               key={formualario.id}
@@ -67,13 +68,16 @@ const FormOne = ({navigation, route}) => {
               tarea={tarea}
               employee={employee}
               cordsOt={cordsOt}
+              index={index}
+              formAsync={formAsync}
+              setformAsync={setformAsync}
             />
           );
         })}
         <TouchableOpacity
           style={styles.btn5}
           onPress={() => {
-            SetStorage(formularioPreguntas);
+            /* SetStorage(formularioPreguntas); */
             /*   navigation.navigate(''); */
           }}>
           <Text style={styles.text6}>Enviar formulario</Text>

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   LogBox,
+  Image,
 } from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
 import {ItemSeparator} from './ItemSeparator';
@@ -22,73 +23,147 @@ const Firma = ({
   formularioPreguntas,
   setFormularioPreguntas,
   preguntatiporespuesta,
+  formAsync,
 }) => {
-  //console.log(tareaId, preguntaid);
-  const [visualizaFirma, setVisualizaFirma] = useState(false);
+  const firmInit = formAsync?.tareas
+    ?.filter(item => item.TareaId === tareaId)[0]
+    ?.formularios.filter(item => item.FormularioId === formularioId)[0]
+    ?.preguntas.filter(item => item.tipo === 'Firma')[0]?.respuesta?.tempUri;
+
+  const [firmPath, setFirmPath] = useState(
+    firmInit ? 'file:' + firmInit : null,
+  );
+  const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
 
   const saveSign = saveBtn => {
     saveBtn.current.saveImage();
   };
 
   const resetSign = saveBtn => {
-    saveBtn.current.resetImage();
-    //eliminr firma
+    if (firmPath) {
+      setFirmPath(null);
+      let path =
+        RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
+      console.log('path', path);
+      RNFS.unlink(path)
+        .then(() => {
+          console.log('FILE DELETED');
+        })
+        .catch(err => {
+          console.log(err.message);
+        });
 
-    let path =
-      RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
-    console.log('path', path);
-    RNFS.unlink(path)
-      .then(() => {
-        console.log('FILE DELETED');
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-
-    //actualizar formularioPreguntas
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-
-    if (indexTarea !== -1) {
-      const indexFormulario = formularioPreguntas.tareas[
-        indexTarea
-      ].formularios.findIndex(
-        formulario => formulario.FormularioId === formularioId,
+      //actualizar formularioPreguntas
+      const indexTarea = formularioPreguntas.tareas.findIndex(
+        tarea => tarea.TareaId === tareaId,
       );
-      if (indexFormulario !== -1) {
-        const indexPregunta = formularioPreguntas.tareas[
+
+      if (indexTarea !== -1) {
+        const indexFormulario = formularioPreguntas.tareas[
           indexTarea
-        ].formularios[indexFormulario].preguntas.findIndex(
-          pregunta => pregunta.id === preguntaid,
+        ].formularios.findIndex(
+          formulario => formulario.FormularioId === formularioId,
         );
-        if (indexPregunta !== -1) {
-          setFormularioPreguntas({
-            ...formularioPreguntas,
-            tareas: [
-              {
-                ...formularioPreguntas.tareas[indexTarea],
-                formularios: [
-                  {
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ],
-                    preguntas: [
-                      {
+        if (indexFormulario !== -1) {
+          const indexPregunta = formularioPreguntas.tareas[
+            indexTarea
+          ].formularios[indexFormulario].preguntas.findIndex(
+            pregunta => pregunta.id === preguntaid,
+          );
+          if (indexPregunta !== -1) {
+            setFormularioPreguntas({
+              ...formularioPreguntas,
+              tareas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea],
+                  formularios: [
+                    {
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ],
+                      preguntas: [
                         ...formularioPreguntas.tareas[indexTarea].formularios[
                           indexFormulario
-                        ].preguntas.filter(
-                          pregunta => pregunta.id !== preguntaid,
-                        ),
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          });
+                        ].preguntas.slice(0, indexPregunta),
+                        {
+                          id: preguntaid,
+                          respuesta: '',
+                          tipo: preguntatiporespuesta,
+                        },
+                        ...formularioPreguntas.tareas[indexTarea].formularios[
+                          indexFormulario
+                        ].preguntas.slice(indexPregunta + 1),
+                      ],
+                    },
+                  ],
+                },
+              ],
+            });
+          }
         }
       }
+    } else {
+      saveBtn.current.resetImage();
+      //eliminr firma
+
+      /* setFirmPath(''); */
+      let path =
+        RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
+      console.log('path', path);
+      RNFS.unlink(path)
+        .then(() => {
+          console.log('FILE DELETED');
+        })
+        .catch(err => {
+          console.log(err.message);
+        });
+
+      //actualizar formularioPreguntas
+      const indexTarea = formularioPreguntas.tareas.findIndex(
+        tarea => tarea.TareaId === tareaId,
+      );
+
+      if (indexTarea !== -1) {
+        const indexFormulario = formularioPreguntas.tareas[
+          indexTarea
+        ].formularios.findIndex(
+          formulario => formulario.FormularioId === formularioId,
+        );
+        if (indexFormulario !== -1) {
+          const indexPregunta = formularioPreguntas.tareas[
+            indexTarea
+          ].formularios[indexFormulario].preguntas.findIndex(
+            pregunta => pregunta.id === preguntaid,
+          );
+          if (indexPregunta !== -1) {
+            setFormularioPreguntas({
+              ...formularioPreguntas,
+              tareas: [
+                {
+                  ...formularioPreguntas.tareas[indexTarea],
+                  formularios: [
+                    {
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ],
+                      preguntas: [
+                        {
+                          ...formularioPreguntas.tareas[indexTarea].formularios[
+                            indexFormulario
+                          ].preguntas.filter(
+                            pregunta => pregunta.id !== preguntaid,
+                          ),
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            });
+          }
+        }
+      }
+      SetStorage(formularioPreguntas);
     }
   };
 
@@ -283,6 +358,7 @@ const Firma = ({
         }
       }
     }
+    SetStorage(formularioPreguntas);
   };
 
   return (
@@ -294,27 +370,40 @@ const Firma = ({
         <Text style={styles.text1}>Presione aquí para firmar</Text>
       </TouchableOpacity>
       <SafeAreaView style={{...styles.marco, ...stylesE}}>
-        <SignatureCapture
-          ref={saveBtn}
-          style={{...styles.signature}}
-          onSaveEvent={_onSaveEvent}
-          onDragEvent={_onDragEvent}
-          saveImageFileInExtStorage={true}
-          showNativeButtons={false}
-          showTitleLabel={false}
-          viewMode={'portrait'}
-        />
+        {firmPath ? (
+          <Image
+            source={{uri: firmPath}}
+            style={{
+              marginTop: 20,
+              width: '100%',
+              height: 200,
+            }}
+          />
+        ) : (
+          <SignatureCapture
+            ref={saveBtn}
+            style={{...styles.signature}}
+            onSaveEvent={_onSaveEvent}
+            onDragEvent={_onDragEvent}
+            saveImageFileInExtStorage={true}
+            showNativeButtons={false}
+            showTitleLabel={false}
+            viewMode={'portrait'}
+          />
+        )}
 
         <ItemSeparator />
 
         <View style={{flexDirection: 'row'}}>
-          <TouchableHighlight
-            style={styles.buttonStyle}
-            onPress={() => {
-              saveSign(saveBtn);
-            }}>
-            <Text style={styles.text}>Guardar</Text>
-          </TouchableHighlight>
+          {!firmPath && (
+            <TouchableHighlight
+              style={styles.buttonStyle}
+              onPress={() => {
+                saveSign(saveBtn);
+              }}>
+              <Text style={styles.text}>Guardar</Text>
+            </TouchableHighlight>
+          )}
 
           <TouchableHighlight
             style={styles.buttonStyle}

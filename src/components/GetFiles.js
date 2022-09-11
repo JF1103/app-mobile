@@ -38,6 +38,7 @@ export const GetFiles = ({
   pregunta,
   formularioPreguntas,
   setFormularioPreguntas,
+  formAsync,
 }) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
 
@@ -63,11 +64,17 @@ export const GetFiles = ({
     }
   };
 
+  const syncUri = formAsync?.tareas
+    ?.filter(item => item.TareaId === tareaId)[0]
+    ?.formularios.filter(item => item.FormularioId === formularioId)[0]
+    ?.preguntas.filter(item => item.tipo === 'Archivo')[0]?.respuesta?.tempUri;
+
+  console.log('syncUri', syncUri);
   useEffect(() => {
     checkLocationPermissions();
   }, []);
 
-  const [tempUri, setTempUri] = useState('');
+  const [tempUri, setTempUri] = useState(syncUri ? syncUri : '');
 
   const takePhoto = () => {
     launchCamera(
@@ -111,7 +118,7 @@ export const GetFiles = ({
         if (resp.didCancel) return;
         if (resp.assets[0].uri) {
           setTempUri(resp.assets[0].uri);
-          handleRespVideo(
+          handleRespFoto(
             tareaId,
             formularioId,
             pregunta.id,
@@ -294,90 +301,6 @@ export const GetFiles = ({
         }
       }
     }
-  };
-
-  const handleRespVideo = async (
-    tareaId,
-    formularioId,
-    id,
-    fileName,
-    fileType,
-    tempUri,
-    respuesta,
-    tipo,
-  ) => {
-    const base64 = await RNFS.readFile(tempUri, 'base64');
-
-    let path = RNFS.DocumentDirectoryPath + `/${fileName}`;
-    RNFS.writeFile(path, base64, 'utf8')
-      .then(success => {
-        console.log('FILE WRITTEN!');
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          ...formularioPreguntas.tareas,
-          {
-            TareaId: tareaId,
-            preguntas: [
-              {id: id, respuesta: {base64: path, tempUri: tempUri}, tipo: tipo},
-            ],
-          },
-        ],
-      });
-    } else {
-      const indexPregunta = formularioPreguntas.tareas[
-        indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
-
-      if (indexPregunta === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: {base64: path, tempUri: tempUri}},
-              ],
-            },
-          ],
-        });
-      } else {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: {base64: path, tempUri: tempUri},
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
-      }
-    }
     SetStorage(formularioPreguntas);
   };
 
@@ -397,66 +320,98 @@ export const GetFiles = ({
     const indexTarea = formularioPreguntas.tareas.findIndex(
       tarea => tarea.TareaId === tareaId,
     );
-
     if (indexTarea === -1) {
       setFormularioPreguntas({
         ...formularioPreguntas,
         tareas: [
-          ...formularioPreguntas.tareas,
           {
             TareaId: tareaId,
-            preguntas: [
+            formularios: [
               {
-                id: id,
-                respuesta: {base64: path},
-                tipo: tipo,
+                FormularioId: formularioId,
+                preguntas: [{id: id, respuesta: {base64: path}, tipo: tipo}],
               },
             ],
           },
         ],
       });
     } else {
-      const indexPregunta = formularioPreguntas.tareas[
+      const indexFormulario = formularioPreguntas.tareas[
         indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
+      ].formularios.findIndex(
+        formulario => formulario.FormularioId === formularioId,
+      );
 
-      if (indexPregunta === -1) {
+      if (indexFormulario === -1) {
         setFormularioPreguntas({
           ...formularioPreguntas,
           tareas: [
             {
               ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: {base64: path}},
+              formularios: [
+                {
+                  FormularioId: formularioId,
+                  preguntas: [{id: id, respuesta: {base64: path}, tipo: tipo}],
+                },
               ],
             },
           ],
         });
       } else {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: {base64: path},
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
+        const indexPregunta = formularioPreguntas.tareas[
+          indexTarea
+        ].formularios[indexFormulario].preguntas.findIndex(
+          pregunta => pregunta.id === id,
+        );
+
+        if (indexPregunta === -1) {
+          setFormularioPreguntas({
+            ...formularioPreguntas,
+            tareas: [
+              {
+                ...formularioPreguntas.tareas[indexTarea],
+                formularios: [
+                  {
+                    ...formularioPreguntas.tareas[indexTarea].formularios[
+                      indexFormulario
+                    ],
+                    preguntas: [
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas,
+                      {id: id, respuesta: {base64: path}, tipo: tipo},
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        } else {
+          setFormularioPreguntas({
+            ...formularioPreguntas,
+            tareas: [
+              {
+                ...formularioPreguntas.tareas[indexTarea],
+                formularios: [
+                  {
+                    ...formularioPreguntas.tareas[indexTarea].formularios[
+                      indexFormulario
+                    ],
+                    preguntas: [
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas.slice(0, indexPregunta),
+                      {id: id, respuesta: {base64: path}, tipo: tipo},
+                      ...formularioPreguntas.tareas[indexTarea].formularios[
+                        indexFormulario
+                      ].preguntas.slice(indexPregunta + 1),
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        }
       }
     }
     SetStorage(formularioPreguntas);
@@ -493,6 +448,7 @@ export const GetFiles = ({
           tareaId={tareaId}
           formularioId={formularioId}
           pregunta={pregunta}
+          formAsync={formAsync}
         />
       )}
       {tempUri && (

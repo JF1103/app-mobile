@@ -37,7 +37,7 @@ const HomeScreen = ({navigation}) => {
     inicializaformularioPreguntas();
   }, []);
 
-  //console.log(JSON.stringify(formAsync));
+  console.log(JSON.stringify(formAsync));
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(
@@ -116,17 +116,18 @@ const HomeScreen = ({navigation}) => {
                   </TouchableOpacity>
                   {employee['0'].tareas.map(tarea => {
                     return (
-                      <>
+                      <View key={employee?.id + tarea.id}>
                         <Tareas
-                          key={tarea.id}
+                          key={employee?.id + tarea.id}
                           tarea={tarea}
                           employee={employee}
                           latitud={latitud}
                           longitud={longitud}
                           formAsync={formAsync}
+                          setformAsync={setformAsync}
                           navigation={navigation}
                         />
-                      </>
+                      </View>
                     );
                   })}
                 </View>
