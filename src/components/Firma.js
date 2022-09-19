@@ -1,4 +1,4 @@
-import React, {Component, useState, useRef} from 'react';
+import React, {Component, useState, useRef, useEffect} from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -15,187 +15,61 @@ import {ItemSeparator} from './ItemSeparator';
 import Icon from 'react-native-vector-icons/Ionicons';
 import RNFS from 'react-native-fs';
 import {SetStorage} from './SetStorage';
+import {deleteFiles} from './DeleteFiles';
+import {resetSign} from './ResetFirm';
+import {handleRespFirma} from './handleRespFirma';
+import {useLocation} from '../hooks/useLocation';
 
 const Firma = ({
   tareaId,
+  idotd,
   formularioId,
+  refformularioconector,
   preguntaid,
   formularioPreguntas,
   setFormularioPreguntas,
   preguntatiporespuesta,
+  employee,
+  idUsuario,
   formAsync,
 }) => {
-  const firmInit = formAsync?.tareas
-    ?.filter(item => item.TareaId === tareaId)[0]
+  const {getCurrentLocation} = useLocation();
+  let path =
+    RNFS.DocumentDirectoryPath +
+    `/firma_${tareaId}_${formularioId}_${preguntaid}.png`;
+
+  const exists = async () => {
+    let exists = await RNFS.exists(
+      '/data/user/0/com.app_mobile/files/firma_5_3_13.png',
+    );
+    console.log('exists', exists);
+  };
+
+  useEffect(() => {
+    exists();
+  }, []);
+
+  const firmInit = formAsync?.formcomplet
+    .filter(item => item.idUsuario === idUsuario)[0]
+    ?.ots.filter(item => item.id_ot === employee.id)[0]
+    ?.tareas.filter(item => item.TareaId === tareaId)[0]
     ?.formularios.filter(item => item.FormularioId === formularioId)[0]
-    ?.preguntas.filter(item => item.tipo === 'Firma')[0]?.respuesta?.tempUri;
+    ?.preguntas.filter(item => item.tipo === 'Firma')[0]?.respuesta?.base64;
 
   const [firmPath, setFirmPath] = useState(
     firmInit ? 'file:' + firmInit : null,
   );
+
   const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
+
+  /*  console.log('firmPath', firmPath);
+  console.log('firmInit', firmInit);
+  console.log(JSON.stringify(formularioPreguntas)); */
 
   const saveSign = saveBtn => {
     saveBtn.current.saveImage();
   };
 
-  const resetSign = saveBtn => {
-    if (firmPath) {
-      setFirmPath(null);
-      let path =
-        RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
-      console.log('path', path);
-      RNFS.unlink(path)
-        .then(() => {
-          console.log('FILE DELETED');
-        })
-        .catch(err => {
-          console.log(err.message);
-        });
-
-      //actualizar formularioPreguntas
-      const indexTarea = formularioPreguntas.tareas.findIndex(
-        tarea => tarea.TareaId === tareaId,
-      );
-
-      if (indexTarea !== -1) {
-        const indexFormulario = formularioPreguntas.tareas[
-          indexTarea
-        ].formularios.findIndex(
-          formulario => formulario.FormularioId === formularioId,
-        );
-        if (indexFormulario !== -1) {
-          const indexPregunta = formularioPreguntas.tareas[
-            indexTarea
-          ].formularios[indexFormulario].preguntas.findIndex(
-            pregunta => pregunta.id === preguntaid,
-          );
-          if (indexPregunta !== -1) {
-            setFormularioPreguntas({
-              ...formularioPreguntas,
-              tareas: [
-                {
-                  ...formularioPreguntas.tareas[indexTarea],
-                  formularios: [
-                    {
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ],
-                      preguntas: [
-                        ...formularioPreguntas.tareas[indexTarea].formularios[
-                          indexFormulario
-                        ].preguntas.slice(0, indexPregunta),
-                        {
-                          id: preguntaid,
-                          respuesta: '',
-                          tipo: preguntatiporespuesta,
-                        },
-                        ...formularioPreguntas.tareas[indexTarea].formularios[
-                          indexFormulario
-                        ].preguntas.slice(indexPregunta + 1),
-                      ],
-                    },
-                  ],
-                },
-              ],
-            });
-          }
-        }
-      }
-    } else {
-      saveBtn.current.resetImage();
-      //eliminr firma
-
-      /* setFirmPath(''); */
-      let path =
-        RNFS.DocumentDirectoryPath + `/firma_${tareaId}_${preguntaid}.png`;
-      console.log('path', path);
-      RNFS.unlink(path)
-        .then(() => {
-          console.log('FILE DELETED');
-        })
-        .catch(err => {
-          console.log(err.message);
-        });
-
-      //actualizar formularioPreguntas
-      const indexTarea = formularioPreguntas.tareas.findIndex(
-        tarea => tarea.TareaId === tareaId,
-      );
-
-      if (indexTarea !== -1) {
-        const indexFormulario = formularioPreguntas.tareas[
-          indexTarea
-        ].formularios.findIndex(
-          formulario => formulario.FormularioId === formularioId,
-        );
-        if (indexFormulario !== -1) {
-          const indexPregunta = formularioPreguntas.tareas[
-            indexTarea
-          ].formularios[indexFormulario].preguntas.findIndex(
-            pregunta => pregunta.id === preguntaid,
-          );
-          if (indexPregunta !== -1) {
-            setFormularioPreguntas({
-              ...formularioPreguntas,
-              tareas: [
-                {
-                  ...formularioPreguntas.tareas[indexTarea],
-                  formularios: [
-                    {
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ],
-                      preguntas: [
-                        {
-                          ...formularioPreguntas.tareas[indexTarea].formularios[
-                            indexFormulario
-                          ].preguntas.filter(
-                            pregunta => pregunta.id !== preguntaid,
-                          ),
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            });
-          }
-        }
-      }
-      SetStorage(formularioPreguntas);
-    }
-  };
-
-  /*     if (indexTarea !== -1) {
-      const indexPregunta = formularioPreguntas.tareas[
-        indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === preguntaid);
-
-      if (indexPregunta !== -1) {
-        console.log('entre eliminarrrr');
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              //elimino la pregunta
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
-      }
-    }
-    SetStorage(formularioPreguntas); 
-  };*/
   const saveBtn = useRef(null);
   const height = visualizaFirma ? '100%' : 0;
   const stylesE = StyleSheet.create(
@@ -205,160 +79,29 @@ const Firma = ({
   );
 
   const _onSaveEvent = result => {
-    console.log(result.pathName);
-    handleRespFirma(
-      tareaId,
-      formularioId,
-      preguntaid,
-      {dat: result.encoded, tempUri: result.pathName},
-      preguntatiporespuesta,
-    );
+    /* console.log('pathname onsaveevent', result.encoded); */
+    getCurrentLocation().then(cords => {
+      handleRespFirma(
+        formularioPreguntas,
+        setFormularioPreguntas,
+        path,
+        firmPath,
+        setFirmPath,
+        tareaId,
+        idotd,
+        formularioId,
+        refformularioconector,
+        preguntaid,
+        {dat: result.encoded, tempUri: result.pathName},
+        preguntatiporespuesta,
+        employee,
+        idUsuario,
+        cords,
+      );
+    });
   };
   const _onDragEvent = () => {
-    // This callback will be called when the user enters signature
     console.log('dragged');
-  };
-
-  const handleRespFirma = async (
-    tareaId,
-    formularioId,
-    id,
-    respuesta,
-    tipo,
-  ) => {
-    console.log('ITEMS', respuesta, tipo);
-
-    const base64 = await RNFS.readFile(respuesta.tempUri, 'base64');
-    console.log(preguntaid);
-    let path =
-      RNFS.DocumentDirectoryPath +
-      `/firma_${tareaId}_${formularioId}_${id}.png`;
-    RNFS.writeFile(path, base64, 'utf8')
-      .then(success => {
-        console.log('FILE WRITTEN!');
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          {
-            TareaId: tareaId,
-            formularios: [
-              {
-                FormularioId: formularioId,
-                preguntas: [
-                  {
-                    id: id,
-                    respuesta: {base64: path, tempUri: respuesta.tempUri},
-                    tipo: tipo,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-    } else {
-      const indexFormulario = formularioPreguntas.tareas[
-        indexTarea
-      ].formularios.findIndex(
-        formulario => formulario.FormularioId === formularioId,
-      );
-
-      if (indexFormulario === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              formularios: [
-                {
-                  FormularioId: formularioId,
-                  preguntas: [
-                    {
-                      id: id,
-                      respuesta: {base64: path, tempUri: respuesta.tempUri},
-                      tipo: tipo,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        });
-      } else {
-        const indexPregunta = formularioPreguntas.tareas[
-          indexTarea
-        ].formularios[indexFormulario].preguntas.findIndex(
-          pregunta => pregunta.id === id,
-        );
-
-        if (indexPregunta === -1) {
-          setFormularioPreguntas({
-            ...formularioPreguntas,
-            tareas: [
-              {
-                ...formularioPreguntas.tareas[indexTarea],
-                formularios: [
-                  {
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ],
-                    preguntas: [
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas,
-                      {
-                        id: id,
-                        respuesta: {base64: path, tempUri: respuesta.tempUri},
-                        tipo: tipo,
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          });
-        } else {
-          setFormularioPreguntas({
-            ...formularioPreguntas,
-            tareas: [
-              {
-                ...formularioPreguntas.tareas[indexTarea],
-                formularios: [
-                  {
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ],
-                    preguntas: [
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas.slice(0, indexPregunta),
-                      {
-                        id: id,
-                        respuesta: {base64: path, tempUri: respuesta.tempUri},
-                        tipo: tipo,
-                      },
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas.slice(indexPregunta + 1),
-                    ],
-                  },
-                ],
-              },
-            ],
-          });
-        }
-      }
-    }
-    SetStorage(formularioPreguntas);
   };
 
   return (
@@ -408,7 +151,18 @@ const Firma = ({
           <TouchableHighlight
             style={styles.buttonStyle}
             onPress={() => {
-              resetSign(saveBtn);
+              resetSign(
+                path,
+                saveBtn,
+                firmPath,
+                setFirmPath,
+                formularioPreguntas,
+                setFormularioPreguntas,
+                tareaId,
+                formularioId,
+                preguntaid,
+                preguntatiporespuesta,
+              );
             }}>
             <Text style={styles.text}>Borrar</Text>
           </TouchableHighlight>

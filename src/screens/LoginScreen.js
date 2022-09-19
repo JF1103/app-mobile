@@ -20,8 +20,8 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const {isLoading, login} = useContext(AuthContext);
-  console.log(email);
-  console.log(password);
+  // console.log(email);
+  // console.log(password);
   return (
     <>
       <ScrollView style={styles.scroll}>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginLeft: 10,
     padding: 2,
-    backgroundColor: '#ffffff', 
+    backgroundColor: '#ffffff',
   },
   input: {
     marginBottom: 12,

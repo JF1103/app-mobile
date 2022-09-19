@@ -1,53 +1,48 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ItemSeparator} from './ItemSeparator';
 import {AuthContext} from '../context/AuthContext';
 import RNSingleSelect, {
   ISingleSelectDataType,
 } from '@freakycoder/react-native-single-select';
-import RNMultiSelect, {
-  IMultiSelectDataTypes,
-} from '@freakycoder/react-native-multiple-select';
+import RNMultiSelect from '../libs/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
 import {GetFiles} from './GetFiles';
 import {Maps} from './Maps';
 import Firma from './Firma';
 import {handleResp} from '../helpers/handleRespt';
 import {SetStorage} from './SetStorage';
+import {FormContext} from '../context/FormContext';
+import {useLocation} from '../hooks/useLocation';
 
 export const Formularios = ({
   formulario,
+  idotd,
   tarea,
   employee,
   cordsOt,
-  formAsync,
-  setformAsync,
+  idUsuario,
 }) => {
-  const initialFormState = {
-    id_ot: employee.id,
-    fecha: employee.fecha,
-    fechafin: employee.fechafin,
-    tareas: [
-      {
-        formularios: [],
-      },
-    ],
-  };
+  const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
+    useContext(FormContext);
 
-  //console.log('formAsync', formAsync);
-  const [formularioPreguntas, setFormularioPreguntas] = useState(
-    formAsync ? formAsync : initialFormState,
-  );
-
-  console.log('formularioPreguntas', JSON.stringify(formularioPreguntas));
-
-  const textAsync = formAsync?.tareas
-    ?.filter(item => item.TareaId === tarea.id)[0]
+  const textAsync = formAsync?.formcomplet
+    ?.filter(item => item.idUsuario === idUsuario)[0]
+    ?.ots.filter(item => item.id_ot === employee.id)[0]
+    ?.tareas.filter(item => item.TareaId === tarea.id)[0]
     ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
     ?.preguntas.filter(item => item.tipo === 'Texto')[0]?.respuesta;
 
-  const singleSelectInit = formAsync?.tareas
-    ?.filter(item => item.TareaId === tarea.id)[0]
+  const singleSelectInit = formAsync?.formcomplet
+    ?.filter(item => item.idUsuario === idUsuario)[0]
+    ?.ots.filter(item => item.id_ot === employee.id)[0]
+    ?.tareas.filter(item => item.TareaId === tarea.id)[0]
     ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
     ?.preguntas.filter(item => item.tipo === 'Seleccion Simple')
     ?.map(item => {
@@ -56,20 +51,22 @@ export const Formularios = ({
         value: item.respuesta,
       };
     })[0];
-  // console.log('singleSelectInit', JSON.stringify(singleSelectInit));
 
   useEffect(() => {
     SetStorage(formularioPreguntas);
     setformAsync(formularioPreguntas);
   }, [formularioPreguntas]);
+  //console.log('nuevo formularios', JSON.stringify(formularioPreguntas));
 
-  /*  console.log('formAsync', JSON.stringify(formAsync)); */
+  /*   console.log('formAsync', JSON.stringify(formAsync)); */
   const preguntas = formulario.preguntas;
   const [text, setText] = useState(textAsync ? textAsync : '');
   const [IditemSelect, setIditemSelect] = useState(0);
   const [selectedItem, setSelectedItem] = useState(singleSelectInit);
+  const [mountMulti, setMountMulti] = useState(false);
+  const {getCurrentLocation} = useLocation();
 
-  console.log(selectedItem);
+  //console.log(selectedItem);
   //console.log('preguntas', JSON.stringify(formularioPreguntas));
   return (
     <View style={styles.row}>
@@ -84,8 +81,10 @@ export const Formularios = ({
         });
 
         const dataMulti = pregunta.respuestas.map((respuesta, index) => {
-          const multiresp = formAsync?.tareas
-            ?.filter(item => item.TareaId === tarea.id)[0]
+          const multiresp = formAsync?.formcomplet
+            ?.filter(item => item.idUsuario === idUsuario)[0]
+            ?.ots.filter(item => item.id_ot === employee.id)[0]
+            ?.tareas.filter(item => item.TareaId === tarea.id)[0]
             ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
             ?.preguntas.filter(
               item => item.tipo === 'Seleccion Multiple',
@@ -118,15 +117,22 @@ export const Formularios = ({
                     selectedItem={selectedItem}
                     onSelect={selectedItem => {
                       setSelectedItem(selectedItem),
-                        handleResp(
-                          tarea.id,
-                          formulario.id,
-                          pregunta.id,
-                          selectedItem.value,
-                          pregunta.tiporespuesta,
-                          formularioPreguntas,
-                          setFormularioPreguntas,
-                        );
+                        getCurrentLocation().then(cords => {
+                          handleResp(
+                            tarea.id,
+                            idotd,
+                            formulario.id,
+                            formulario.refformularioconector,
+                            pregunta.id,
+                            selectedItem.value,
+                            pregunta.tiporespuesta,
+                            formularioPreguntas,
+                            setFormularioPreguntas,
+                            employee,
+                            idUsuario,
+                            cords,
+                          );
+                        });
                     }}
                     placeholder="Elegir opción"
                     width="100%"
@@ -135,29 +141,52 @@ export const Formularios = ({
                 <ItemSeparator />
               </View>
             ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
-              <View key={pregunta.id}>
+              <View
+                key={pregunta.id}
+                style={{
+                  height: 170 + 50 * dataMulti.length,
+                }}>
                 <Text style={styles.selmul}>{pregunta.pregunta}</Text>
-                <RNMultiSelect
-                  key={pregunta.id}
-                  style={styles.sm}
-                  disableAbsolute
-                  doneButtonBackgroundColor
-                  data={dataMulti}
-                  doneButtonText="Listo"
-                  onSelect={selectedItems => {
-                    setIditemSelect(selectedItems),
-                      handleResp(
-                        tarea.id,
-                        formulario.id,
-                        pregunta.id,
-                        selectedItems,
-                        pregunta.tiporespuesta,
-                        formularioPreguntas,
-                        setFormularioPreguntas,
-                      );
-                  }}
-                  placeholder="Elegir opción"
-                />
+                <ScrollView horizontal={true} style={{width: '100%'}}>
+                  <RNMultiSelect
+                    key={pregunta.id}
+                    style={styles.sm}
+                    disableAbsolute={true}
+                    doneButtonBackgroundColor
+                    data={dataMulti}
+                    menuItemTextStyle={{textDecorationLine: 'none'}}
+                    doneButtonTextStyle={{color: '#fb8c00'}}
+                    doneButtonText="Listo"
+                    menuBarContainerStyle={{
+                      borderRadius: 10,
+                      height: 50 * dataMulti.length,
+                    }}
+                    onSelect={selectedItems => {
+                      mountMulti
+                        ? getCurrentLocation().then(cords => {
+                            handleResp(
+                              tarea.id,
+                              idotd,
+                              formulario.id,
+                              formulario.refformularioconector,
+                              pregunta.id,
+                              selectedItems,
+                              pregunta.tiporespuesta,
+                              formularioPreguntas,
+                              setFormularioPreguntas,
+                              employee,
+                              idUsuario,
+                              cords,
+                            ),
+                              setIditemSelect(selectedItems),
+                              console.log('seleccion items', selectedItems);
+                          })
+                        : setMountMulti(true),
+                        setIditemSelect(selectedItems);
+                    }}
+                    placeholder="Elegir opción"
+                  />
+                </ScrollView>
                 <ItemSeparator />
               </View>
             ) : pregunta.tiporespuesta === 'Texto' ? (
@@ -172,15 +201,22 @@ export const Formularios = ({
                   exceedCharCountColor="#990606"
                   placeholder={'Escriba aquí ...'}
                   onChangeText={text => {
-                    handleResp(
-                      tarea.id,
-                      formulario.id,
-                      pregunta.id,
-                      text,
-                      pregunta.tiporespuesta,
-                      formularioPreguntas,
-                      setFormularioPreguntas,
-                    ),
+                    getCurrentLocation().then(cords => {
+                      handleResp(
+                        tarea.id,
+                        idotd,
+                        formulario.id,
+                        formulario.refformularioconector,
+                        pregunta.id,
+                        text,
+                        pregunta.tiporespuesta,
+                        formularioPreguntas,
+                        setFormularioPreguntas,
+                        employee,
+                        idUsuario,
+                        cords,
+                      );
+                    }),
                       setText(text);
                   }}
                   value={text}
@@ -192,20 +228,29 @@ export const Formularios = ({
                 <Maps
                   cordsOt={cordsOt}
                   tareaId={tarea.id}
+                  idotd={idotd}
                   formularioId={formulario.id}
+                  refformularioconector={formulario.refformularioconector}
                   pregunta={pregunta}
                   formularioPreguntas={formularioPreguntas}
                   setFormularioPreguntas={setFormularioPreguntas}
+                  employee={employee}
+                  idUsuario={idUsuario}
+                  formAsync={formAsync}
                 />
               </>
             ) : pregunta.tiporespuesta === 'Archivo' ? (
               <>
                 <GetFiles
                   tareaId={tarea.id}
+                  idotd={idotd}
                   formularioId={formulario.id}
+                  refformularioconector={formulario.refformularioconector}
                   pregunta={pregunta}
                   formularioPreguntas={formularioPreguntas}
                   setFormularioPreguntas={setFormularioPreguntas}
+                  employee={employee}
+                  idUsuario={idUsuario}
                   formAsync={formAsync}
                 />
               </>
@@ -216,11 +261,15 @@ export const Formularios = ({
                 {
                   <Firma
                     tareaId={tarea.id}
+                    idotd={idotd}
                     formularioId={formulario.id}
+                    refformularioconector={formulario.refformularioconector}
                     preguntaid={pregunta.id}
                     formularioPreguntas={formularioPreguntas}
                     setFormularioPreguntas={setFormularioPreguntas}
                     preguntatiporespuesta={pregunta.tiporespuesta}
+                    employee={employee}
+                    idUsuario={idUsuario}
                     formAsync={formAsync}
                   />
                 }
@@ -231,6 +280,19 @@ export const Formularios = ({
           </View>
         );
       })}
+      <TouchableOpacity
+        style={{
+          backgroundColor: '#fb8c00',
+          borderRadius: 10,
+          padding: 10,
+          marginTop: 40,
+        }}
+        onPress={() => {
+          /* SetStorage(formularioPreguntas); */
+          /*   navigation.navigate(''); */
+        }}>
+        <Text style={styles.text6}>Terminar Formulario</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -243,8 +305,10 @@ const styles = StyleSheet.create({
   },
   row: {
     backgroundColor: '#ffffff',
+    width: '98%',
     marginHorizontal: '6%',
-    marginVertical: '1%',
+    /* marginVertical: '1%', */
+    marginTop: 20,
     padding: '5%',
     borderRadius: 20,
     boxShadow: 5,
@@ -339,7 +403,7 @@ const styles = StyleSheet.create({
   },
   text6: {
     fontSize: 16,
-    color: '#fb8c00',
+    color: 'white',
     textAlign: 'center',
   },
   textfirma: {

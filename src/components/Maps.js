@@ -15,20 +15,26 @@ import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import {ItemSeparator} from './ItemSeparator';
 import {handleResp} from '../helpers/handleRespt';
+import {useLocation} from '../hooks/useLocation';
 
 export const Maps = ({
   cordsOt,
-  formularioId,
   tareaId,
+  idotd,
+  formularioId,
+  refformularioconector,
   pregunta,
   formularioPreguntas,
   setFormularioPreguntas,
+  employee,
+  idUsuario,
+  cords,
 }) => {
-  const [location, setLocation] = useState({});
+  /*  const [location, setLocation] = useState();
   let nbr_latitud = 0;
-  let nbr_longitud = 0;
+  let nbr_longitud = 0; */
 
-  useEffect(() => {
+  /*  useEffect(() => {
     Geolocation.getCurrentPosition(
       info => {
         setLocation({
@@ -38,115 +44,69 @@ export const Maps = ({
       },
 
       err => {
-        console.log('entre error');
-        console.log(err);
+        // console.log('entre error');
+        //console.log(err);
+      },
+      {
+        enableHighAccuracy: false,
       },
     );
-  }, []);
-
+  }, []); */
+  const {hasLocation, initialPosition} = useLocation();
   useEffect(() => {
     /* handleRespLocation(tareaId, pregunta.id, location, pregunta.tiporespuesta); */
-    handleResp(
-      tareaId,
-      formularioId,
-      pregunta.id,
-      location,
-      pregunta.tiporespuesta,
-      formularioPreguntas,
-      setFormularioPreguntas,
-    );
-  }, [location]);
+    if (initialPosition.latitude !== 0 && initialPosition.longitude !== 0) {
+      console.log('entre', initialPosition);
+      handleResp(
+        tareaId,
+        idotd,
+        formularioId,
+        refformularioconector,
+        pregunta.id,
+        {
+          latitude: initialPosition.latitude,
+          longitude: initialPosition.longitude,
+        },
+        pregunta.tiporespuesta,
+        formularioPreguntas,
+        setFormularioPreguntas,
+        employee,
+        idUsuario,
+        {
+          latitude: initialPosition.latitude,
+          longitude: initialPosition.longitude,
+        },
+      );
+    }
+  }, [initialPosition]);
 
-  /* const handleRespLocation = (tareaId, id, respuesta, tipo) => {
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          ...formularioPreguntas.tareas,
-          {
-            TareaId: tareaId,
-            preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-          },
-        ],
-      });
-    } else {
-      const indexPregunta = formularioPreguntas.tareas[
-        indexTarea
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
-
-      if (indexPregunta === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas,
-                {id: id, respuesta: respuesta},
-              ],
-            },
-          ],
-        });
-      } else {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              preguntas: [
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  0,
-                  indexPregunta,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].preguntas[
-                    indexPregunta
-                  ],
-                  respuesta: respuesta,
-                },
-                ...formularioPreguntas.tareas[indexTarea].preguntas.slice(
-                  indexPregunta + 1,
-                ),
-              ],
-            },
-          ],
-        });
-      }
-    } 
-
-   
-  };*/
   return (
     <View key={pregunta.id} style={{height: 300}}>
       <Text style={styles.geo}>{pregunta.pregunta}</Text>
       <Text style={styles.geoText}>
-        Latitud:{location.nbr_latitud} longitud:
-        {location.nbr_longitud}
+        Latitud:{initialPosition.latitude} longitud:
+        {initialPosition.longitude}
       </Text>
       <ItemSeparator />
-      {location.nbr_latitud && location.nbr_longitud ? (
+      {hasLocation ? (
         <>
           <MapView
             showsUserLocation={true}
             style={styles.geolocalizacion}
             initialRegion={{
-              latitude: location.nbr_latitud,
-              longitude: location.nbr_longitud,
+              latitude: initialPosition.latitude,
+              longitude: initialPosition.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}>
-            <Marker
+            {/* <Marker
               coordinate={{
                 latitude: nbr_latitud,
                 longitude: nbr_longitud,
               }}
               title="My Marker"
               description="Some description"
-            />
+            /> */}
           </MapView>
           <ItemSeparator />
         </>

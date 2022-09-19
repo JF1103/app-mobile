@@ -33,8 +33,7 @@ import {handleResp} from '../helpers/handleRespt';
 import {Formularios} from './Formularios';
 
 const FormOne = ({navigation, route}) => {
-  const {tarea, latitud, longitud, employee, formAsync, setformAsync} =
-    route.params;
+  const {tarea, latitud, longitud, employee, idUsuario} = route.params;
 
   const [respuestas, setRespuestas] = useState();
   const [tex, setTex] = useState();
@@ -44,6 +43,7 @@ const FormOne = ({navigation, route}) => {
   const {userInfo} = useContext(AuthContext);
 
   const [location, setLocation] = useState({});
+
   /*   const {form, onChange, setFormValue} = UseForm(); */
   //console.log(JSON.stringify(formularioPreguntas));
 
@@ -59,29 +59,21 @@ const FormOne = ({navigation, route}) => {
           }}>
           <Icon style={styles.icon} name="arrow-back-outline" />
         </TouchableOpacity>
-        <Text style={styles.title}>Formulario</Text>
+        {/*  <Text style={styles.title}>Formulario</Text> */}
         {tarea?.formularios.map((formualario, index) => {
           return (
             <Formularios
               key={formualario.id}
               formulario={formualario}
+              idotd={tarea.idotd}
               tarea={tarea}
               employee={employee}
               cordsOt={cordsOt}
               index={index}
-              formAsync={formAsync}
-              setformAsync={setformAsync}
+              idUsuario={idUsuario}
             />
           );
         })}
-        <TouchableOpacity
-          style={styles.btn5}
-          onPress={() => {
-            /* SetStorage(formularioPreguntas); */
-            /*   navigation.navigate(''); */
-          }}>
-          <Text style={styles.text6}>Enviar formulario</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -177,19 +169,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
   },
-  btn5: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 1.0,
-    height: 40,
-    width: '80%',
-    justifyContent: 'center',
-    marginBottom: 10,
-    marginTop: 10,
-  },
+
   text6: {
     fontSize: 16,
     color: '#fb8c00',

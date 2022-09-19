@@ -40,13 +40,14 @@ export const AuthProvider = ({children}) => {
         params: {
           email: email,
           password: password,
-      }
+        },
       })
       .then(res => {
-
         let userInfo = res.data;
-        if (userInfo.error == false ) {userInfo.access_token = 'jjjj'}
-        console.log(userInfo);
+        if (userInfo.error == false) {
+          userInfo.access_token = 'jjjj';
+        }
+        console.log(res);
         setUserInfo(userInfo);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
 
@@ -57,17 +58,14 @@ export const AuthProvider = ({children}) => {
         console.log(`login error ${e}`);
         setIsLoading(false);
       });
-
   };
 
   const logout = () => {
     setIsLoading(true);
 
-    
-        AsyncStorage.removeItem('userInfo');
-        setUserInfo({});
-        setIsLoading(false);
-    
+    AsyncStorage.removeItem('userInfo');
+    setUserInfo({});
+    setIsLoading(false);
   };
 
   const isLoggedIn = async () => {

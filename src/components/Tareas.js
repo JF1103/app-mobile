@@ -7,9 +7,8 @@ export default function Tareas({
   employee,
   latitud,
   longitud,
-  formAsync,
-  setformAsync,
   index,
+  idUsuario,
 }) {
   return (
     <TouchableOpacity
@@ -21,27 +20,26 @@ export default function Tareas({
           employee,
           latitud,
           longitud,
-          formAsync,
-          setformAsync,
+          idUsuario,
         });
       }}>
-      <Text style={styles.text1}>Iniciar Tarea</Text>
+      <Text style={styles.text1}>Iniciar Tarea {tarea.tarea}</Text>
     </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({
   btn2: {
-    flex: 1,
     backgroundColor: '#ffffff',
     borderRadius: 10,
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1.0,
     height: 30,
-    width: '50%',
+    width: '100%',
     justifyContent: 'center',
-    marginLeft: 10,
+
     color: '#f5f5f5',
+    marginBottom: 10,
   },
   text1: {
     fontSize: 16,

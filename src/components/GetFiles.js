@@ -31,16 +31,23 @@ import RNFS from 'react-native-fs';
 import {ItemSeparator} from './ItemSeparator';
 import Recaudio from './Recaudio';
 import {SetStorage} from './SetStorage';
+import {handleResp} from '../helpers/handleRespt';
+import {useLocation} from '../hooks/useLocation';
 
 export const GetFiles = ({
   tareaId,
+  idotd,
   formularioId,
+  refformularioconector,
   pregunta,
   formularioPreguntas,
   setFormularioPreguntas,
+  employee,
+  idUsuario,
   formAsync,
 }) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
+  const {getCurrentLocation} = useLocation();
 
   const checkLocationPermissions = async () => {
     let permissionStatus, permissionStatus2;
@@ -56,16 +63,26 @@ export const GetFiles = ({
       let permissionsStatus5 = await request(
         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       );
+      permissionStatus2 = await request(
+        PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+      );
+      permissionStatus = await request(PERMISSIONS.ACCESS_COARSE_LOCATION);
 
       permissionStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      permissionStatus2 = await check(
+        PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+      );
+      permissionStatus = await check(PERMISSIONS.ACCESS_COARSE_LOCATION);
       permissionStatus2 = await check(
         PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
       );
     }
   };
 
-  const syncUri = formAsync?.tareas
-    ?.filter(item => item.TareaId === tareaId)[0]
+  const syncUri = formAsync?.formcomplet
+    .filter(item => item.idUsuario === idUsuario)[0]
+    ?.ots.filter(item => item.id_ot === employee.id)[0]
+    ?.tareas.filter(item => item.TareaId === tareaId)[0]
     ?.formularios.filter(item => item.FormularioId === formularioId)[0]
     ?.preguntas.filter(item => item.tipo === 'Archivo')[0]?.respuesta?.tempUri;
 
@@ -182,9 +199,26 @@ export const GetFiles = ({
         console.log(err.message);
       });
 
-    console.log('ITEMS', respuesta, tipo);
+    getCurrentLocation().then(cords => {
+      handleResp(
+        tareaId,
+        idotd,
+        formularioId,
+        refformularioconector,
+        id,
+        {base64: path, tempUri: tempUri},
+        tipo,
+        formularioPreguntas,
+        setFormularioPreguntas,
+        employee,
+        idUsuario,
+        cords,
+      );
+    });
+  };
+  //console.log('ITEMS', respuesta, tipo);
 
-    const indexTarea = formularioPreguntas.tareas.findIndex(
+  /*   const indexTarea = formularioPreguntas.tareas.findIndex(
       tarea => tarea.TareaId === tareaId,
     );
     if (indexTarea === -1) {
@@ -301,8 +335,7 @@ export const GetFiles = ({
         }
       }
     }
-    SetStorage(formularioPreguntas);
-  };
+    SetStorage(formularioPreguntas); */
 
   const handleRespAudio = async (tareaId, formularioId, id, tempUri, tipo) => {
     const base64 = await RNFS.readFile(tempUri, 'base64');
@@ -316,7 +349,23 @@ export const GetFiles = ({
       .catch(err => {
         console.log(err.message);
       });
-
+    getCurrentLocation().then(cords => {
+      handleResp(
+        tareaId,
+        idotd,
+        formularioId,
+        refformularioconector,
+        id,
+        {base64: path},
+        tipo,
+        formularioPreguntas,
+        setFormularioPreguntas,
+        employee,
+        idUsuario,
+        cords,
+      );
+    });
+    /*   
     const indexTarea = formularioPreguntas.tareas.findIndex(
       tarea => tarea.TareaId === tareaId,
     );
@@ -414,7 +463,7 @@ export const GetFiles = ({
         }
       }
     }
-    SetStorage(formularioPreguntas);
+    SetStorage(formularioPreguntas); */
   };
 
   return (
