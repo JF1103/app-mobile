@@ -72,7 +72,6 @@ export const Formularios = ({
   return (
     <View style={styles.row}>
       <Text style={styles.welcome}>{formulario.formulario}</Text>
-      <ItemSeparator />
       {preguntas?.map((pregunta, index2) => {
         const data = pregunta.respuestas.map((respuesta, index) => {
           return {
@@ -109,6 +108,8 @@ export const Formularios = ({
                     borderColor: '#fb8c00',
                     borderWidth: 1,
                     borderRadius: 10,
+                    width: '80%',
+                    marginLeft: 35,
                   }}>
                   <RNSingleSelect
                     key={pregunta.id}
@@ -139,7 +140,6 @@ export const Formularios = ({
                     width="100%"
                   />
                 </View>
-                <ItemSeparator />
               </View>
             ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
               <View
@@ -148,7 +148,7 @@ export const Formularios = ({
                   height: 170 + 50 * dataMulti.length,
                 }}>
                 <Text style={styles.selmul}>{pregunta.pregunta}</Text>
-                <ScrollView horizontal={true} style={{width: '100%'}}>
+                <ScrollView horizontal={true} style={{width: '100%', marginLeft: 30}}>
                   <RNMultiSelect
                     key={pregunta.id}
                     style={styles.sm}
@@ -188,7 +188,6 @@ export const Formularios = ({
                     placeholder="Elegir opción"
                   />
                 </ScrollView>
-                <ItemSeparator />
               </View>
             ) : pregunta.tiporespuesta === 'Texto' ? (
               <View key={pregunta.id}>
@@ -222,7 +221,6 @@ export const Formularios = ({
                   }}
                   value={text}
                 />
-                <ItemSeparator />
               </View>
             ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
               <>
@@ -284,9 +282,12 @@ export const Formularios = ({
       <TouchableOpacity
         style={{
           backgroundColor: '#fb8c00',
-          borderRadius: 10,
+          borderRadius: 20,
           padding: 10,
-          marginTop: 40,
+          marginTop: 20,
+          marginBottom: 20,
+          width: '80%',
+          marginLeft: 35,
         }}
         onPress={() => {
           SendFormulrio(
@@ -306,96 +307,71 @@ export const Formularios = ({
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ffffff',
-  },
   row: {
-    backgroundColor: '#ffffff',
-    width: '98%',
-    marginHorizontal: '6%',
-    /* marginVertical: '1%', */
-    marginTop: 20,
-    padding: '5%',
+    backgroundColor: '#fff',
     borderRadius: 20,
-    boxShadow: 5,
+    marginHorizontal: 20,
+    marginBottom: 15,
+    paddingHorizontal: 5,
+    shadowColor: '#836525',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
     borderColor: '#fb8c00',
     borderWidth: 1,
   },
   welcome: {
     fontSize: 18,
+    backgroundColor: '#fb8c00',
+    borderRadius: 20,
     color: '#000000',
-    padding: 5,
+    padding: 10,
     textAlign: 'center',
-  },
-  icon: {
-    fontSize: 30,
-    marginRight: 300,
-    color: '#000000',
-    marginTop: 5,
-  },
-  title: {
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#000000',
-    marginTop: -35,
-  },
-  container2: {
-    justifyContent: 'center',
+    marginTop: 8,
   },
   text: {
-    fontSize: 18,
-    color: '#000000',
+    fontSize: 14,
+    color: '#fb8c00',
     padding: 5,
-    marginVertical: '5%',
+    marginVertical: '3%',
     textAlign: 'center',
   },
   selsim: {
-    fontSize: 18,
-    color: '#000000',
+    fontSize: 14,
+    color: '#fb8c00',
     padding: 5,
-    marginVertical: '5%',
+    marginVertical: '3%',
     textAlign: 'center',
   },
   selmul: {
-    fontSize: 18,
-    color: '#000000',
+    fontSize: 14,
+    color: '#fb8c00',
     padding: 5,
-    marginVertical: '5%',
-    textAlign: 'center',
-  },
-  geo: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
+    marginVertical: '3%',
     textAlign: 'center',
   },
   textarea: {
-    borderRadius: 10,
-    height: 50,
+    borderRadius: 20,
+    height: 45,
     justifyContent: 'center',
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1.0,
+    width: '80%',
+    marginLeft: 35,
   },
   sm: {
-    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     boxShadow: 5,
     borderColor: '#fb8c00',
-    borderWidth: 1.0,
-  },
-  geolocalizacion: {
-    flex: 1,
-  },
-  textarch: {
-    fontSize: 15,
-    color: '#000000',
-    padding: 5,
+    borderWidth: 1,
+    borderRadius: 18,
+    marginBottom: 20,
   },
   btn5: {
     flex: 1,
@@ -416,10 +392,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   textfirma: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
+    fontSize: 14,
+    color: '#fb8c00',
+    marginVertical: '1%',
     textAlign: 'center',
   },
 });

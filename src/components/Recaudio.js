@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   viewBarPlay: {
-    backgroundColor: 'orange',
+    backgroundColor: '#fb8c00',
     height: 4,
     width: 0,
   },
@@ -73,18 +73,18 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   btn: {
-    borderColor: 'orange',
+    borderColor: '#fb8c00',
     borderWidth: 1,
   },
   txt: {
-    color: 'orange',
+    color: '#fb8c00',
     fontSize: 14,
     marginHorizontal: 8,
     marginVertical: 4,
   },
   txtRecordCounter: {
     marginTop: 32,
-    color: 'orange',
+    color: '#fb8c00',
     fontSize: 20,
     textAlignVertical: 'center',
     fontWeight: '200',
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   txtCounter: {
     marginTop: 12,
-    color: 'orange',
+    color: '#fb8c00',
     fontSize: 20,
     textAlignVertical: 'center',
     fontWeight: '200',
@@ -185,7 +185,7 @@ class Page extends Component {
               <View style={styles.playBtnWrapper}></View>
             </>
           ) : (
-            <Wave size={60} color="orange" />
+            <Wave size={60} color="#fb8c00" />
           )}
         </View>
       </SafeAreaView>

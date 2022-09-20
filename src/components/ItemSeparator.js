@@ -9,6 +9,8 @@ export const ItemSeparator = () => {
                     borderColor: '#fb8c00',
                     backgroundColor: '#fb8c00',
                     borderRadius: 30,
+                    width: '80%',
+                    marginLeft: 30,
                 }}>
             </View>
     )

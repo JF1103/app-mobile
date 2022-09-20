@@ -108,29 +108,25 @@ const HomeScreen = ({navigation}) => {
                 <View style={styles.row}>
                   <View
                     style={{
-                      justifyContent: 'center',
-                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
                     }}>
-                    <Text style={styles.texto}>Fecha: {employee?.fecha}</Text>
+                    <Text style={styles.texto}><Text style={styles.titulo}>Fecha:</Text> {employee?.fecha}</Text>
+                  
+                  <Text style={styles.welcome}><Text style={styles.titulo}>Sucursal:</Text> {employee?.cliente}</Text>
                   </View>
-
-                  <Text style={styles.welcome}>
-                    Sucursal: {employee?.cliente}
-                  </Text>
                   <ItemSeparator />
-                  <Text style={styles.sucursal}>
-                    Direccion: {employee?.sucursal}
-                  </Text>
+                  <Text style={styles.sucursal}><Text style={styles.titulo}>Dirección:</Text> {employee?.sucursal}</Text>
                   <ItemSeparator />
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                     }}>
-                    <Text style={styles.texto}>{employee?.actividad}</Text>
-                    <ItemSeparator />
-                    <Text style={styles.texto}>Nivel: {employee?.nivel}</Text>
+                    <Text style={styles.texto}><Text style={styles.titulo}>Actividad:</Text> {employee?.actividad}</Text>
+                    <Text style={styles.texto}><Text style={styles.titulo}>Prioridad:</Text> {employee?.nivel}</Text>
                   </View>
+                  <ItemSeparator />
                 </View>
 
                 <View style={styles.items}>
@@ -146,7 +142,7 @@ const HomeScreen = ({navigation}) => {
                       return (
                         <View
                           key={employee?.id + tarea.id}
-                          style={{width: '100%'}}>
+                          style={{width: '90%'}}>
                           <Tareas
                             key={employee?.id + tarea.id}
                             tarea={tarea}
@@ -172,9 +168,10 @@ const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 20,
     marginHorizontal: 20,
-    marginTop: 20,
+    marginTop: 15,
+    marginBottom: 15,
     paddingHorizontal: 5,
     shadowColor: '#836525',
     shadowOffset: {
@@ -185,7 +182,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     borderColor: '#fb8c00',
-    borderWidth: 0.3,
+    borderWidth: 1,
   },
   items: {
     marginTop: 15,
@@ -199,32 +196,33 @@ const styles = StyleSheet.create({
   },
   containerb2: {
     backgroundColor: '#ffffff',
-    borderRadius: 10,
+    borderRadius: 20,
     flex: 1,
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
-    color: '#fb8c00',
+    fontSize: 15,
+    color: '#eeeeee',
     textAlign: 'center',
   },
 
   welcome: {
-    fontSize: 18,
+    fontSize: 14,
     padding: 5,
     color: '#000000',
     textAlign: 'center',
   },
   texto: {
-    fontSize: 18,
+    fontSize: 14,
     padding: 5,
     color: '#000000',
     textAlign: 'center',
   },
   sucursal: {
-    fontSize: 13,
+    fontSize: 14,
     padding: 5,
     color: '#000000',
+    textAlign: 'center',
   },
   row: {
     backgroundColor: '#ffffff',
@@ -238,17 +236,22 @@ const styles = StyleSheet.create({
     /* borderWidth: 1, */
   },
   btn1: {
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
+    flex: 1,
+    backgroundColor: '#fb8c00',
+    borderRadius: 20,
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1.0,
     height: 30,
-    width: '100%',
+    width: '90%',
     justifyContent: 'center',
     color: '#f5f5f5',
     marginBottom: 10,
   },
+  titulo: {
+    color: '#fb8c00',
+  },
 });
 
 export default HomeScreen;
+

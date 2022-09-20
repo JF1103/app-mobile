@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   text1: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#000000',
     marginVertical: '2%',
     textAlign: 'center',
