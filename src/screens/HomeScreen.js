@@ -17,6 +17,9 @@ import {GetStorage} from '../components/GetStorage';
 import Tareas from '../components/Tareas';
 import {GetDataOt} from '../components/GetDataOt';
 import {FormContext} from '../context/FormContext';
+import {CheckinOut} from '../components/CheckinOut';
+import {useLocation} from '../hooks/useLocation';
+import {SendArraaycheckInOut} from '../components/SendArraayCheckInOut';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -24,6 +27,17 @@ const HomeScreen = ({navigation}) => {
     useContext(FormContext);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
+
+  useEffect(() => {
+    setInterval(() => {
+      CheckinOut(getCurrentLocation, userInfo, 0);
+    }, 60000);
+  }, []);
+
+  /*  useEffect(() => {
+    SendArraaycheckInOut();
+  }, []); */
 
   /* const [formularioPreguntas, setFormularioPreguntas] = useState(); */
 

@@ -13,3 +13,16 @@ export const SetStorage = async formularioPreguntas => {
     console.log(e);
   }
 };
+
+export const setCheckInOut = async checkinout => {
+  //console.log('SetStorage');
+
+  try {
+    await AsyncStorage.setItem(
+      'checkinout',
+      JSON.stringify(checkinout).toString(),
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};

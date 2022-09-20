@@ -20,6 +20,7 @@ import {handleResp} from '../helpers/handleRespt';
 import {SetStorage} from './SetStorage';
 import {FormContext} from '../context/FormContext';
 import {useLocation} from '../hooks/useLocation';
+import SendFormulrio from './SendFormulrio';
 
 export const Formularios = ({
   formulario,
@@ -288,8 +289,16 @@ export const Formularios = ({
           marginTop: 40,
         }}
         onPress={() => {
-          /* SetStorage(formularioPreguntas); */
-          /*   navigation.navigate(''); */
+          SendFormulrio(
+            tarea.id,
+            idotd,
+            formulario.id,
+            formulario.refformularioconector,
+            formularioPreguntas,
+            setFormularioPreguntas,
+            employee,
+            idUsuario,
+          );
         }}>
         <Text style={styles.text6}>Terminar Formulario</Text>
       </TouchableOpacity>

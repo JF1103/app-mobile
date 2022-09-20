@@ -1,24 +1,28 @@
 import Geolocation from '@react-native-community/geolocation';
+import moment from 'moment';
 import React, {useContext, useState} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
+import {useLocation} from '../hooks/useLocation';
+import {CheckinOut} from './CheckinOut';
+import {getCheckInOut} from './GetStorage';
+import {SendCheckinOut} from './SendCheckinOut';
 
 const Botones = () => {
   const {logout} = useContext(AuthContext);
-  const [visualizaCheck, setvisualizaCheck] = useState(true);
-  const [location, setLocation] = useState({});
 
-  //console.log(location);
-  const CheckInOut = type => {
-    Geolocation.getCurrentPosition(info => {
-      // console.log(info);
-      setLocation({
-        nbr_latitud: Number(info.coords.latitude),
-        nbr_longitud: Number(info.coords.longitude),
-      });
-    });
-    setvisualizaCheck(!visualizaCheck);
-  };
+  const [visualizaCheck, setvisualizaCheck] = useState(true);
+  const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
+  const {userInfo} = useContext(AuthContext);
+  getCheckInOut().then(checkinout => {
+    if (checkinout !== null) {
+      if (checkinout.checks[checkinout.checks.length - 1].type === 1) {
+        setvisualizaCheck(false);
+      } else if (checkinout.checks[checkinout.checks.length - 1].type === 2) {
+        setvisualizaCheck(true);
+      }
+    }
+  });
   return (
     <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>
@@ -28,7 +32,8 @@ const Botones = () => {
         <TouchableOpacity
           style={styles.touch3}
           onPress={() => {
-            CheckInOut('IN');
+            CheckinOut(getCurrentLocation, userInfo, 1);
+            setvisualizaCheck(false);
           }}>
           <Text style={styles.text3}>CheckIn</Text>
         </TouchableOpacity>
@@ -36,7 +41,8 @@ const Botones = () => {
         <TouchableOpacity
           style={styles.touch4}
           onPress={() => {
-            CheckInOut('OUT');
+            CheckinOut(getCurrentLocation, userInfo, 2);
+            setvisualizaCheck(true);
           }}>
           <Text style={styles.text4}>CheckOut</Text>
         </TouchableOpacity>
