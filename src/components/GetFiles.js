@@ -472,7 +472,7 @@ export const GetFiles = ({
       <View
         style={{
           flexDirection: 'row',
-          marginTop: 5,
+          marginTop: 10,
         }}>
         <TouchableOpacity style={styles.btn} onPress={takePhoto}>
           <Text style={styles.text5}>Foto</Text>
@@ -510,96 +510,17 @@ export const GetFiles = ({
           }}
         />
       )}
-      <ItemSeparator />
     </View>
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ffffff',
-  },
-  row: {
-    backgroundColor: '#fb8c00',
-    marginHorizontal: '6%',
-    marginVertical: '5%',
-    padding: '5%',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#000000',
-    borderWidth: 0.5,
-  },
-  welcome: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    fontWeight: 'bold',
-  },
-  icon: {
-    fontSize: 40,
-    marginRight: 300,
-    color: '#ff0000',
-    marginTop: 20,
-  },
-  title: {
-    fontSize: 40,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#000000',
-    marginTop: -50,
-  },
-  container2: {
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    fontWeight: 'bold',
-  },
-  selsim: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    fontWeight: 'bold',
-  },
-  selmul: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    fontWeight: 'bold',
-  },
-  geo: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    textAlign: 'center',
-  },
-  textarea: {
-    borderRadius: 20,
-    height: 70,
-  },
-  sm: {
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  geolocalizacion: {
-    flex: 1,
-    borderRadius: 30,
-  },
+  
   archivo: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
+    fontSize: 14,
+    color: '#fb8c00',
     textAlign: 'center',
+    marginBottom: 10,
+    marginTop: 10,
   },
   btn: {
     flex: 1,
@@ -609,9 +530,9 @@ const styles = StyleSheet.create({
     borderColor: '#fb8c00',
     borderWidth: 1.0,
     height: 30,
-    width: '20%',
     justifyContent: 'center',
-    marginRight: 3,
+    marginRight: 5,
+    marginLeft: 5,
   },
   text5: {
     fontSize: 16,

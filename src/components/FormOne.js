@@ -80,107 +80,10 @@ const FormOne = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ffffff',
-  },
-  row: {
-    backgroundColor: '#ffffff',
-    marginHorizontal: '6%',
-    marginVertical: '1%',
-    padding: '5%',
-    borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 1,
-  },
-  welcome: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    textAlign: 'center',
-  },
   icon: {
     fontSize: 30,
     marginRight: 300,
     color: '#000000',
-    marginTop: 5,
-  },
-  title: {
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#000000',
-    marginTop: -35,
-  },
-  container2: {
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    textAlign: 'center',
-  },
-  selsim: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    textAlign: 'center',
-  },
-  selmul: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    textAlign: 'center',
-  },
-  geo: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    textAlign: 'center',
-  },
-  textarea: {
-    borderRadius: 10,
-    height: 50,
-    justifyContent: 'center',
-    boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 1.0,
-  },
-  sm: {
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 1.0,
-  },
-  geolocalizacion: {
-    flex: 1,
-  },
-  textarch: {
-    fontSize: 15,
-    color: '#000000',
-    padding: 5,
-  },
-
-  text6: {
-    fontSize: 16,
-    color: '#fb8c00',
-    textAlign: 'center',
-  },
-  textfirma: {
-    fontSize: 18,
-    color: '#000000',
-    padding: 5,
-    marginVertical: '5%',
-    textAlign: 'center',
   },
 });
 

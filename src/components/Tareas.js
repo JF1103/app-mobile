@@ -30,7 +30,7 @@ export default function Tareas({
 const styles = StyleSheet.create({
   btn2: {
     backgroundColor: '#ffffff',
-    borderRadius: 10,
+    borderRadius: 20,
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1.0,
