@@ -111,20 +111,35 @@ const HomeScreen = ({navigation}) => {
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                     }}>
-                    <Text style={styles.texto}><Text style={styles.titulo}>Fecha:</Text> {employee?.fecha}</Text>
-                  
-                  <Text style={styles.welcome}><Text style={styles.titulo}>Sucursal:</Text> {employee?.cliente}</Text>
+                    <Text style={styles.texto}>
+                      <Text style={styles.titulo}>Fecha:</Text>{' '}
+                      {employee?.fecha}
+                    </Text>
+
+                    <Text style={styles.welcome}>
+                      <Text style={styles.titulo}>Sucursal:</Text>{' '}
+                      {employee?.cliente}
+                    </Text>
                   </View>
                   <ItemSeparator />
-                  <Text style={styles.sucursal}><Text style={styles.titulo}>Dirección:</Text> {employee?.sucursal}</Text>
+                  <Text style={styles.sucursal}>
+                    <Text style={styles.titulo}>Dirección:</Text>{' '}
+                    {employee?.sucursal}
+                  </Text>
                   <ItemSeparator />
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                     }}>
-                    <Text style={styles.texto}><Text style={styles.titulo}>Actividad:</Text> {employee?.actividad}</Text>
-                    <Text style={styles.texto}><Text style={styles.titulo}>Prioridad:</Text> {employee?.nivel}</Text>
+                    <Text style={styles.texto}>
+                      <Text style={styles.titulo}>Actividad:</Text>{' '}
+                      {employee?.actividad}
+                    </Text>
+                    <Text style={styles.texto}>
+                      <Text style={styles.titulo}>Prioridad:</Text>{' '}
+                      {employee?.nivel}
+                    </Text>
                   </View>
                   <ItemSeparator />
                 </View>
@@ -228,6 +243,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     marginHorizontal: '2%',
     marginTop: 15,
+    alignItems: 'center',
     /*     margin: '2%',
     padding: '5%', */
     /*  borderRadius: 20, */
@@ -254,4 +270,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
-

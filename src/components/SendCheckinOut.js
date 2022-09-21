@@ -10,7 +10,7 @@ export const SendCheckinOut = (idusuario, check, latitud, longitud, fecha) => {
   formdata.append('longitud', longitud);
   formdata.append('fecha', fecha);
 
-  fetch(BASE_URL + '/ubicacionusuarios/insert.php?', {
+  fetch(BASE_URL + '/ubicacionusuarios/insert.php', {
     method: 'POST',
     headers: {
       Accept: 'application/json',

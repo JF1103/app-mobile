@@ -29,7 +29,7 @@ export const handleResp = async (
             {
               FormularioId: formularioId,
               refformularioconector: refformularioconector,
-              checkSend: false,
+
               preguntas: [
                 {
                   id: id,
@@ -37,6 +37,7 @@ export const handleResp = async (
                   tipo: tipo,
                   latitud: preguntaCords.latitude,
                   longitud: preguntaCords.longitude,
+                  checkSend: false,
                 },
               ],
             },
@@ -110,7 +111,7 @@ export const handleResp = async (
               {
                 FormularioId: formularioId,
                 refformularioconector: refformularioconector,
-                checkSend: false,
+
                 preguntas: [
                   {
                     id: id,
@@ -118,6 +119,7 @@ export const handleResp = async (
                     tipo: tipo,
                     latitud: preguntaCords.latitude,
                     longitud: preguntaCords.longitude,
+                    checkSend: false,
                   },
                 ],
               },
@@ -143,7 +145,7 @@ export const handleResp = async (
             ].formularios.push({
               FormularioId: formularioId,
               refformularioconector: refformularioconector,
-              checkSend: false,
+
               preguntas: [
                 {
                   id: id,
@@ -151,6 +153,7 @@ export const handleResp = async (
                   tipo: tipo,
                   latitud: preguntaCords.latitude,
                   longitud: preguntaCords.longitude,
+                  checkSend: false,
                 },
               ],
             }),
@@ -178,6 +181,7 @@ export const handleResp = async (
                 tipo: tipo,
                 latitud: preguntaCords.latitude,
                 longitud: preguntaCords.longitude,
+                checkSend: false,
               }),
                 setFormularioPreguntas({
                   ...formularioPreguntas,
