@@ -24,6 +24,11 @@ export const Navbar = () => {
           display: 'flex',
           alignItems: 'center',
           backgroundColor: '#fb8c00',
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 20,
+          borderColor: '#fb8c00',
+          borderWidth: 1,
         }}>
         <TouchableOpacity
           onPress={() => {

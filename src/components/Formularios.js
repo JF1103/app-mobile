@@ -151,7 +151,7 @@ export const Formularios = ({
                 <Text style={styles.selmul}>{pregunta.pregunta}</Text>
                 <ScrollView
                   horizontal={true}
-                  style={{width: '100%', marginLeft: 30}}>
+                  style={{width: '100%'}}>
                   <RNMultiSelect
                     key={pregunta.id}
                     style={styles.sm}
