@@ -106,7 +106,7 @@ const Firma = ({
 
   return (
     <>
-      <TouchableOpacity
+      <TouchableOpacity 
         onPress={() => {
           visualizaFirma ? setVisualizaFirma(false) : setVisualizaFirma(true);
         }}>
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1,
+    alignItems: 'center'
   },
   signature: {
     borderWidth: 1,
@@ -197,6 +198,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 40,
     marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   text: {
     fontSize: 16,

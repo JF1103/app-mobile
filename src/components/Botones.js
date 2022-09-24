@@ -71,6 +71,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: '#f5f5f5',
     marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
   text2: {
     fontSize: 15,
@@ -90,6 +94,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: '#f5f5f5',
     marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
   text3: {
     fontSize: 15,
@@ -109,6 +117,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: '#f5f5f5',
     marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
   text4: {
     fontSize: 15,
