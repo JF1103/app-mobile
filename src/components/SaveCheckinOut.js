@@ -12,7 +12,7 @@ export const SaveCheckinOut = async (
 ) => {
   let array = await getCheckInOut();
 
-  console.log('aarray storge', array);
+  /* console.log('aarray storge', array); */
   if (array != null) {
     console.log('entre en storage');
     array.checks.push({
