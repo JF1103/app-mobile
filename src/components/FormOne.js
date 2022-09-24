@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import RNSingleSelect, {
@@ -32,6 +33,9 @@ import {GetStorage} from './GetStorage';
 import {handleResp} from '../helpers/handleRespt';
 import {Formularios} from './Formularios';
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 const FormOne = ({navigation, route}) => {
   const {tarea, latitud, longitud, employee, idUsuario} = route.params;
 
@@ -52,13 +56,28 @@ const FormOne = ({navigation, route}) => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: '#fb8c00',
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 20,
+          borderColor: '#fb8c00',
+          borderWidth: 1,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
           }}>
           <Icon style={styles.icon} name="arrow-back-outline" />
         </TouchableOpacity>
+
+        <Text style={styles.text}>Formularios</Text>
+        </View>
         {/*  <Text style={styles.title}>Formulario</Text> */}
         {tarea?.formularios.map((formualario, index) => {
           return (
@@ -80,6 +99,14 @@ const FormOne = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  text: {
+    justifyContent: 'center',
+    marginLeft: '-45%',
+    fontSize: 25,
+    color: '#FAFAFA',
+    width: windowWidth,
+    marginBottom: 5,
+  },
   icon: {
     fontSize: 30,
     marginRight: 300,

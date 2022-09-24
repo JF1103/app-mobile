@@ -70,6 +70,7 @@ export const Formularios = ({
   //console.log(selectedItem);
   //console.log('preguntas', JSON.stringify(formularioPreguntas));
   return (
+    <>
     <View style={styles.row}>
       <Text style={styles.welcome}>{formulario.formulario}</Text>
       {preguntas?.map((pregunta, index2) => {
@@ -101,7 +102,7 @@ export const Formularios = ({
         return (
           <View style={styles.container2} key={index2}>
             {pregunta.tiporespuesta === 'Seleccion Simple' ? (
-              <View key={pregunta.id}>
+              <View key={pregunta.id} style={{alignItems: 'center'}}>
                 <Text style={styles.selsim}>{pregunta.pregunta}</Text>
                 <View
                   style={{
@@ -109,7 +110,6 @@ export const Formularios = ({
                     borderWidth: 1,
                     borderRadius: 10,
                     width: '80%',
-                    marginLeft: 35,
                   }}>
                   <RNSingleSelect
                     key={pregunta.id}
@@ -142,6 +142,7 @@ export const Formularios = ({
                 </View>
               </View>
             ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
+              <View style={{alignItems: 'center', marginBottom: -30}}>
               <View
                 key={pregunta.id}
                 style={{
@@ -150,7 +151,7 @@ export const Formularios = ({
                 <Text style={styles.selmul}>{pregunta.pregunta}</Text>
                 <ScrollView
                   horizontal={true}
-                  style={{width: '100%', marginLeft: 30}}>
+                  style={{width: '100%'}}>
                   <RNMultiSelect
                     key={pregunta.id}
                     style={styles.sm}
@@ -191,8 +192,9 @@ export const Formularios = ({
                   />
                 </ScrollView>
               </View>
+              </View>
             ) : pregunta.tiporespuesta === 'Texto' ? (
-              <View key={pregunta.id}>
+              <View key={pregunta.id}  style={{alignItems: 'center'}}>
                 <Text style={styles.text}>{pregunta.pregunta}</Text>
                 <RNTextArea
                   key={pregunta.id}
@@ -281,6 +283,7 @@ export const Formularios = ({
           </View>
         );
       })}
+      <View style={{alignItems: 'center'}}>
       <TouchableOpacity
         style={{
           backgroundColor: '#fb8c00',
@@ -289,7 +292,12 @@ export const Formularios = ({
           marginTop: 20,
           marginBottom: 20,
           width: '80%',
-          marginLeft: 35,
+          shadowColor: '#000000',
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 7,
+          borderColor: '#c88719',
+          borderWidth: 1,
         }}
         onPress={() => {
           SendFormulrio(
@@ -305,24 +313,27 @@ export const Formularios = ({
         }}>
         <Text style={styles.text6}>Terminar Formulario</Text>
       </TouchableOpacity>
+      </View>
     </View>
+    </>
   );
 };
 const styles = StyleSheet.create({
   row: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
+    marginTop: 15,
     marginBottom: 15,
     paddingHorizontal: 5,
-    shadowColor: '#836525',
+    shadowColor: '#000000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 10,
     borderColor: '#fb8c00',
     borderWidth: 1,
   },
@@ -334,6 +345,13 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: 'center',
     marginTop: 8,
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 8,
+    borderColor: '#c88719',
+    borderWidth: 1,
   },
   text: {
     fontSize: 14,
@@ -364,7 +382,6 @@ const styles = StyleSheet.create({
     borderColor: '#fb8c00',
     borderWidth: 1.0,
     width: '80%',
-    marginLeft: 35,
   },
   sm: {
     alignItems: 'center',

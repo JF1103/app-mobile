@@ -157,7 +157,7 @@ const HomeScreen = ({navigation}) => {
                       return (
                         <View
                           key={employee?.id + tarea.id}
-                          style={{width: '90%'}}>
+                          style={styles.btn2}>
                           <Tareas
                             key={employee?.id + tarea.id}
                             tarea={tarea}
@@ -184,18 +184,18 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     marginTop: 15,
     marginBottom: 15,
     paddingHorizontal: 5,
-    shadowColor: '#836525',
+    shadowColor: '#000000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 10,
     borderColor: '#fb8c00',
     borderWidth: 1,
   },
@@ -255,14 +255,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fb8c00',
     borderRadius: 20,
-    boxShadow: 5,
-    borderColor: '#fb8c00',
+    borderColor: '#c88719',
     borderWidth: 1.0,
     height: 30,
     width: '90%',
     justifyContent: 'center',
     color: '#f5f5f5',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 8,
+  },
+  btn2: {
+    flex: 1,
+    borderRadius: 20,
+    height: 30,
+    width: '90%',
+    justifyContent: 'center',
+    color: '#f5f5f5',
     marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   titulo: {
     color: '#fb8c00',

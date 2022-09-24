@@ -87,7 +87,6 @@ export const Maps = ({
         Latitud:{initialPosition.latitude} longitud:
         {initialPosition.longitude}
       </Text>
-      <ItemSeparator />
       {hasLocation ? (
         <>
           <MapView
@@ -108,7 +107,6 @@ export const Maps = ({
               description="Some description"
             /> */}
           </MapView>
-          <ItemSeparator />
         </>
       ) : (
         <></>
@@ -118,36 +116,35 @@ export const Maps = ({
 };
 
 const styles = StyleSheet.create({
-  map: {
-    boxShadow: 5,
-    borderColor: '#fb8c00',
-    borderWidth: 2,
-    backgroundColor: 'red',
-  },
   geo: {
     fontSize: 14,
     color: '#fb8c00',
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
+    marginTop: 20,
   },
   geoText: {
     fontSize: 14,
     color: '#000000',
     textAlign: 'center',
   },
-  tarea: {
-    borderRadius: 20,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: 5,
-    borderColor: '#ffb74d',
-    borderWidth: 1.0,
-    fontWeight: 'bold',
-    color: '#212121',
-  },
   geolocalizacion: {
     flex: 1,
+    backgroundColor: '#fff',
+    marginHorizontal: 15,
+    marginTop: 15,
+    marginBottom: 15,
+    paddingHorizontal: 5,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 7,
+    borderColor: '#fb8c00',
+    borderWidth: 1,
   },
 });
