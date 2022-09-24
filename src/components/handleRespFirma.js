@@ -45,7 +45,7 @@ export const handleRespFirma = async (
     formularioId,
     refformularioconector,
     id,
-    {base64: path, tempUri: respuesta.tempUri},
+    {base64: path, tempUri: respuesta.tempUri, fileType: respuesta.fileType},
     tipo,
     formularioPreguntas,
     setFormularioPreguntas,

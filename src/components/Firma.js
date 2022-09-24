@@ -92,7 +92,7 @@ const Firma = ({
         formularioId,
         refformularioconector,
         preguntaid,
-        {dat: result.encoded, tempUri: result.pathName},
+        {dat: result.encoded, tempUri: result.pathName, fileType},
         preguntatiporespuesta,
         employee,
         idUsuario,

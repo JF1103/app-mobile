@@ -206,7 +206,7 @@ export const GetFiles = ({
         formularioId,
         refformularioconector,
         id,
-        {base64: path, tempUri: tempUri},
+        {base64: path, tempUri: tempUri, fileType: fileType},
         tipo,
         formularioPreguntas,
         setFormularioPreguntas,
