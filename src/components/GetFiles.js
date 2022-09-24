@@ -86,7 +86,7 @@ export const GetFiles = ({
     ?.formularios.filter(item => item.FormularioId === formularioId)[0]
     ?.preguntas.filter(item => item.tipo === 'Archivo')[0]?.respuesta?.tempUri;
 
-  console.log('syncUri', syncUri);
+  // console.log('syncUri', syncUri);
   useEffect(() => {
     checkLocationPermissions();
   }, []);
@@ -514,7 +514,6 @@ export const GetFiles = ({
   );
 };
 const styles = StyleSheet.create({
-  
   archivo: {
     fontSize: 14,
     color: '#fb8c00',

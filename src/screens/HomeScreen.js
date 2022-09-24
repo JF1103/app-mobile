@@ -61,7 +61,7 @@ const HomeScreen = ({navigation}) => {
     inicializaformularioPreguntas();
   }, []);
 
-  console.log(JSON.stringify(formAsync));
+  /* console.log(JSON.stringify(formAsync)); */
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(

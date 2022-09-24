@@ -48,8 +48,8 @@ export const Formularios = ({
     ?.preguntas.filter(item => item.tipo === 'Seleccion Simple')
     ?.map(item => {
       return {
-        id: item.id,
-        value: item.respuesta,
+        id: item.respuesta.id,
+        value: item.respuesta.value,
       };
     })[0];
 
@@ -126,7 +126,7 @@ export const Formularios = ({
                             formulario.id,
                             formulario.refformularioconector,
                             pregunta.id,
-                            selectedItem.value,
+                            {id: selectedItem.id, value: selectedItem.value},
                             pregunta.tiporespuesta,
                             formularioPreguntas,
                             setFormularioPreguntas,
@@ -149,7 +149,9 @@ export const Formularios = ({
                   height: 170 + 50 * dataMulti.length,
                 }}>
                 <Text style={styles.selmul}>{pregunta.pregunta}</Text>
-                <ScrollView horizontal={true} style={{width: '100%'}}>
+                <ScrollView
+                  horizontal={true}
+                  style={{width: '100%', marginLeft: 30}}>
                   <RNMultiSelect
                     key={pregunta.id}
                     style={styles.sm}
