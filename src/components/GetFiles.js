@@ -45,6 +45,7 @@ export const GetFiles = ({
   employee,
   idUsuario,
   formAsync,
+  disabled,
 }) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
   const {getCurrentLocation} = useLocation();
@@ -79,19 +80,36 @@ export const GetFiles = ({
     }
   };
 
-  const syncUri = formAsync?.formcomplet
+  const datos = formAsync?.formcomplet
     .filter(item => item.idUsuario === idUsuario)[0]
     ?.ots.filter(item => item.id_ot === employee.id)[0]
     ?.tareas.filter(item => item.TareaId === tareaId)[0]
     ?.formularios.filter(item => item.FormularioId === formularioId)[0]
-    ?.preguntas.filter(item => item.tipo === 'Archivo')[0]?.respuesta?.tempUri;
+    ?.preguntas.filter(item => item.id === pregunta.id)[0]?.respuesta;
 
-  // console.log('syncUri', syncUri);
+  /* console.log('pregunta', pregunta); */
+  const syncUri = datos?.base64;
+  const typeFile = datos?.fileType;
+
+  /*  console.log('syncUri', syncUri); */
   useEffect(() => {
     checkLocationPermissions();
   }, []);
 
-  const [tempUri, setTempUri] = useState(syncUri ? syncUri : '');
+  const [tempUri, setTempUri] = useState(syncUri ? 'file:' + syncUri : '');
+  const [visualizaImagen, setvisualizaImagen] = useState(false);
+
+  /*   useEffect(() => {
+    if (tempUri && typeFile === 'audio/mp4') {
+      setvisualizaImagen(false);
+      setvisualizaAudio(true);
+    } else {
+      console.log('tempUri', tempUri);
+      console.log('typeFile', typeFile);
+      setvisualizaImagen(true);
+      setvisualizaAudio(false);
+    }
+  }, [tempUri]); */
 
   const takePhoto = () => {
     launchCamera(
@@ -191,7 +209,7 @@ export const GetFiles = ({
 
     let path = RNFS.DocumentDirectoryPath + `/${fileName}`;
 
-    RNFS.writeFile(path, base64, 'utf8')
+    RNFS.writeFile(path, base64, 'base64')
       .then(success => {
         console.log('FILE WRITTEN!');
       })
@@ -216,139 +234,8 @@ export const GetFiles = ({
       );
     });
   };
-  //console.log('ITEMS', respuesta, tipo);
-
-  /*   const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          {
-            TareaId: tareaId,
-            formularios: [
-              {
-                FormularioId: formularioId,
-                preguntas: [
-                  {
-                    id: id,
-                    respuesta: {base64: path, tempUri: tempUri},
-                    tipo: tipo,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-    } else {
-      const indexFormulario = formularioPreguntas.tareas[
-        indexTarea
-      ].formularios.findIndex(
-        formulario => formulario.FormularioId === formularioId,
-      );
-
-      if (indexFormulario === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              formularios: [
-                {
-                  FormularioId: formularioId,
-                  preguntas: [
-                    {
-                      id: id,
-                      respuesta: {base64: path, tempUri: tempUri},
-                      tipo: tipo,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        });
-      } else {
-        const indexPregunta = formularioPreguntas.tareas[
-          indexTarea
-        ].formularios[indexFormulario].preguntas.findIndex(
-          pregunta => pregunta.id === id,
-        );
-
-        if (indexPregunta === -1) {
-          setFormularioPreguntas({
-            ...formularioPreguntas,
-            tareas: [
-              {
-                ...formularioPreguntas.tareas[indexTarea],
-                formularios: [
-                  {
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ],
-                    preguntas: [
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas,
-                      {
-                        id: id,
-                        respuesta: {base64: path, tempUri: tempUri},
-                        tipo: tipo,
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          });
-        } else {
-          setFormularioPreguntas({
-            ...formularioPreguntas,
-            tareas: [
-              {
-                ...formularioPreguntas.tareas[indexTarea],
-                formularios: [
-                  {
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ],
-                    preguntas: [
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas.slice(0, indexPregunta),
-                      {
-                        id: id,
-                        respuesta: {base64: path, tempUri: tempUri},
-                        tipo: tipo,
-                      },
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas.slice(indexPregunta + 1),
-                    ],
-                  },
-                ],
-              },
-            ],
-          });
-        }
-      }
-    }
-    SetStorage(formularioPreguntas); */
 
   const handleRespAudio = async (tareaId, formularioId, id, tempUri, tipo) => {
-    const base64 = await RNFS.readFile(tempUri, 'base64');
-    let path =
-      RNFS.DocumentDirectoryPath +
-      `/audio_${tareaId}_${formularioId}_${id}.mp4`;
-    RNFS.writeFile(path, base64, 'utf8')
-      .then(success => {
-        console.log('FILE WRITTEN!');
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
     getCurrentLocation().then(cords => {
       handleResp(
         tareaId,
@@ -356,7 +243,7 @@ export const GetFiles = ({
         formularioId,
         refformularioconector,
         id,
-        {base64: path},
+        {base64: tempUri, fileType: 'audio/mp4'},
         tipo,
         formularioPreguntas,
         setFormularioPreguntas,
@@ -365,105 +252,6 @@ export const GetFiles = ({
         cords,
       );
     });
-    /*   
-    const indexTarea = formularioPreguntas.tareas.findIndex(
-      tarea => tarea.TareaId === tareaId,
-    );
-    if (indexTarea === -1) {
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          {
-            TareaId: tareaId,
-            formularios: [
-              {
-                FormularioId: formularioId,
-                preguntas: [{id: id, respuesta: {base64: path}, tipo: tipo}],
-              },
-            ],
-          },
-        ],
-      });
-    } else {
-      const indexFormulario = formularioPreguntas.tareas[
-        indexTarea
-      ].formularios.findIndex(
-        formulario => formulario.FormularioId === formularioId,
-      );
-
-      if (indexFormulario === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              formularios: [
-                {
-                  FormularioId: formularioId,
-                  preguntas: [{id: id, respuesta: {base64: path}, tipo: tipo}],
-                },
-              ],
-            },
-          ],
-        });
-      } else {
-        const indexPregunta = formularioPreguntas.tareas[
-          indexTarea
-        ].formularios[indexFormulario].preguntas.findIndex(
-          pregunta => pregunta.id === id,
-        );
-
-        if (indexPregunta === -1) {
-          setFormularioPreguntas({
-            ...formularioPreguntas,
-            tareas: [
-              {
-                ...formularioPreguntas.tareas[indexTarea],
-                formularios: [
-                  {
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ],
-                    preguntas: [
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas,
-                      {id: id, respuesta: {base64: path}, tipo: tipo},
-                    ],
-                  },
-                ],
-              },
-            ],
-          });
-        } else {
-          setFormularioPreguntas({
-            ...formularioPreguntas,
-            tareas: [
-              {
-                ...formularioPreguntas.tareas[indexTarea],
-                formularios: [
-                  {
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ],
-                    preguntas: [
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas.slice(0, indexPregunta),
-                      {id: id, respuesta: {base64: path}, tipo: tipo},
-                      ...formularioPreguntas.tareas[indexTarea].formularios[
-                        indexFormulario
-                      ].preguntas.slice(indexPregunta + 1),
-                    ],
-                  },
-                ],
-              },
-            ],
-          });
-        }
-      }
-    }
-    SetStorage(formularioPreguntas); */
   };
 
   return (
@@ -474,17 +262,23 @@ export const GetFiles = ({
           flexDirection: 'row',
           marginTop: 10,
         }}>
-        <TouchableOpacity style={styles.btn} onPress={takePhoto}>
+        <TouchableOpacity
+          style={disabled ? styles.btnDisable : styles.btn}
+          onPress={takePhoto}>
           <Text style={styles.text5}>Foto</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={takeVideo}>
+        <TouchableOpacity
+          style={disabled ? styles.btnDisable : styles.btn}
+          onPress={takeVideo}>
           <Text style={styles.text5}>Video</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={takePhotoFromGallery}>
+        <TouchableOpacity
+          style={disabled ? styles.btnDisable : styles.btn}
+          onPress={takePhotoFromGallery}>
           <Text style={styles.text5}>Galería</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.btn}
+          style={disabled ? styles.btnDisable : styles.btn}
           onPress={() => {
             visualizaAudio ? setvisualizaAudio(false) : setvisualizaAudio(true);
           }}>
@@ -494,13 +288,14 @@ export const GetFiles = ({
       {visualizaAudio && (
         <Recaudio
           handleRespAudio={handleRespAudio}
+          ot={idotd}
           tareaId={tareaId}
           formularioId={formularioId}
           pregunta={pregunta}
           formAsync={formAsync}
         />
       )}
-      {tempUri && (
+      {tempUri && typeFile && typeFile !== 'audio/mp4' && (
         <Image
           source={{uri: tempUri}}
           style={{
@@ -532,7 +327,25 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: 'center',
     marginRight: 5,
-    marginLeft: 5,shadowColor: '#000000',
+    marginLeft: 5,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderColor: '#fb8c00',
+  },
+  btnDisable: {
+    flex: 1,
+    backgroundColor: '#E8D3BB',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#c88719',
+    borderWidth: 1.0,
+    height: 30,
+    justifyContent: 'center',
+    marginRight: 5,
+    marginLeft: 5,
+    shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,

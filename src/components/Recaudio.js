@@ -105,11 +105,10 @@ const styles = StyleSheet.create({
 const screenWidth = Dimensions.get('screen').width;
 
 class Page extends Component {
-  /*   dirs = RNFetchBlob.fs.dirs;
+  dirs = RNFS.DocumentDirectoryPath;
   path = Platform.select({
-    ios: 'hello.m4a',
-    android: `${this.dirs.CacheDir}/hello.mp3`,
-  }); */
+    android: `${this.dirs}/audio_${this.props.ot}_${this.props.tareaId}_${this.props.formularioId}_${this.props.pregunta.id}.mp4`,
+  });
 
   audioRecorderPlayer;
 
@@ -159,14 +158,13 @@ class Page extends Component {
                 Stop
               </Button>
             )}
-            {this.state.recordTime !== '00:00:00' && !this.state.grabando && (
-              <Button
-                style={styles.btn}
-                onPress={this.onStartPlay}
-                textStyle={styles.txt}>
-                Play
-              </Button>
-            )}
+
+            <Button
+              style={styles.btn}
+              onPress={this.onStartPlay}
+              textStyle={styles.txt}>
+              Play
+            </Button>
           </View>
         </View>
         <View style={styles.viewPlayer}>
@@ -252,17 +250,17 @@ class Page extends Component {
     };
 
     console.log('audioSet', audioSet);
-    //? Custom path
-    // const uri = await this.audioRecorderPlayer.startRecorder(
-    //   this.path,
-    //   audioSet,
-    // );
 
-    //? Default path
+    const uri = await this.audioRecorderPlayer.startRecorder(
+      this.path,
+      audioSet,
+    );
+
+    /*    //? Default path
     const uri = await this.audioRecorderPlayer.startRecorder(
       undefined,
       audioSet,
-    );
+    ); */
 
     this.audioRecorderPlayer.addRecordBackListener(e => {
       // console.log('record-back', e);
@@ -299,11 +297,12 @@ class Page extends Component {
     });
 
     const base64 = await RNFS.readFile(result, 'base64');
+    console.log('base64', result);
     this.props.handleRespAudio(
       this.props.tareaId,
       this.props.formularioId,
       this.props.pregunta.id,
-      result,
+      result.substring(result.lastIndexOf(':') + 1),
       this.props.pregunta.tiporespuesta,
     );
   };
@@ -311,10 +310,10 @@ class Page extends Component {
   onStartPlay = async () => {
     console.log('onStartPlay');
     //? Custom path
-    // const msg = await this.audioRecorderPlayer.startPlayer(this.path);
+    const msg = await this.audioRecorderPlayer.startPlayer(this.path);
 
     //? Default path
-    const msg = await this.audioRecorderPlayer.startPlayer();
+    /*  const msg = await this.audioRecorderPlayer.startPlayer(); */
     const volume = await this.audioRecorderPlayer.setVolume(1.0);
     console.log(`file: ${msg}`, `volume: ${volume}`);
 

@@ -5,7 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import RNSingleSelect, {
@@ -57,26 +57,29 @@ const FormOne = ({navigation, route}) => {
   return (
     <ScrollView>
       <View>
-      <View
-        style={{
-          flexDirection: 'row',
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#fb8c00',
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 20,
-          borderColor: '#fb8c00',
-          borderWidth: 1,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Home');
+        <View
+          style={{
+            flexDirection: 'row',
+            display: 'flex',
+            direction: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#fb8c00',
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 20,
+            borderColor: '#fb8c00',
+            borderWidth: 1,
           }}>
-          <Icon style={styles.icon} name="arrow-back-outline" />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={{position: 'absolute', left: 10}}
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <Icon style={styles.icon} name="arrow-back-outline" />
+          </TouchableOpacity>
 
-        <Text style={styles.text}>Formularios</Text>
+          <Text style={styles.text}>Formularios</Text>
         </View>
         {/*  <Text style={styles.title}>Formulario</Text> */}
         {tarea?.formularios.map((formualario, index) => {
@@ -100,17 +103,17 @@ const FormOne = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   text: {
-    justifyContent: 'center',
-    marginLeft: '-45%',
+    //justifyContent: 'center',
+    //marginLeft: '-45%',
     fontSize: 25,
     color: '#FAFAFA',
-    width: windowWidth,
+    //width: windowWidth,
     marginBottom: 5,
   },
   icon: {
     fontSize: 30,
-    marginRight: 300,
-    color: '#000000',
+    //marginRight: 300,
+    color: '#FAFAFA',
   },
 });
 

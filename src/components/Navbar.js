@@ -23,6 +23,7 @@ export const Navbar = () => {
           flexDirection: 'row',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           backgroundColor: '#fb8c00',
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
@@ -31,6 +32,7 @@ export const Navbar = () => {
           borderWidth: 1,
         }}>
         <TouchableOpacity
+          style={{position: 'absolute', left: 10}}
           onPress={() => {
             visualizaNavbar
               ? setvisualizaNavbar(false)
@@ -49,10 +51,10 @@ export const Navbar = () => {
 const styles = StyleSheet.create({
   text: {
     justifyContent: 'center',
-    marginLeft: '15%',
+    //marginLeft: '15%',
     fontSize: 25,
     color: '#FAFAFA',
-    width: windowWidth,
+    //width: windowWidth,
     marginBottom: 5,
   },
 });

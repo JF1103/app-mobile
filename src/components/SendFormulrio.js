@@ -60,6 +60,7 @@ carpeta
   const data = preguntas.map(async (item, index) => {
     let data = {};
 
+    console.log('item', item);
     if (item.tipo === 'Firma' || item.tipo === 'Archivo') {
       const archivo = await getFileBase64(item.respuesta.base64);
 
@@ -96,9 +97,6 @@ carpeta
         longitud: item.respuesta.longitud,
         refrespuestascuestionario:
           item.tipo === 'Seleccion Simple' ? item.respuesta.id : 0,
-        archivo: '',
-        tipo: '',
-        carpeta: '',
         latitud: item.latitud,
         longitud: item.longitud,
       };
@@ -149,7 +147,7 @@ carpeta
           indexIdOt
         ].tareas[indexIdTarea].formularios[indexIdFormulario].preguntas[
           indexPregunta
-        ].respuesta.checkSend = true;
+        ].checkSend = true;
         /* console.log(
             'newFormularioPreguntas',
             JSON.stringify(newFormularioPreguntas),

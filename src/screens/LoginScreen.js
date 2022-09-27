@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
   Text,
   TextInput,
@@ -20,18 +20,25 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const {isLoading, login} = useContext(AuthContext);
+  const scroll = useRef(null);
   // console.log(email);
   // console.log(password);
   return (
     <>
-      <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll} ref={scroll}>
         <View style={styles.container}>
           <Spinner visible={isLoading} />
-          <Image
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.img}
+              source={require('./../assets/img/expo-bg1.png')}
+            />
+            {/*   <Image
             style={styles.img}
             resizeMode="cover"
             source={require('./../assets/img/expo-bg1.png')}
-          />
+          /> */}
+          </View>
           <View style={styles.wrapper}>
             <Text style={styles.subtitle}>Email</Text>
             <TextInput
@@ -41,7 +48,10 @@ const LoginScreen = ({navigation}) => {
               autoFocus={true}
               style={styles.input}
               value={email}
-              onChangeText={text => setEmail(text)}
+              onChangeText={text => {
+                setEmail(text), scroll.current.scrollToEnd();
+              }}
+              onTouchStart={() => scroll.current.scrollToEnd()}
             />
             <Text style={styles.subtitle}>Contraseña</Text>
             <TextInput
@@ -69,10 +79,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: windowHeight,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#ffff',
     borderRadius: 20,
     marginHorizontal: 15,
     marginTop: 15,
+    height: windowHeight * 0.96,
     marginBottom: 15,
     paddingHorizontal: 5,
     shadowColor: '#000000',
@@ -83,13 +94,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   img: {
-    width: windowWidth * 0.9,
-    height: windowHeight * 0.4,
+    width: windowWidth * 0.7,
+    height: windowHeight * 0.3,
     marginTop: -100,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     marginBottom: 30,
+    backgroundColor: '#ffffff',
+    resizeMode: 'contain',
   },
   wrapper: {
     width: '80%',
@@ -137,6 +150,17 @@ const styles = StyleSheet.create({
   },
   scroll: {
     backgroundColor: '#ffffff',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: '#ffffff',
+    adjustContent: 'center',
+    width: 300,
+    adjustContent: 'center',
+    //ajustar tamaño
   },
 });
 

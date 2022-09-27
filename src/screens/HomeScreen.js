@@ -29,11 +29,11 @@ const HomeScreen = ({navigation}) => {
   const [data, setData] = useState([]);
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
 
-  useEffect(() => {
+  /* useEffect(() => {
     setInterval(() => {
       CheckinOut(getCurrentLocation, userInfo, 0);
     }, 60000);
-  }, []);
+  }, []); */
 
   /*  useEffect(() => {
     SendArraaycheckInOut();
@@ -41,7 +41,7 @@ const HomeScreen = ({navigation}) => {
 
   /* const [formularioPreguntas, setFormularioPreguntas] = useState(); */
 
-  //console.log('formAsync', formAsync);
+  console.log('formAsync', JSON.stringify(formAsync));
 
   const [cargandoAsync, setcargandoAsync] = useState(false);
   /* const [formAsync, setformAsync] = useState(); */
@@ -155,9 +155,7 @@ const HomeScreen = ({navigation}) => {
                     </TouchableOpacity>
                     {employee['0'].tareas.map(tarea => {
                       return (
-                        <View
-                          key={employee?.id + tarea.id}
-                          style={styles.btn2}>
+                        <View key={employee?.id + tarea.id} style={styles.btn2}>
                           <Tareas
                             key={employee?.id + tarea.id}
                             tarea={tarea}
