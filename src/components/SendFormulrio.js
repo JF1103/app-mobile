@@ -148,10 +148,10 @@ carpeta
         ].tareas[indexIdTarea].formularios[indexIdFormulario].preguntas[
           indexPregunta
         ].checkSend = true;
-        /* console.log(
-            'newFormularioPreguntas',
-            JSON.stringify(newFormularioPreguntas),
-          ); */
+        // console.log(
+        //  'newFormularioPreguntas',
+        //  JSON.stringify(newFormularioPreguntas),
+        // );
         setFormularioPreguntas({...newFormularioPreguntas});
       })
       .catch(error => {

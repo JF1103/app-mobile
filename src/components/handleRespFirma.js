@@ -21,8 +21,8 @@ export const handleRespFirma = async (
   idUsuario,
   cords,
 ) => {
-  // const base64 = await RNFS.readFile(respuesta.tempUri, 'base64');
-
+  /* const base64 = await RNFS.readFile(respuesta.tempUri, 'base64');
+  console.log('de la memoria', base64); */
   deleteFiles(path)
     .then(() => {
       RNFS.writeFile(path, respuesta.dat, 'base64')

@@ -36,18 +36,9 @@ const Firma = ({
   const {getCurrentLocation} = useLocation();
   let path =
     RNFS.DocumentDirectoryPath +
-    `/firma_${tareaId}_${formularioId}_${preguntaid}.png`;
-
-  const exists = async () => {
-    let exists = await RNFS.exists(
-      '/data/user/0/com.app_mobile/files/firma_5_3_13.png',
-    );
-    console.log('exists', exists);
-  };
-
-  useEffect(() => {
-    exists();
-  }, []);
+    `/firma_${employee.id}_${tareaId}_${formularioId}_${preguntaid}.png`;
+  RNFS.DocumentDirectoryPath;
+  const [base64, setbase64] = useState(null);
 
   const firmInit = formAsync?.formcomplet
     .filter(item => item.idUsuario === idUsuario)[0]
@@ -59,9 +50,25 @@ const Firma = ({
   const [firmPath, setFirmPath] = useState(
     firmInit ? 'file:' + firmInit : null,
   );
+  /* useEffect(async () => {
+    const base64 = await RNFS.readFile(firmInit, 'base64');
+    console.log('de la memoria2', base64);
+  }, []); */
 
+  const exists = async () => {
+    /* let exists = await RNFS.exists(
+      '/data/user/0/com.app_mobile/files/firma_14_5_3_13.png',
+    ); */
+    /* console.log('exists', exists); */
+    firmInit && setbase64(await RNFS.readFile(firmInit, 'base64'));
+  };
+
+  useEffect(() => {
+    exists();
+  }, [firmPath]);
   const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
 
+  console.log('firmPath', firmPath);
   /*  console.log('firmPath', firmPath);
   console.log('firmInit', firmInit);
   console.log(JSON.stringify(formularioPreguntas)); */
@@ -79,7 +86,7 @@ const Firma = ({
   );
 
   const _onSaveEvent = result => {
-    /* console.log('pathname onsaveevent', result.encoded); */
+    console.log('pathname onsaveevent', result.encoded);
     getCurrentLocation().then(cords => {
       handleRespFirma(
         formularioPreguntas,
@@ -98,12 +105,14 @@ const Firma = ({
         idUsuario,
         cords,
       );
+      /*   saveBtn.current.resetImage(); */
     });
   };
   const _onDragEvent = () => {
     console.log('dragged');
   };
 
+  console.log('baes54', base64);
   return (
     <>
       <TouchableOpacity
@@ -113,9 +122,9 @@ const Firma = ({
         <Text style={styles.text1}>Presione aquí para firmar</Text>
       </TouchableOpacity>
       <SafeAreaView style={{...styles.marco, ...stylesE}}>
-        {firmPath ? (
+        {base64 !== null && firmPath ? (
           <Image
-            source={{uri: firmPath}}
+            source={{uri: `data:image/png;base64,${base64}`}}
             style={{
               marginTop: 20,
               width: '100%',
@@ -158,16 +167,30 @@ const Firma = ({
                 setFirmPath,
                 formularioPreguntas,
                 setFormularioPreguntas,
+                idUsuario,
+                employee,
+                idotd,
                 tareaId,
                 formularioId,
                 preguntaid,
                 preguntatiporespuesta,
               );
+              /* saveBtn.current.resetImage(); */
             }}>
             <Text style={styles.text}>Borrar</Text>
           </TouchableHighlight>
         </View>
       </SafeAreaView>
+      {/*   {base64 !== null && (
+        <Image
+          source={{uri: `data:image/png;base64,${base64}`}}
+          style={{
+            marginTop: 20,
+            width: '100%',
+            height: 200,
+          }}
+        />
+      )} */}
     </>
   );
 };

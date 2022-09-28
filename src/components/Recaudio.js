@@ -117,7 +117,10 @@ class Page extends Component {
     this.state = {
       isLoggingIn: false,
       recordSecs: 0,
-      recordTime: '00:00:00',
+      recordTime:
+        props.tempUri !== '' && props.typeFile === 'audio/mp4'
+          ? '00:00:10'
+          : '00:00:00',
       currentPositionSec: 0,
       currentDurationSec: 0,
       playTime: '00:00:00',
@@ -137,7 +140,7 @@ class Page extends Component {
     if (!playWidth) {
       playWidth = 0;
     }
-
+    console.log('props.tempUri', this.props.tempUri);
     return (
       <SafeAreaView>
         <View style={styles.viewRecorder}>
@@ -158,13 +161,14 @@ class Page extends Component {
                 Stop
               </Button>
             )}
-
-            <Button
-              style={styles.btn}
-              onPress={this.onStartPlay}
-              textStyle={styles.txt}>
-              Play
-            </Button>
+            {this.state.recordTime !== '00:00:00' && !this.state.grabando && (
+              <Button
+                style={styles.btn}
+                onPress={this.onStartPlay}
+                textStyle={styles.txt}>
+                Play
+              </Button>
+            )}
           </View>
         </View>
         <View style={styles.viewPlayer}>

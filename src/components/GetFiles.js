@@ -28,6 +28,8 @@ import {
 } from 'react-native-permissions';
 import RNFS from 'react-native-fs';
 
+import {Grayscale} from 'react-native-color-matrix-image-filters';
+
 import {ItemSeparator} from './ItemSeparator';
 import Recaudio from './Recaudio';
 import {SetStorage} from './SetStorage';
@@ -99,17 +101,27 @@ export const GetFiles = ({
   const [tempUri, setTempUri] = useState(syncUri ? 'file:' + syncUri : '');
   const [visualizaImagen, setvisualizaImagen] = useState(false);
 
-  /*   useEffect(() => {
-    if (tempUri && typeFile === 'audio/mp4') {
-      setvisualizaImagen(false);
-      setvisualizaAudio(true);
-    } else {
-      console.log('tempUri', tempUri);
-      console.log('typeFile', typeFile);
-      setvisualizaImagen(true);
-      setvisualizaAudio(false);
+  useEffect(() => {
+    console.log('tempUri', tempUri);
+    console.log('typeFile', typeFile);
+    if (tempUri && typeFile) {
+      if (tempUri.includes('.mp4')) {
+        console.log('entro a setvisualizaAudio');
+        setvisualizaImagen(false);
+        setvisualizaAudio(true);
+      } else {
+        console.log('entro a setvisualizaimagen');
+        console.log('tempUri', tempUri);
+        console.log('typeFile', typeFile);
+        setvisualizaImagen(true);
+        setvisualizaAudio(false);
+      }
     }
-  }, [tempUri]); */
+  }, [tempUri]);
+
+  useEffect(() => {
+    setvisualizaImagen(!visualizaAudio);
+  }, [visualizaAudio]);
 
   const takePhoto = () => {
     launchCamera(
@@ -136,6 +148,7 @@ export const GetFiles = ({
                 resp.assets[0].base64,
                 pregunta.tiporespuesta,
               );
+          setvisualizaImagen(true);
         } else return;
       },
     );
@@ -163,6 +176,7 @@ export const GetFiles = ({
             resp.assets[0].base64,
             pregunta.tiporespuesta,
           );
+          setvisualizaImagen(true);
         } else return;
       },
     );
@@ -191,6 +205,7 @@ export const GetFiles = ({
           resp.assets[0].base64,
           pregunta.tiporespuesta,
         );
+        setvisualizaImagen(true);
       },
     );
   };
@@ -293,18 +308,33 @@ export const GetFiles = ({
           formularioId={formularioId}
           pregunta={pregunta}
           formAsync={formAsync}
+          tempUri={tempUri}
+          typeFile={typeFile}
         />
       )}
-      {tempUri && typeFile && typeFile !== 'audio/mp4' && (
-        <Image
-          source={{uri: tempUri}}
-          style={{
-            marginTop: 20,
-            width: '100%',
-            height: 300,
-          }}
-        />
-      )}
+      {visualizaImagen &&
+        tempUri !== '' &&
+        (disabled ? (
+          <Grayscale>
+            <Image
+              source={{uri: tempUri}}
+              style={{
+                marginTop: 20,
+                width: '100%',
+                height: 300,
+              }}
+            />
+          </Grayscale>
+        ) : (
+          <Image
+            source={{uri: tempUri}}
+            style={{
+              marginTop: 20,
+              width: '100%',
+              height: 300,
+            }}
+          />
+        ))}
     </View>
   );
 };

@@ -17,6 +17,17 @@ import {ItemSeparator} from './ItemSeparator';
 import {handleResp} from '../helpers/handleRespt';
 import {useLocation} from '../hooks/useLocation';
 
+import {
+  Grayscale,
+  Sepia,
+  Tint,
+  ColorMatrix,
+  concatColorMatrices,
+  invert,
+  contrast,
+  saturate,
+} from 'react-native-color-matrix-image-filters';
+
 export const Maps = ({
   cordsOt,
   tareaId,
