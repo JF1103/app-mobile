@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: windowHeight,
     backgroundColor: '#ffff',
     borderRadius: 20,
     marginHorizontal: 15,
@@ -86,12 +85,6 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.96,
     marginBottom: 15,
     paddingHorizontal: 5,
-    shadowColor: '#000000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 20,
-    borderColor: '#fb8c00',
-    borderWidth: 1,
   },
   img: {
     width: windowWidth * 0.7,
@@ -101,7 +94,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     marginBottom: 30,
-    backgroundColor: '#ffffff',
     resizeMode: 'contain',
   },
   wrapper: {
