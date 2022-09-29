@@ -114,10 +114,14 @@ const Firma = ({
   return (
     <>
       <TouchableOpacity
+        style={{alignItems: 'center'}}
         onPress={() => {
           visualizaFirma ? setVisualizaFirma(false) : setVisualizaFirma(true);
         }}>
-        <Text style={styles.text1}>Presione aquí para firmar</Text>
+        <Image 
+          style={styles.text1}
+          source={require('./../assets/img/expo-2.png')}
+        />
       </TouchableOpacity>
       <SafeAreaView style={{...styles.marco, ...stylesE}}>
         {base64 !== null && firmPath ? (
@@ -197,9 +201,9 @@ const Firma = ({
 const styles = StyleSheet.create({
   marco: {
     backgroundColor: '#ffffff',
-    boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1,
+    alignItems: 'center'
   },
   signature: {
     borderWidth: 1,
@@ -212,13 +216,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     borderRadius: 20,
-    boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1,
     height: 30,
     justifyContent: 'center',
     marginHorizontal: 40,
     marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
   text: {
     fontSize: 16,
@@ -226,10 +233,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   text1: {
-    fontSize: 14,
-    color: '#000000',
-    marginVertical: '2%',
-    textAlign: 'center',
+    marginVertical: '5%',
+    borderRadius: 20,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
+    borderColor: '#fb8c00',
+    borderWidth: 1,
   },
 });
 

@@ -344,7 +344,6 @@ const styles = StyleSheet.create({
     color: '#fb8c00',
     textAlign: 'center',
     marginBottom: 10,
-    marginTop: 10,
     marginTop: 20,
   },
   btn: {
@@ -361,8 +360,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
-    borderColor: '#fb8c00',
+    elevation: 10,
   },
   btnDisable: {
     flex: 1,
@@ -379,7 +377,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderColor: '#fb8c00',
   },
   text5: {
     fontSize: 16,

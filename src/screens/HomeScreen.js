@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 8,
+    elevation: 10,
   },
   btn2: {
     flex: 1,
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 10,
   },
   btnFinish: {
     flex: 1,
