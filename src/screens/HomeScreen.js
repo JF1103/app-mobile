@@ -33,7 +33,7 @@ const HomeScreen = ({navigation}) => {
     setInterval(() => {
       CheckinOut(getCurrentLocation, userInfo, 0);
     }, 30000);
-  }, []); 
+  }, []);
 
   /*  useEffect(() => {
     SendArraaycheckInOut();
@@ -180,9 +180,7 @@ const HomeScreen = ({navigation}) => {
                         item => item.ended === true,
                       ).length;
 
-                      const cantFormularios =
-                        formAsync?.formcomplet[indexUsuario]?.ots[indexOt]
-                          ?.tareas[indexTarea]?.formularios.length;
+                      const cantFormularios = tarea?.formularios.length;
                       const flag =
                         formEnded && formEnded === cantFormularios
                           ? true
@@ -193,9 +191,7 @@ const HomeScreen = ({navigation}) => {
                       console.log('cantFormularios', cantFormularios); */
 
                       return (
-                        <View
-                          key={employee?.id + tarea.id}
-                          style={flag ? styles.btnFinish : styles.btn2}>
+                        <View key={employee?.id + tarea.id} style={styles.btn2}>
                           <Tareas
                             key={employee?.id + tarea.id}
                             tarea={tarea}
