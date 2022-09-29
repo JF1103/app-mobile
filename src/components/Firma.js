@@ -118,7 +118,7 @@ const Firma = ({
         onPress={() => {
           visualizaFirma ? setVisualizaFirma(false) : setVisualizaFirma(true);
         }}>
-        <Image 
+        <Image
           style={styles.text1}
           source={require('./../assets/img/expo-2.png')}
         />
@@ -182,7 +182,6 @@ const Firma = ({
               <Text style={styles.text}>Borrar</Text>
             </TouchableHighlight>
           </View>
-        </View>
         </View>
       </SafeAreaView>
       {/*   {base64 !== null && (
