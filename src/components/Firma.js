@@ -68,7 +68,6 @@ const Firma = ({
   }, [firmPath]);
   const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
 
-  console.log('firmPath', firmPath);
   /*  console.log('firmPath', firmPath);
   console.log('firmInit', firmInit);
   console.log(JSON.stringify(formularioPreguntas)); */
@@ -86,7 +85,7 @@ const Firma = ({
   );
 
   const _onSaveEvent = result => {
-    console.log('pathname onsaveevent', result.encoded);
+    // console.log('pathname onsaveevent', result.encoded);
     getCurrentLocation().then(cords => {
       handleRespFirma(
         formularioPreguntas,
@@ -112,7 +111,6 @@ const Firma = ({
     console.log('dragged');
   };
 
-  console.log('baes54', base64);
   return (
     <>
       <TouchableOpacity
@@ -143,42 +141,43 @@ const Firma = ({
             viewMode={'portrait'}
           />
         )}
+        <View style={{alignItems: 'center'}}>
+          <ItemSeparator />
 
-        <ItemSeparator />
+          <View style={{flexDirection: 'row'}}>
+            {!firmPath && (
+              <TouchableHighlight
+                style={styles.buttonStyle}
+                onPress={() => {
+                  saveSign(saveBtn);
+                }}>
+                <Text style={styles.text}>Guardar</Text>
+              </TouchableHighlight>
+            )}
 
-        <View style={{flexDirection: 'row'}}>
-          {!firmPath && (
             <TouchableHighlight
               style={styles.buttonStyle}
               onPress={() => {
-                saveSign(saveBtn);
+                resetSign(
+                  path,
+                  saveBtn,
+                  firmPath,
+                  setFirmPath,
+                  formularioPreguntas,
+                  setFormularioPreguntas,
+                  idUsuario,
+                  employee,
+                  idotd,
+                  tareaId,
+                  formularioId,
+                  preguntaid,
+                  preguntatiporespuesta,
+                );
+                /* saveBtn.current.resetImage(); */
               }}>
-              <Text style={styles.text}>Guardar</Text>
+              <Text style={styles.text}>Borrar</Text>
             </TouchableHighlight>
-          )}
-
-          <TouchableHighlight
-            style={styles.buttonStyle}
-            onPress={() => {
-              resetSign(
-                path,
-                saveBtn,
-                firmPath,
-                setFirmPath,
-                formularioPreguntas,
-                setFormularioPreguntas,
-                idUsuario,
-                employee,
-                idotd,
-                tareaId,
-                formularioId,
-                preguntaid,
-                preguntatiporespuesta,
-              );
-              /* saveBtn.current.resetImage(); */
-            }}>
-            <Text style={styles.text}>Borrar</Text>
-          </TouchableHighlight>
+          </View>
         </View>
       </SafeAreaView>
       {/*   {base64 !== null && (

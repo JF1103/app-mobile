@@ -29,7 +29,7 @@ export const handleResp = async (
             {
               FormularioId: formularioId,
               refformularioconector: refformularioconector,
-
+              ended: false,
               preguntas: [
                 {
                   id: id,
@@ -111,6 +111,7 @@ export const handleResp = async (
               {
                 FormularioId: formularioId,
                 refformularioconector: refformularioconector,
+                ended: false,
 
                 preguntas: [
                   {
@@ -145,7 +146,7 @@ export const handleResp = async (
             ].formularios.push({
               FormularioId: formularioId,
               refformularioconector: refformularioconector,
-
+              ended: false,
               preguntas: [
                 {
                   id: id,
