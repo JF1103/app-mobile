@@ -21,6 +21,7 @@ import {SetStorage} from './SetStorage';
 import {FormContext} from '../context/FormContext';
 import {useLocation} from '../hooks/useLocation';
 import SendFormulrio from './SendFormulrio';
+import {Chase} from 'react-native-animated-spinkit';
 
 export const Formularios = ({
   formulario,
@@ -80,12 +81,37 @@ export const Formularios = ({
 
     const numeroPreguntas = formulario.preguntas.length;
 
+    const ended = formAsync?.formcomplet
+      ?.filter(item => item.idUsuario === idUsuario)[0]
+      ?.ots.filter(item => item.id_ot === employee.id)[0]
+      ?.tareas.filter(item => item.TareaId === tarea.id)[0]
+      ?.formularios.filter(
+        item => item.FormularioId === formulario.id,
+      )[0]?.ended;
+
     if (numeroRespuestas === numeroPreguntas) {
       setformsended(true);
       setDisabled(true);
+      setSending(false);
+      if (ended !== true) {
+        let copy = formularioPreguntas;
+        copy.formcomplet
+          .filter(item => item.idUsuario === idUsuario)[0]
+          .ots.filter(item => item.id_ot === employee.id)[0]
+          .tareas.filter(item => item.TareaId === tarea.id)[0]
+          .formularios.filter(
+            item => item.FormularioId === formulario.id,
+          )[0].ended = true;
+        setFormularioPreguntas({...copy});
+      }
     } else {
+      setSending(false);
     }
   }, [formAsync]);
+
+  const [sending, setSending] = useState(false);
+
+  console.log('sending', sending);
 
   //console.log(selectedItem);
   //console.log('preguntas', JSON.stringify(formularioPreguntas));
@@ -333,9 +359,15 @@ export const Formularios = ({
                 setFormularioPreguntas,
                 employee,
                 idUsuario,
-              );
+                setSending,
+              ),
+                setSending(true);
             }}>
-            <Text style={{...styles.text6}}>Terminar Formulario</Text>
+            {sending ? (
+              <Chase color="white" size={14} />
+            ) : (
+              <Text style={{...styles.text6}}>Terminar Formulario</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -463,6 +495,7 @@ const styles = StyleSheet.create({
     elevation: 7,
     borderColor: '#c88719',
     borderWidth: 1,
+    alignItems: 'center',
   },
   btnSubmit: {
     backgroundColor: '#fb8c00',
@@ -477,5 +510,6 @@ const styles = StyleSheet.create({
     elevation: 7,
     borderColor: '#c88719',
     borderWidth: 1,
+    alignItems: 'center',
   },
 });

@@ -12,6 +12,7 @@ export default function SendFormulrio(
   setFormularioPreguntas,
   employee,
   idUsuario,
+  setSending,
 ) {
   /* 
     usuario:11
@@ -28,6 +29,7 @@ tipo:
 carpeta
 
 */
+
   console.log('e formulario es ', JSON.stringify(formularioPreguntas));
   const preguntas = formularioPreguntas.formcomplet
     .filter(item => item.idUsuario === idUsuario)[0]
@@ -122,6 +124,7 @@ carpeta
     formData.append('carpeta', data.carpeta);
 
     console.log('envia-----------', JSON.stringify(formData));
+
     axios
       .post(`${BASE_URL}/formulariosdetalles/insertbyone.php`, formData, {
         headers: {

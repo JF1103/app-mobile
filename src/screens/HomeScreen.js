@@ -41,7 +41,7 @@ const HomeScreen = ({navigation}) => {
 
   /* const [formularioPreguntas, setFormularioPreguntas] = useState(); */
 
-  console.log('formAsync', JSON.stringify(formAsync));
+  /*  console.log('formAsync', JSON.stringify(formAsync)); */
 
   const [cargandoAsync, setcargandoAsync] = useState(false);
   /* const [formAsync, setformAsync] = useState(); */
@@ -56,7 +56,7 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    console.log('inicializo preguntas');
+    /* console.log('inicializo preguntas'); */
     setcargandoAsync(true);
     inicializaformularioPreguntas();
   }, []);
@@ -90,6 +90,8 @@ const HomeScreen = ({navigation}) => {
     GetDataOt(userInfo.idusuario, setData, setLoading);
   }, []);
 
+  const [tareaEnd, setTareaEnd] = useState(false);
+  /* console.log('tareaEnd', tareaEnd); */
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -154,8 +156,46 @@ const HomeScreen = ({navigation}) => {
                       <Text style={styles.text}>Iniciar Ruta</Text>
                     </TouchableOpacity>
                     {employee['0'].tareas.map(tarea => {
+                      console.log(tarea.id);
+                      const indexUsuario = formAsync?.formcomplet?.findIndex(
+                        item => item.idUsuario === userInfo.idusuario,
+                      );
+                      /*  console.log('indexUsuario', indexUsuario); */
+                      const indexOt = formAsync?.formcomplet[
+                        indexUsuario
+                      ]?.ots.findIndex(item => item.id_ot === employee.id);
+
+                      /* console.log('indexOt', indexOt); */
+
+                      const indexTarea = formAsync?.formcomplet[
+                        indexUsuario
+                      ].ots[indexOt]?.tareas.findIndex(
+                        item => item.TareaId === tarea.id,
+                      );
+                      /*  console.log('indexTarea', indexTarea); */
+
+                      const formEnded = formAsync?.formcomplet[
+                        indexUsuario
+                      ]?.ots[indexOt]?.tareas[indexTarea]?.formularios.filter(
+                        item => item.ended === true,
+                      ).length;
+
+                      const cantFormularios =
+                        formAsync?.formcomplet[indexUsuario]?.ots[indexOt]
+                          ?.tareas[indexTarea]?.formularios.length;
+                      const flag =
+                        formEnded && formEnded === cantFormularios
+                          ? true
+                          : false;
+
+                      /* console.log('flag', flag);
+                      console.log('formEnded', formEnded);
+                      console.log('cantFormularios', cantFormularios); */
+
                       return (
-                        <View key={employee?.id + tarea.id} style={styles.btn2}>
+                        <View
+                          key={employee?.id + tarea.id}
+                          style={flag ? styles.btnFinish : styles.btn2}>
                           <Tareas
                             key={employee?.id + tarea.id}
                             tarea={tarea}
@@ -164,6 +204,10 @@ const HomeScreen = ({navigation}) => {
                             longitud={longitud}
                             navigation={navigation}
                             idUsuario={userInfo.idusuario}
+                            tareaEnd={tareaEnd}
+                            setTareaEnd={setTareaEnd}
+                            formEnded={formEnded}
+                            cantFormularios={cantFormularios}
                           />
                         </View>
                       );
@@ -277,6 +321,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
+  },
+  btnFinish: {
+    flex: 1,
+    borderRadius: 20,
+    height: 30,
+    width: '90%',
+    justifyContent: 'center',
+    color: 'red',
+    marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   titulo: {
     color: '#fb8c00',

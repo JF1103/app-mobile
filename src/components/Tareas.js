@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 export default function Tareas({
@@ -9,11 +9,17 @@ export default function Tareas({
   longitud,
   index,
   idUsuario,
+  tareaEnd,
+  setTareaEnd,
+  formEnded,
+  cantFormularios,
 }) {
+  const flag = formEnded && formEnded === cantFormularios ? true : false;
+
   return (
     <TouchableOpacity
       key={employee?.id + tarea.id}
-      style={styles.btn2}
+      style={flag ? styles.btnFinish : styles.btn2}
       onPress={() => {
         navigation.navigate('FormOne', {
           tarea,
@@ -40,6 +46,20 @@ const styles = StyleSheet.create({
 
     color: '#f5f5f5',
     marginBottom: 10,
+  },
+  btnFinish: {
+    backgroundColor: '#FFF8EF',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 30,
+    width: '100%',
+    justifyContent: 'center',
+
+    color: '#f5f5f5',
+    marginBottom: 10,
+    opacity: 0.5,
   },
   text1: {
     fontSize: 16,
