@@ -147,9 +147,9 @@ const Firma = ({
             viewMode={'portrait'}
           />
         )}
-
+        <View style={{ alignItems: 'center'}}>
         <ItemSeparator />
-
+        
         <View style={{flexDirection: 'row'}}>
           {!firmPath && (
             <TouchableHighlight
@@ -184,6 +184,7 @@ const Firma = ({
             <Text style={styles.text}>Borrar</Text>
           </TouchableHighlight>
         </View>
+        </View>
       </SafeAreaView>
       {/*   {base64 !== null && (
         <Image
@@ -204,7 +205,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderColor: '#fb8c00',
     borderWidth: 1,
-    alignItems: 'center'
   },
   signature: {
     borderWidth: 1,

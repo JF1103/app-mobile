@@ -29,11 +29,11 @@ const HomeScreen = ({navigation}) => {
   const [data, setData] = useState([]);
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
 
-  /* useEffect(() => {
+  useEffect(() => {
     setInterval(() => {
       CheckinOut(getCurrentLocation, userInfo, 0);
-    }, 60000);
-  }, []); */
+    }, 30000);
+  }, []); 
 
   /*  useEffect(() => {
     SendArraaycheckInOut();

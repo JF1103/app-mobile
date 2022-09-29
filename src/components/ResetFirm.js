@@ -18,7 +18,7 @@ export const resetSign = (
   preguntatiporespuesta,
 ) => {
   deleteFiles(path);
-
+  saveBtn.current && saveBtn.current.resetImage();
   setFirmPath(null);
   const indexUsuario = formularioPreguntas.formcomplet.findIndex(
     usuario => usuario.idUsuario === idUsuario,
