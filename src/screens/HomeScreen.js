@@ -31,13 +31,12 @@ const HomeScreen = ({navigation}) => {
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const [refresh, setRefresh] = useState(false);
 
-  const pullMe  = async () =>{
+  const pullMe = async () => {
     setRefresh(true);
     await GetDataOt(userInfo.idusuario, setData, setLoading);
 
-    
-      setRefresh(false)
-  }
+    setRefresh(false);
+  };
 
   useEffect(() => {
     setInterval(() => {
@@ -103,19 +102,16 @@ const HomeScreen = ({navigation}) => {
   const [tareaEnd, setTareaEnd] = useState(false);
   /* console.log('tareaEnd', tareaEnd); */
   return (
-    
-      <View style={styles.container}>
-        <Navbar />
-        <ScrollView
+    <View style={styles.container}>
+      <Navbar />
+      <ScrollView
         refreshControl={
           <RefreshControl
-          refreshing={refresh}
-          colors={["#fb8c00"]}
-          onRefresh={()=>pullMe()}
+            refreshing={refresh}
+            colors={['#fb8c00']}
+            onRefresh={() => pullMe()}
           />
-        }
-        >
-
+        }>
         {isLoading && cargandoAsync && (
           <ActivityIndicator size="large" color="blue" />
         )}
@@ -124,6 +120,49 @@ const HomeScreen = ({navigation}) => {
           !cargandoAsync &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
+            const cantTares = employee['0'].tareas.length;
+
+            const TareasEned = employee['0'].tareas
+              .map(tarea => {
+                const indexUsuario = formAsync?.formcomplet?.findIndex(
+                  item => item.idUsuario === userInfo.idusuario,
+                );
+                const indexOt = formAsync?.formcomplet[
+                  indexUsuario
+                ]?.ots.findIndex(item => item.id_ot === employee.id);
+
+                /* console.log('indexOt', indexOt); */
+
+                const indexTarea = formAsync?.formcomplet[indexUsuario].ots[
+                  indexOt
+                ]?.tareas.findIndex(item => item.TareaId === tarea.id);
+
+                const NumformEnded = formAsync?.formcomplet[indexUsuario]?.ots[
+                  indexOt
+                ]?.tareas[indexTarea]?.formularios.filter(
+                  item => item.ended === true,
+                ).length;
+
+                const cantFormularios = tarea?.formularios.length;
+
+                const treaEnded =
+                  NumformEnded && NumformEnded === cantFormularios
+                    ? true
+                    : false;
+
+                return treaEnded;
+              })
+              .filter(item => item === true).length;
+            console.log('otended', otEnded);
+            const otEnded = TareasEned === cantTares;
+
+            if (otEnded) {
+              return (
+                <View key={employee.id}>
+                  <></>
+                </View>
+              );
+            }
             return (
               <View style={styles.card} key={employee?.id}>
                 <View style={styles.row}>
@@ -159,7 +198,18 @@ const HomeScreen = ({navigation}) => {
                     </Text>
                     <Text style={styles.texto}>
                       <Text style={styles.titulo}>Prioridad:</Text>{' '}
-                      <Text style={employee?.nivel === "1-Alta" ? {...styles.nivelAlto} : employee?.nivel === "2-Media" ?{...styles.nivelMedio} : employee?.nivel === "3-Baja" && {...styles.nivelBajo} }>{employee?.nivel}</Text>
+                      <Text
+                        style={
+                          employee?.nivel === '1-Alta'
+                            ? {...styles.nivelAlto}
+                            : employee?.nivel === '2-Media'
+                            ? {...styles.nivelMedio}
+                            : employee?.nivel === '3-Baja' && {
+                                ...styles.nivelBajo,
+                              }
+                        }>
+                        {employee?.nivel}
+                      </Text>
                     </Text>
                   </View>
                   <ItemSeparator />
@@ -193,47 +243,59 @@ const HomeScreen = ({navigation}) => {
                       );
                       /*  console.log('indexTarea', indexTarea); */
 
-                      const formEnded = formAsync?.formcomplet[
+                      const NumformEnded = formAsync?.formcomplet[
                         indexUsuario
                       ]?.ots[indexOt]?.tareas[indexTarea]?.formularios.filter(
                         item => item.ended === true,
                       ).length;
 
                       const cantFormularios = tarea?.formularios.length;
-                      const flag =
-                        formEnded && formEnded === cantFormularios
+                      const cantTareas = employee['0'].tareas.length;
+
+                      const treaEnded =
+                        NumformEnded && NumformEnded === cantFormularios
                           ? true
                           : false;
 
                       /* console.log('flag', flag);
                       console.log('formEnded', formEnded);
                       console.log('cantFormularios', cantFormularios); */
-                      return (
-                        <View key={employee?.id + tarea.id} style={styles.btn2}>
-                          <Tareas
+
+                      if (treaEnded) {
+                        return (
+                          <View key={employee?.id + tarea.id}>
+                            <></>
+                          </View>
+                        );
+                      } else
+                        return (
+                          <View
                             key={employee?.id + tarea.id}
-                            tarea={tarea}
-                            employee={employee}
-                            latitud={latitud}
-                            longitud={longitud}
-                            navigation={navigation}
-                            idUsuario={userInfo.idusuario}
-                            tareaEnd={tareaEnd}
-                            setTareaEnd={setTareaEnd}
-                            formEnded={formEnded}
-                            cantFormularios={cantFormularios}
-                          />
-                        </View>
-                      );
+                            style={styles.btn2}>
+                            <Tareas
+                              key={employee?.id + tarea.id}
+                              tarea={tarea}
+                              employee={employee}
+                              latitud={latitud}
+                              longitud={longitud}
+                              navigation={navigation}
+                              idUsuario={userInfo.idusuario}
+                              tareaEnd={tareaEnd}
+                              setTareaEnd={setTareaEnd}
+                              formEnded={NumformEnded}
+                              cantFormularios={cantFormularios}
+                              screenCall={'HomeScreen'}
+                            />
+                          </View>
+                        );
                     })}
                   </View>
                 </View>
               </View>
             );
           })}
-          </ScrollView>
-      </View>
-    
+      </ScrollView>
+    </View>
   );
 };
 
@@ -354,13 +416,13 @@ const styles = StyleSheet.create({
     color: '#fb8c00',
   },
   nivelAlto: {
-    color: "red",
+    color: 'red',
   },
   nivelMedio: {
-    color: "yellow",
+    color: 'yellow',
   },
   nivelBajo: {
-    color: "green",
+    color: 'green',
   },
 });
 
