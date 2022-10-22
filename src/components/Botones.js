@@ -1,4 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import React, {useContext, useState} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
@@ -8,12 +9,13 @@ import {CheckinOut} from './CheckinOut';
 import {getCheckInOut} from './GetStorage';
 import {SendCheckinOut} from './SendCheckinOut';
 
-const Botones = ({ navigation }) => {
+const Botones = () => {
   const {logout} = useContext(AuthContext);
 
   const [visualizaCheck, setvisualizaCheck] = useState(true);
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const {userInfo} = useContext(AuthContext);
+  const navigator = useNavigation();
   getCheckInOut().then(checkinout => {
     if (checkinout !== null) {
       if (checkinout.checks[checkinout.checks.length - 1].type === 1) {
@@ -23,12 +25,17 @@ const Botones = ({ navigation }) => {
       }
     }
   });
+console.log(navigator)
+
   return (
     <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>
         <Text style={styles.text2}>Cerrar Sesión</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.touch5}>
+      <TouchableOpacity 
+      style={styles.touch5}
+      onPress={() => {navigator.navigate("TareasFinalizadas")}}
+      >
         <Text style={styles.text5}>T. Finalizadas</Text>
       </TouchableOpacity>
       {visualizaCheck ? (

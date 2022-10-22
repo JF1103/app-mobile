@@ -1,14 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
+import {Text} from 'react-native'
 
-export class tareasFinalizadas extends Component {
-  render() {
-    return (
-      <div>tareasFinalizadas</div>
-    )
-  }
+export const TareasFinalizadas = () => {
+  return (
+    <Text>tareasFinalizadas</Text>
+  )
 }
-
-export default tareasFinalizadas;
 
 
 

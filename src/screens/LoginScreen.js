@@ -1,4 +1,4 @@
-import { size } from 'lodash';
+
 import React, {useContext, useRef, useState} from 'react';
 import {
   Text,
@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from '../context/AuthContext';
-import { validateEmail } from '../helpers/helpers';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -23,6 +22,7 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState(null);
   const {isLoading, login} = useContext(AuthContext);
   const scroll = useRef(null);
+
 
   return (
     <>
@@ -74,6 +74,7 @@ const LoginScreen = ({navigation}) => {
     </>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

@@ -31,12 +31,12 @@ const HomeScreen = ({navigation}) => {
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const [refresh, setRefresh] = useState(false);
 
-  const pullMe = () =>{
+  const pullMe  = async () =>{
     setRefresh(true);
+    await GetDataOt(userInfo.idusuario, setData, setLoading);
 
-    setTimeout(() => {
+    
       setRefresh(false)
-    }, 3000)
   }
 
   useEffect(() => {
@@ -110,6 +110,7 @@ const HomeScreen = ({navigation}) => {
         refreshControl={
           <RefreshControl
           refreshing={refresh}
+          colors={["#fb8c00"]}
           onRefresh={()=>pullMe()}
           />
         }
@@ -158,7 +159,7 @@ const HomeScreen = ({navigation}) => {
                     </Text>
                     <Text style={styles.texto}>
                       <Text style={styles.titulo}>Prioridad:</Text>{' '}
-                      {employee?.nivel}
+                      <Text style={employee?.nivel === "1-Alta" ? {...styles.nivelAlto} : employee?.nivel === "2-Media" ?{...styles.nivelMedio} : employee?.nivel === "3-Baja" && {...styles.nivelBajo} }>{employee?.nivel}</Text>
                     </Text>
                   </View>
                   <ItemSeparator />
@@ -351,6 +352,15 @@ const styles = StyleSheet.create({
   },
   titulo: {
     color: '#fb8c00',
+  },
+  nivelAlto: {
+    color: "red",
+  },
+  nivelMedio: {
+    color: "yellow",
+  },
+  nivelBajo: {
+    color: "green",
   },
 });
 

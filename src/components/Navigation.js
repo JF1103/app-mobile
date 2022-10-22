@@ -10,6 +10,7 @@ import FormOne from './FormOne';
 import {Ruta} from './Ruta';
 import {FormProvider} from '../context/FormContext';
 const Stack = createNativeStackNavigator();
+import {TareasFinalizadas} from './TareasFinalizadas';
 
 const Navigation = () => {
   const {userInfo, splashLoading} = useContext(AuthContext);
@@ -47,6 +48,11 @@ const Navigation = () => {
           <Stack.Screen
             name="Ruta"
             component={Ruta}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="TareasFinalizadas"
+            component={TareasFinalizadas}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
