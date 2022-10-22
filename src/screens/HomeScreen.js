@@ -103,10 +103,9 @@ const HomeScreen = ({navigation}) => {
   const [tareaEnd, setTareaEnd] = useState(false);
   /* console.log('tareaEnd', tareaEnd); */
   return (
-    
-      <View style={styles.container}>
-        <Navbar />
-        <ScrollView
+    <View style={styles.container}>
+      <Navbar />
+      <ScrollView
         refreshControl={
           <RefreshControl
           refreshing={refresh}
@@ -231,9 +230,8 @@ const HomeScreen = ({navigation}) => {
               </View>
             );
           })}
-          </ScrollView>
-      </View>
-    
+      </ScrollView>
+    </View>
   );
 };
 
