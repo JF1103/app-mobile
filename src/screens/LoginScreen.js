@@ -1,3 +1,4 @@
+import { size } from 'lodash';
 import React, {useContext, useRef, useState} from 'react';
 import {
   Text,
@@ -12,6 +13,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from '../context/AuthContext';
+import { validateEmail } from '../helpers/helpers';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -21,8 +23,7 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState(null);
   const {isLoading, login} = useContext(AuthContext);
   const scroll = useRef(null);
-  // console.log(email);
-  // console.log(password);
+
   return (
     <>
       <ScrollView style={styles.scroll} ref={scroll}>
@@ -115,7 +116,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: '#ffffff',
     color: '#000000',
-    textAlign: 'center',
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10,
     borderColor: '#fb8c00',
+    marginTop: 20,
   },
   text: {
     fontSize: 16,

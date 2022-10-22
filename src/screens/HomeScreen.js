@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import Botones from '../components/Botones';
 import {ItemSeparator} from '../components/ItemSeparator';
@@ -28,11 +29,20 @@ const HomeScreen = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
+  const [refresh, setRefresh] = useState(false);
+
+  const pullMe = () =>{
+    setRefresh(true);
+
+    setTimeout(() => {
+      setRefresh(false)
+    }, 3000)
+  }
 
   useEffect(() => {
     setInterval(() => {
       CheckinOut(getCurrentLocation, userInfo, 0);
-    }, 30000);
+    }, 600000);
   }, []);
 
   /*  useEffect(() => {
@@ -93,9 +103,17 @@ const HomeScreen = ({navigation}) => {
   const [tareaEnd, setTareaEnd] = useState(false);
   /* console.log('tareaEnd', tareaEnd); */
   return (
-    <ScrollView>
+    
       <View style={styles.container}>
         <Navbar />
+        <ScrollView
+        refreshControl={
+          <RefreshControl
+          refreshing={refresh}
+          onRefresh={()=>pullMe()}
+          />
+        }
+        >
 
         {isLoading && cargandoAsync && (
           <ActivityIndicator size="large" color="blue" />
@@ -189,7 +207,6 @@ const HomeScreen = ({navigation}) => {
                       /* console.log('flag', flag);
                       console.log('formEnded', formEnded);
                       console.log('cantFormularios', cantFormularios); */
-
                       return (
                         <View key={employee?.id + tarea.id} style={styles.btn2}>
                           <Tareas
@@ -213,8 +230,9 @@ const HomeScreen = ({navigation}) => {
               </View>
             );
           })}
+          </ScrollView>
       </View>
-    </ScrollView>
+    
   );
 };
 

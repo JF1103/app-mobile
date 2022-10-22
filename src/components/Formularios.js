@@ -148,7 +148,7 @@ export const Formularios = ({
           });
 
           return (
-            <View style={styles.container2} key={index2}>
+            <View key={index2}>
               {pregunta.tiporespuesta === 'Seleccion Simple' ? (
                 <View key={pregunta.id} style={{alignItems: 'center'}}>
                   <Text style={styles.selsim}>{pregunta.pregunta}</Text>
@@ -245,7 +245,7 @@ export const Formularios = ({
                               : setMountMulti(true),
                               setIditemSelect(selectedItems);
                           }}
-                          placeholder="Elegir opción"
+                          placeholder="Elegir opción" 
                         />
                       </ScrollView>
                     </View>

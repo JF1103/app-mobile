@@ -55,7 +55,6 @@ const FormOne = ({navigation, route}) => {
   formData.append('idusuario', userInfo.idusuario);
 
   return (
-    <ScrollView>
       <View>
         <View
           style={{
@@ -81,7 +80,7 @@ const FormOne = ({navigation, route}) => {
 
           <Text style={styles.text}>Formularios</Text>
         </View>
-        {/*  <Text style={styles.title}>Formulario</Text> */}
+        <ScrollView>
         {tarea?.formularios.map((formualario, index) => {
           return (
             <Formularios
@@ -96,8 +95,9 @@ const FormOne = ({navigation, route}) => {
             />
           );
         })}
+        </ScrollView>
       </View>
-    </ScrollView>
+      
   );
 };
 

@@ -8,7 +8,7 @@ import {CheckinOut} from './CheckinOut';
 import {getCheckInOut} from './GetStorage';
 import {SendCheckinOut} from './SendCheckinOut';
 
-const Botones = () => {
+const Botones = ({ navigation }) => {
   const {logout} = useContext(AuthContext);
 
   const [visualizaCheck, setvisualizaCheck] = useState(true);
@@ -27,6 +27,9 @@ const Botones = () => {
     <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>
         <Text style={styles.text2}>Cerrar Sesión</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.touch5}>
+        <Text style={styles.text5}>T. Finalizadas</Text>
       </TouchableOpacity>
       {visualizaCheck ? (
         <TouchableOpacity
@@ -75,6 +78,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
+    marginTop: 5,
   },
   text2: {
     fontSize: 15,
@@ -98,6 +102,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
+    marginTop: 5,
   },
   text3: {
     fontSize: 15,
@@ -121,10 +126,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
+    marginTop: 5,
   },
   text4: {
     fontSize: 15,
     color: '#eeeeee',
+    textAlign: 'center',
+  },
+  touch5: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    boxShadow: 5,
+    borderColor: '#fb8c00',
+    borderWidth: 1.0,
+    height: 30,
+    width: '30%',
+    color: '#f5f5f5',
+    marginBottom: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
+    marginTop: 5,
+  },
+  text5: {
+    fontSize: 15,
+    color: '#fb8c00',
     textAlign: 'center',
   },
 });
