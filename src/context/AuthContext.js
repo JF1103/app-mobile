@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, {createContext, useEffect, useState} from 'react';
+import {ToastAndroid} from 'react-native';
 import {BASE_URL} from '../config';
 
 export const AuthContext = createContext();
@@ -9,6 +10,7 @@ export const AuthProvider = ({children}) => {
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [splashLoading, setSplashLoading] = useState(false);
+  const [loginError, setloginError] = useState(false);
 
   const register = (name, email, password) => {
     setIsLoading(true);
@@ -24,7 +26,7 @@ export const AuthProvider = ({children}) => {
         setUserInfo(userInfo);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
         setIsLoading(false);
-        console.log(userInfo);
+        /* console.log(userInfo); */
       })
       .catch(e => {
         console.log(`register error ${e}`);
@@ -32,32 +34,15 @@ export const AuthProvider = ({children}) => {
       });
   };
 
-  const login = (email, password) => {
+  const login = async (email, password) => {
     setIsLoading(true);
 
-    axios
-      .get(`${BASE_URL}/usuarios/login.php`, {
-        params: {
-          email: email,
-          password: password,
-        },
-      })
-      .then(res => {
-        let userInfo = res.data;
-        if (userInfo.error == false) {
-          userInfo.access_token = 'jjjj';
-        }
-        console.log(res);
-        setUserInfo(userInfo);
-        AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-
-        console.log(res.data.error);
-        setIsLoading(false);
-      })
-      .catch(e => {
-        console.log(`login error ${e}`);
-        setIsLoading(false);
-      });
+    return axios.get(`${BASE_URL}/usuarios/login.php`, {
+      params: {
+        email: email,
+        password: password,
+      },
+    });
   };
 
   const logout = () => {
@@ -98,6 +83,10 @@ export const AuthProvider = ({children}) => {
         splashLoading,
         login,
         logout,
+        setUserInfo,
+        setIsLoading,
+        setloginError,
+        loginError,
       }}>
       {children}
     </AuthContext.Provider>

@@ -40,6 +40,7 @@ export const Maps = ({
   employee,
   idUsuario,
   cords,
+  mapsReq,
 }) => {
   /*  const [location, setLocation] = useState();
   let nbr_latitud = 0;
@@ -67,7 +68,6 @@ export const Maps = ({
   useEffect(() => {
     /* handleRespLocation(tareaId, pregunta.id, location, pregunta.tiporespuesta); */
     if (initialPosition.latitude !== 0 && initialPosition.longitude !== 0) {
-      console.log('entre', initialPosition);
       handleResp(
         tareaId,
         idotd,
@@ -94,10 +94,12 @@ export const Maps = ({
   return (
     <View key={pregunta.id} style={{height: 300}}>
       <Text style={styles.geo}>{pregunta.pregunta}</Text>
-      <Text style={styles.geoText}>
-        Latitud:{initialPosition.latitude} longitud:
-        {initialPosition.longitude}
-      </Text>
+      <View style={mapsReq ? {borderColor: 'red', borderWidth: 2} : {}}>
+        <Text style={styles.geoText}>
+          Latitud:{initialPosition.latitude} longitud:
+          {initialPosition.longitude}
+        </Text>
+      </View>
       {hasLocation ? (
         <>
           <MapView

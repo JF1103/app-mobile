@@ -27,8 +27,8 @@ export const handleRespFirma = async (
     .then(() => {
       RNFS.writeFile(path, respuesta.dat, 'base64')
         .then(success => {
-          console.log('FILE WRITTEN!');
-          console.log('escribi en ', path);
+          /*   console.log('FILE WRITTEN!');
+          console.log('escribi en ', path); */
           setFirmPath('file:' + path);
         })
         .catch(err => {

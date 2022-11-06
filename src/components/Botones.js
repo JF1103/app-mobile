@@ -1,5 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import React, {useContext, useState} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
@@ -25,17 +25,17 @@ const Botones = () => {
       }
     }
   });
-console.log(navigator)
 
   return (
     <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>
         <Text style={styles.text2}>Cerrar Sesión</Text>
       </TouchableOpacity>
-      <TouchableOpacity 
-      style={styles.touch5}
-      onPress={() => {navigator.navigate("TareasFinalizadas")}}
-      >
+      <TouchableOpacity
+        style={styles.touch5}
+        onPress={() => {
+          navigator.navigate('TareasFinalizadas');
+        }}>
         <Text style={styles.text5}>T. Finalizadas</Text>
       </TouchableOpacity>
       {visualizaCheck ? (

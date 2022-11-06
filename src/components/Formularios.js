@@ -22,6 +22,7 @@ import {FormContext} from '../context/FormContext';
 import {useLocation} from '../hooks/useLocation';
 import SendFormulrio from './SendFormulrio';
 import {Chase} from 'react-native-animated-spinkit';
+import {validaCampos} from '../helpers/validaCampos';
 
 export const Formularios = ({
   formulario,
@@ -33,7 +34,7 @@ export const Formularios = ({
 }) => {
   const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
     useContext(FormContext);
-
+  const {userInfo} = useContext(AuthContext);
   const textAsync = formAsync?.formcomplet
     ?.filter(item => item.idUsuario === idUsuario)[0]
     ?.ots.filter(item => item.id_ot === employee.id)[0]
@@ -71,6 +72,14 @@ export const Formularios = ({
   const {getCurrentLocation} = useLocation();
   const [disabled, setDisabled] = useState(false);
 
+  const [singleSelectReq, setsingleSelectReq] = useState(false);
+  const [multiSelectReq, setmultiSelectReq] = useState(false);
+  const [textAreaReq, settextAreaReq] = useState(false);
+  const [firmaReq, setfirmaReq] = useState(false);
+  const [fileReq, setfileReq] = useState(false);
+  const [mapsReq, setmapsReq] = useState(false);
+  const [validaForm, setvalidaForm] = useState(false);
+  console.log('validaform afuera', validaForm);
   useEffect(() => {
     const numeroRespuestas = formAsync?.formcomplet
       ?.filter(item => item.idUsuario === idUsuario)[0]
@@ -115,6 +124,7 @@ export const Formularios = ({
 
   //console.log(selectedItem);
   //console.log('preguntas', JSON.stringify(formularioPreguntas));
+
   return (
     <>
       <View style={styles.row}>
@@ -154,12 +164,21 @@ export const Formularios = ({
                   <Text style={styles.selsim}>{pregunta.pregunta}</Text>
                   <View
                     pointerEvents={disabled ? 'none' : 'auto'}
-                    style={{
-                      borderColor: '#fb8c00',
-                      borderWidth: 1,
-                      borderRadius: 10,
-                      width: '80%',
-                    }}>
+                    style={
+                      singleSelectReq
+                        ? {
+                            borderColor: 'red',
+                            borderRadius: 10,
+                            width: '80%',
+                            borderWidth: 2,
+                          }
+                        : {
+                            borderColor: '#fb8c00',
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            width: '80%',
+                          }
+                    }>
                     <RNSingleSelect
                       key={pregunta.id}
                       searchEnabled={false}
@@ -186,7 +205,10 @@ export const Formularios = ({
                               idUsuario,
                               cords,
                             );
-                          });
+                          }),
+                          selectedItem !== undefined &&
+                            setsingleSelectReq(false),
+                          console.log('selectedItem', selectedItem);
                       }}
                       placeholder="Elegir opción"
                       width="100%"
@@ -194,27 +216,32 @@ export const Formularios = ({
                   </View>
                 </View>
               ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
-                <View style={{alignItems: 'center', marginBottom: -30}}>
+                <View style={{alignItems: 'center', marginBottom: -80}}>
                   <View
                     key={pregunta.id}
                     style={{
                       height: 170 + 50 * dataMulti.length,
                     }}>
                     <Text style={styles.selmul}>{pregunta.pregunta}</Text>
-                    <View pointerEvents={disabled ? 'none' : 'auto'}>
-                      <ScrollView horizontal={true} style={{width: '100%'}}>
+                    <View
+                      pointerEvents={disabled ? 'none' : 'auto'}
+                      style={{
+                        height: 200,
+                      }}>
+                      <ScrollView
+                        horizontal={true}
+                        style={{
+                          width: '100%',
+                        }}>
                         <RNMultiSelect
                           key={pregunta.id}
-                          style={styles.sm}
+                          style={multiSelectReq ? styles.smError : styles.sm}
                           disableAbsolute={true}
-                          doneButtonBackgroundColor
                           buttonContainerStyle={
                             disabled ? {backgroundColor: '#E8D3BB'} : {}
                           }
                           data={dataMulti}
                           menuItemTextStyle={{textDecorationLine: 'none'}}
-                          doneButtonTextStyle={{color: '#fb8c00'}}
-                          doneButtonText="Listo"
                           menuBarContainerStyle={{
                             borderRadius: 10,
                             height: 50 * dataMulti.length,
@@ -243,9 +270,11 @@ export const Formularios = ({
                                     );
                                 })
                               : setMountMulti(true),
-                              setIditemSelect(selectedItems);
+                              setIditemSelect(selectedItems),
+                              selectedItems.length > 0 &&
+                                setmultiSelectReq(false);
                           }}
-                          placeholder="Elegir opción" 
+                          placeholder="Elegir opción"
                         />
                       </ScrollView>
                     </View>
@@ -260,7 +289,13 @@ export const Formularios = ({
                   <RNTextArea
                     key={pregunta.id}
                     textInputStyle={{fontSize: 15, color: 'black'}}
-                    style={disabled ? styles.textareaDisable : styles.textarea}
+                    style={
+                      disabled
+                        ? styles.textareaDisable
+                        : textAreaReq
+                        ? styles.textareaError
+                        : styles.textarea
+                    }
                     maxCharLimit={200}
                     placeholderTextColor="#000000"
                     exceedCharCountColor="#990606"
@@ -282,7 +317,8 @@ export const Formularios = ({
                           cords,
                         );
                       }),
-                        setText(text);
+                        setText(text),
+                        text !== '' && settextAreaReq(false);
                     }}
                     value={text}
                   />
@@ -301,6 +337,7 @@ export const Formularios = ({
                     employee={employee}
                     idUsuario={idUsuario}
                     formAsync={formAsync}
+                    mapsReq={mapsReq}
                   />
                 </View>
               ) : pregunta.tiporespuesta === 'Archivo' ? (
@@ -317,6 +354,8 @@ export const Formularios = ({
                     idUsuario={idUsuario}
                     formAsync={formAsync}
                     disabled={disabled}
+                    fileReq={fileReq}
+                    setfileReq={setfileReq}
                   />
                 </View>
               ) : pregunta.tiporespuesta === 'Firma' ? (
@@ -335,6 +374,8 @@ export const Formularios = ({
                       employee={employee}
                       idUsuario={idUsuario}
                       formAsync={formAsync}
+                      firmaReq={firmaReq}
+                      setfirmaReq={setfirmaReq}
                     />
                   </View>
                 </>
@@ -350,18 +391,32 @@ export const Formularios = ({
           <TouchableOpacity
             style={disabled ? styles.btnDisable : styles.btnSubmit}
             onPress={() => {
-              SendFormulrio(
+              setSending(true);
+              validaCampos(
+                selectedItem,
+                setsingleSelectReq,
+                text,
+                settextAreaReq,
+                IditemSelect,
+                setmultiSelectReq,
+                setfirmaReq,
+                setfileReq,
+                setmapsReq,
                 tarea.id,
                 idotd,
                 formulario.id,
                 formulario.refformularioconector,
                 formularioPreguntas,
                 setFormularioPreguntas,
+                formulario,
+                userInfo,
+                employee.id,
                 employee,
+                setvalidaForm,
                 idUsuario,
                 setSending,
-              ),
-                setSending(true);
+              );
+              console.log('validaForm', validaForm);
             }}>
             {sending ? (
               <Chase color="white" size={14} />
@@ -416,6 +471,7 @@ const styles = StyleSheet.create({
     marginVertical: '3%',
     textAlign: 'center',
   },
+  texterror: {},
   selsim: {
     fontSize: 14,
     color: '#fb8c00',
@@ -439,6 +495,15 @@ const styles = StyleSheet.create({
     borderWidth: 1.0,
     width: '80%',
   },
+  textareaError: {
+    borderRadius: 20,
+    height: 45,
+    justifyContent: 'center',
+    boxShadow: 5,
+    borderColor: 'red',
+    borderWidth: 2,
+    width: '80%',
+  },
   textareaDisable: {
     borderRadius: 20,
     height: 45,
@@ -455,6 +520,15 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1,
+    borderRadius: 18,
+    marginBottom: 20,
+  },
+  smError: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: 5,
+    borderColor: 'red',
+    borderWidth: 2,
     borderRadius: 18,
     marginBottom: 20,
   },

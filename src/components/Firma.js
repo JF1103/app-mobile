@@ -32,6 +32,8 @@ const Firma = ({
   employee,
   idUsuario,
   formAsync,
+  firmaReq,
+  setfirmaReq,
 }) => {
   const {getCurrentLocation} = useLocation();
   let path =
@@ -106,11 +108,13 @@ const Firma = ({
       );
       /*   saveBtn.current.resetImage(); */
     });
+    setfirmaReq(false);
   };
   const _onDragEvent = () => {
     console.log('dragged');
   };
 
+  console.log('firmPath', firmPath);
   return (
     <>
       <TouchableOpacity
@@ -119,11 +123,12 @@ const Firma = ({
           visualizaFirma ? setVisualizaFirma(false) : setVisualizaFirma(true);
         }}>
         <Image
-          style={styles.text1}
+          style={firmaReq ? styles.text1Error : styles.text1}
           source={require('./../assets/img/expo-2.png')}
         />
       </TouchableOpacity>
-      <SafeAreaView style={{...styles.marco, ...stylesE}}>
+      <SafeAreaView
+        style={firmaReq ? styles.marcoError : {...styles.marco, ...stylesE}}>
         {base64 !== null && firmPath ? (
           <Image
             source={{uri: `data:image/png;base64,${base64}`}}
@@ -204,6 +209,11 @@ const styles = StyleSheet.create({
     borderColor: '#fb8c00',
     borderWidth: 1,
   },
+  marcoError: {
+    backgroundColor: '#ffffff',
+    borderColor: 'red',
+    borderWidth: 2,
+  },
   signature: {
     borderWidth: 1,
     height: 200,
@@ -240,6 +250,16 @@ const styles = StyleSheet.create({
     elevation: 10,
     borderColor: '#fb8c00',
     borderWidth: 1,
+  },
+  text1Error: {
+    marginVertical: '5%',
+    borderRadius: 20,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
+    borderColor: 'red',
+    borderWidth: 2,
   },
 });
 

@@ -20,7 +20,7 @@ export const SendCheckinOut = (idusuario, check, latitud, longitud, fecha) => {
   })
     .then(response => response.json())
     .then(responseJson => {
-      console.log(responseJson);
+      /*  console.log(responseJson); */
     })
     .catch(error => {
       console.error(error);

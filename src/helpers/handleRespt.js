@@ -47,12 +47,12 @@ export const handleResp = async (
     },
   ];
 
-  console.log('entre handleResp');
+  /* console.log('entre handleResp');
   console.log('respuesta', respuesta);
-  console.log('usuario', +idUsuario);
+  console.log('usuario', +idUsuario); */
   //no esxiste el formulario
   if (!formularioPreguntas) {
-    console.log('no existe el formulario');
+    /*  console.log('no existe el formulario'); */
 
     const otsIdUsuario = [
       {
@@ -63,14 +63,14 @@ export const handleResp = async (
 
     setFormularioPreguntas({formcomplet: otsIdUsuario});
   } else {
-    console.log('existe el formulario');
+    /* console.log('existe el formulario'); */
     const indexUsuario = formularioPreguntas.formcomplet.findIndex(
       usuario => usuario.idUsuario === idUsuario,
     );
 
     //formulario tiene datos pero no del usuario
     if (indexUsuario === -1) {
-      console.log('formulario tiene datos pero no del usuario');
+      /*  console.log('formulario tiene datos pero no del usuario'); */
       const otsIdUsuario = [
         {
           idUsuario: idUsuario,
@@ -80,28 +80,28 @@ export const handleResp = async (
       formularioPreguntas.formcomplet.push(otsIdUsuario);
       setFormularioPreguntas({...formularioPreguntas});
     } else {
-      console.log('formulario tiene datos del usuario');
+      /* console.log('formulario tiene datos del usuario'); */
       //formulrio tienen daatos del usurio
       const indexOt = formularioPreguntas.formcomplet[
         indexUsuario
       ].ots.findIndex(ot => ot.id_ot === employee.id);
 
       if (indexOt === -1) {
-        console.log('formulario tiene datos del usuario pero no de la ot');
+        /*  console.log('formulario tiene datos del usuario pero no de la ot'); */
         formularioPreguntas.formcomplet[indexUsuario].ots.push(
           ...initialFormState,
         ),
           setFormularioPreguntas({...formularioPreguntas});
       } else {
-        console.log('formulario tiene datos del usuario y de la ot');
+        /* console.log('formulario tiene datos del usuario y de la ot'); */
         const indexTarea = formularioPreguntas.formcomplet[indexUsuario].ots[
           indexOt
         ].tareas.findIndex(tarea => tarea.TareaId === tareaId);
 
         if (indexTarea === -1) {
-          console.log(
+          /*  console.log(
             'formulario tiene datos del usuario y de la ot pero no de la tarea',
-          );
+          ); */
           formularioPreguntas.formcomplet[indexUsuario].ots[
             indexOt
           ].tareas.push({
@@ -128,9 +128,9 @@ export const handleResp = async (
           }),
             setFormularioPreguntas({...formularioPreguntas});
         } else {
-          console.log(
+          /* console.log(
             'formulario tiene datos del usuario y de la ot y de la tarea',
-          );
+          ); */
           const indexFormulario = formularioPreguntas.formcomplet[
             indexUsuario
           ].ots[indexOt].tareas[indexTarea].formularios.findIndex(
@@ -138,9 +138,9 @@ export const handleResp = async (
           );
 
           if (indexFormulario === -1) {
-            console.log(
+            /*   console.log(
               'formulario tiene datos del usuario y de la ot y de la tarea pero no del formulario',
-            );
+            ); */
             formularioPreguntas.formcomplet[indexUsuario].ots[indexOt].tareas[
               indexTarea
             ].formularios.push({
@@ -160,9 +160,9 @@ export const handleResp = async (
             }),
               setFormularioPreguntas({...formularioPreguntas});
           } else {
-            console.log(
+            /* console.log(
               'formulario tiene datos del usuario y de la ot y de la tarea y del formulario',
-            );
+            ); */
             const indexPregunta = formularioPreguntas.formcomplet[
               indexUsuario
             ].ots[indexOt].tareas[indexTarea].formularios[
@@ -170,10 +170,10 @@ export const handleResp = async (
             ].preguntas.findIndex(pregunta => pregunta.id === id);
 
             if (indexPregunta === -1) {
-              console.log(
+              /*   console.log(
                 'formulario tiene datos del usuario y de la ot y de la tarea y del formulario pero no de la pregunta',
-              );
-              console.log('no existe la pregunta');
+              ); */
+              /* console.log('no existe la pregunta'); */
               formularioPreguntas.formcomplet[indexUsuario].ots[indexOt].tareas[
                 indexTarea
               ].formularios[indexFormulario].preguntas.push({
@@ -188,9 +188,9 @@ export const handleResp = async (
                   ...formularioPreguntas,
                 });
             } else {
-              console.log(
+              /*  console.log(
                 'formulario tiene datos del usuario y de la ot y de la tarea y del formulario y de la pregunta',
-              );
+              ); */
 
               const objcopy = formularioPreguntas;
               objcopy.formcomplet[indexUsuario].ots[indexOt].tareas[

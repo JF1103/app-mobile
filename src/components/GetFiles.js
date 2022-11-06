@@ -48,6 +48,8 @@ export const GetFiles = ({
   idUsuario,
   formAsync,
   disabled,
+  fileReq = {fileReq},
+  setfileReq = {setfileReq},
 }) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
   const {getCurrentLocation} = useLocation();
@@ -102,17 +104,11 @@ export const GetFiles = ({
   const [visualizaImagen, setvisualizaImagen] = useState(false);
 
   useEffect(() => {
-    console.log('tempUri', tempUri);
-    console.log('typeFile', typeFile);
     if (tempUri && typeFile) {
       if (tempUri.includes('.mp4')) {
-        console.log('entro a setvisualizaAudio');
         setvisualizaImagen(false);
         setvisualizaAudio(true);
       } else {
-        console.log('entro a setvisualizaimagen');
-        console.log('tempUri', tempUri);
-        console.log('typeFile', typeFile);
         setvisualizaImagen(true);
         setvisualizaAudio(false);
       }
@@ -231,7 +227,7 @@ export const GetFiles = ({
       .catch(err => {
         console.log(err.message);
       });
-
+    setfileReq(false);
     getCurrentLocation().then(cords => {
       handleResp(
         tareaId,
@@ -273,10 +269,23 @@ export const GetFiles = ({
     <View key={pregunta.id}>
       <Text style={styles.archivo}>{pregunta.pregunta}</Text>
       <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 10,
-        }}>
+        style={
+          fileReq
+            ? {
+                flexDirection: 'row',
+                marginTop: 10,
+                borderColor: 'red',
+                borderWidth: 2,
+                borderRadius: 10,
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }
+            : {
+                flexDirection: 'row',
+                marginTop: 10,
+              }
+        }>
         <TouchableOpacity
           style={disabled ? styles.btnDisable : styles.btn}
           onPress={takePhoto}>

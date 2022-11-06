@@ -29,8 +29,8 @@ tipo:
 carpeta
 
 */
-
-  console.log('e formulario es ', JSON.stringify(formularioPreguntas));
+  console.log('entre a enviar formualrio');
+  /* console.log('e formulario es ', JSON.stringify(formularioPreguntas)); */
   const preguntas = formularioPreguntas.formcomplet
     .filter(item => item.idUsuario === idUsuario)[0]
     .ots.filter(item => item.id_ot === employee.id)[0]
@@ -62,7 +62,7 @@ carpeta
   const data = preguntas.map(async (item, index) => {
     let data = {};
 
-    console.log('item', item);
+    /*  console.log('item', item); */
     if (item.tipo === 'Firma' || item.tipo === 'Archivo') {
       const archivo = await getFileBase64(item.respuesta.base64);
 
@@ -123,7 +123,7 @@ carpeta
     formData.append('tipo', data.tipo);
     formData.append('carpeta', data.carpeta);
 
-    console.log('envia-----------', JSON.stringify(formData));
+    /*     console.log('envia-----------', JSON.stringify(formData)); */
 
     axios
       .post(`${BASE_URL}/formulariosdetalles/insertbyone.php`, formData, {
@@ -132,8 +132,8 @@ carpeta
         },
       })
       .then(response => {
-        console.log('termine');
-        console.log(JSON.stringify(response.data));
+        /* console.log('termine'); */
+        /* console.log(JSON.stringify(response.data)); */
 
         const indexPregunta = formularioPreguntas.formcomplet[
           indexIdUsuario

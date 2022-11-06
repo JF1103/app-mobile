@@ -178,7 +178,7 @@ export const TareasFinalizadas = ({navigation}) => {
                 return treaEnded;
               })
               .filter(item => item === true).length;
-            console.log('otended', otEnded);
+            /*  console.log('otended', otEnded); */
             const otEnded = TareasEned === cantTares;
 
             if (!(TareasEned > 0 || otEnded)) {
@@ -243,7 +243,7 @@ export const TareasFinalizadas = ({navigation}) => {
                   <View style={styles.items}>
                     <View style={styles.containerb2}>
                       {employee['0'].tareas.map(tarea => {
-                        console.log(tarea.id);
+                        /* console.log(tarea.id); */
                         const indexUsuario = formAsync?.formcomplet?.findIndex(
                           item => item.idUsuario === userInfo.idusuario,
                         );

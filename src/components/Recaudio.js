@@ -140,7 +140,7 @@ class Page extends Component {
     if (!playWidth) {
       playWidth = 0;
     }
-    console.log('props.tempUri', this.props.tempUri);
+
     return (
       <SafeAreaView>
         <View style={styles.viewRecorder}>

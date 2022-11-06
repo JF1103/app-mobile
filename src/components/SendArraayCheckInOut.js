@@ -5,7 +5,7 @@ export const SendArraaycheckInOut = async () => {
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('checkinout');
-      console.log('jsonvalue', jsonValue);
+      /* console.log('jsonvalue', jsonValue); */
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log(e);
@@ -29,7 +29,7 @@ export const SendArraaycheckInOut = async () => {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        /*   console.log(responseJson); */
       })
       .catch(error => {
         console.error(error);
