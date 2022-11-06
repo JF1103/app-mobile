@@ -345,6 +345,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     marginTop: 20,
+    textDecorationLine: 'underline',
   },
   btn: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,22 +6,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ItemSeparator} from './ItemSeparator';
-import {AuthContext} from '../context/AuthContext';
+import { ItemSeparator } from './ItemSeparator';
+import { AuthContext } from '../context/AuthContext';
 import RNSingleSelect, {
   ISingleSelectDataType,
 } from '@freakycoder/react-native-single-select';
 import RNMultiSelect from '../libs/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
-import {GetFiles} from './GetFiles';
-import {Maps} from './Maps';
+import { GetFiles } from './GetFiles';
+import { Maps } from './Maps';
 import Firma from './Firma';
-import {handleResp} from '../helpers/handleRespt';
-import {SetStorage} from './SetStorage';
-import {FormContext} from '../context/FormContext';
-import {useLocation} from '../hooks/useLocation';
+import { handleResp } from '../helpers/handleRespt';
+import { SetStorage } from './SetStorage';
+import { FormContext } from '../context/FormContext';
+import { useLocation } from '../hooks/useLocation';
 import SendFormulrio from './SendFormulrio';
-import {Chase} from 'react-native-animated-spinkit';
+import { Chase } from 'react-native-animated-spinkit';
 
 export const Formularios = ({
   formulario,
@@ -31,7 +31,7 @@ export const Formularios = ({
   cordsOt,
   idUsuario,
 }) => {
-  const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
+  const { formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas } =
     useContext(FormContext);
 
   const textAsync = formAsync?.formcomplet
@@ -68,7 +68,7 @@ export const Formularios = ({
   const [IditemSelect, setIditemSelect] = useState(0);
   const [selectedItem, setSelectedItem] = useState(singleSelectInit);
   const [mountMulti, setMountMulti] = useState(false);
-  const {getCurrentLocation} = useLocation();
+  const { getCurrentLocation } = useLocation();
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export const Formularios = ({
           .formularios.filter(
             item => item.FormularioId === formulario.id,
           )[0].ended = true;
-        setFormularioPreguntas({...copy});
+        setFormularioPreguntas({ ...copy });
       }
     } else {
       setSending(false);
@@ -150,7 +150,7 @@ export const Formularios = ({
           return (
             <View key={index2}>
               {pregunta.tiporespuesta === 'Seleccion Simple' ? (
-                <View key={pregunta.id} style={{alignItems: 'center'}}>
+                <View key={pregunta.id} style={{ alignItems: 'center' }}>
                   <Text style={styles.selsim}>{pregunta.pregunta}</Text>
                   <View
                     pointerEvents={disabled ? 'none' : 'auto'}
@@ -167,7 +167,7 @@ export const Formularios = ({
                       initialValue={selectedItem}
                       selectedItem={selectedItem}
                       buttonContainerStyle={
-                        disabled ? {backgroundColor: '#E8D3BB'} : {}
+                        disabled ? { backgroundColor: '#E8D3BB' } : {}
                       }
                       onSelect={selectedItem => {
                         setSelectedItem(selectedItem),
@@ -178,7 +178,7 @@ export const Formularios = ({
                               formulario.id,
                               formulario.refformularioconector,
                               pregunta.id,
-                              {id: selectedItem.id, value: selectedItem.value},
+                              { id: selectedItem.id, value: selectedItem.value },
                               pregunta.tiporespuesta,
                               formularioPreguntas,
                               setFormularioPreguntas,
@@ -194,58 +194,55 @@ export const Formularios = ({
                   </View>
                 </View>
               ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
-                <View style={{alignItems: 'center', marginBottom: -30}}>
+                <View style={{ alignItems: 'center', marginBottom: -30 }}>
                   <View
                     key={pregunta.id}
                     style={{
-                      height: 170 + 50 * dataMulti.length,
+                      height: 170 + 50 * dataMulti.length, 
                     }}>
                     <Text style={styles.selmul}>{pregunta.pregunta}</Text>
                     <View pointerEvents={disabled ? 'none' : 'auto'}>
-                      <ScrollView horizontal={true} style={{width: '100%'}}>
+                      <ScrollView horizontal={true} style={{ width: '100%' }}>
                         <RNMultiSelect
                           key={pregunta.id}
                           style={styles.sm}
                           disableAbsolute={true}
                           doneButtonBackgroundColor
                           buttonContainerStyle={
-                            disabled ? {backgroundColor: '#E8D3BB'} : {}
+                            disabled ? { backgroundColor: '#E8D3BB' } : {}
                           }
                           data={dataMulti}
-                          menuItemTextStyle={{textDecorationLine: 'none'}}
-                          doneButtonTextStyle={{color: '#fb8c00'}}
+                          menuItemTextStyle={{ textDecorationLine: 'none' }}
+                          doneButtonTextStyle={{ color: '#fb8c00' }}
                           doneButtonText="Listo"
-                          menuBarContainerStyle={{
-                            borderRadius: 10,
-                            height: 50 * dataMulti.length,
-                          }}
+                          menuBarContainerStyle={{ borderRadius: 10, height: 50 * dataMulti.length }}
                           onSelect={selectedItems => {
                             mountMulti
                               ? getCurrentLocation().then(cords => {
-                                  handleResp(
-                                    tarea.id,
-                                    idotd,
-                                    formulario.id,
-                                    formulario.refformularioconector,
-                                    pregunta.id,
+                                handleResp(
+                                  tarea.id,
+                                  idotd,
+                                  formulario.id,
+                                  formulario.refformularioconector,
+                                  pregunta.id,
+                                  selectedItems,
+                                  pregunta.tiporespuesta,
+                                  formularioPreguntas,
+                                  setFormularioPreguntas,
+                                  employee,
+                                  idUsuario,
+                                  cords,
+                                ),
+                                  setIditemSelect(selectedItems),
+                                  console.log(
+                                    'seleccion items',
                                     selectedItems,
-                                    pregunta.tiporespuesta,
-                                    formularioPreguntas,
-                                    setFormularioPreguntas,
-                                    employee,
-                                    idUsuario,
-                                    cords,
-                                  ),
-                                    setIditemSelect(selectedItems),
-                                    console.log(
-                                      'seleccion items',
-                                      selectedItems,
-                                    );
-                                })
+                                  );
+                              })
                               : setMountMulti(true),
                               setIditemSelect(selectedItems);
                           }}
-                          placeholder="Elegir opción" 
+                          placeholder="Elegir opción"
                         />
                       </ScrollView>
                     </View>
@@ -254,12 +251,12 @@ export const Formularios = ({
               ) : pregunta.tiporespuesta === 'Texto' ? (
                 <View
                   key={pregunta.id}
-                  style={{alignItems: 'center'}}
+                  style={{ alignItems: 'center' }}
                   pointerEvents={disabled ? 'none' : 'auto'}>
                   <Text style={styles.text}>{pregunta.pregunta}</Text>
                   <RNTextArea
                     key={pregunta.id}
-                    textInputStyle={{fontSize: 15, color: 'black'}}
+                    textInputStyle={{ fontSize: 15, color: 'black' }}
                     style={disabled ? styles.textareaDisable : styles.textarea}
                     maxCharLimit={200}
                     placeholderTextColor="#000000"
@@ -345,7 +342,7 @@ export const Formularios = ({
           );
         })}
         <View
-          style={{alignItems: 'center'}}
+          style={{ alignItems: 'center' }}
           pointerEvents={disabled ? 'none' : 'auto'}>
           <TouchableOpacity
             style={disabled ? styles.btnDisable : styles.btnSubmit}
@@ -366,7 +363,7 @@ export const Formularios = ({
             {sending ? (
               <Chase color="white" size={14} />
             ) : (
-              <Text style={{...styles.text6}}>Terminar Formulario</Text>
+              <Text style={{ ...styles.text6 }}>Enviar Formulario</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -379,8 +376,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     marginHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 15,
+    marginBottom: 50,
+    marginTop: 10,
     paddingHorizontal: 5,
     shadowColor: '#000000',
     shadowOffset: {
@@ -415,6 +412,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   selsim: {
     fontSize: 14,
@@ -422,6 +420,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   selmul: {
     fontSize: 14,
@@ -429,6 +428,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   textarea: {
     borderRadius: 20,
@@ -457,6 +457,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 18,
     marginBottom: 20,
+    textDecorationLine: 'underline',
   },
   btn5: {
     flex: 1,
@@ -481,6 +482,7 @@ const styles = StyleSheet.create({
     color: '#fb8c00',
     marginVertical: '1%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   btnDisable: {
     backgroundColor: '#E8D3BB',

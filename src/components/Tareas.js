@@ -19,7 +19,7 @@ export default function Tareas({
   return (
     <TouchableOpacity
       key={employee?.id + tarea.id}
-      style={flag ? styles.btnFinish : styles.btn2}
+      style={styles.btn2}
       onPress={() => {
         navigation.navigate('FormOne', {
           tarea,

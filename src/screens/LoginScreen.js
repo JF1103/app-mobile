@@ -22,6 +22,7 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState(null);
   const {isLoading, login} = useContext(AuthContext);
   const scroll = useRef(null);
+  
 
 
   return (

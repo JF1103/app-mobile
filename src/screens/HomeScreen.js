@@ -350,7 +350,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 5,
     color: '#000000',
-    textAlign: 'center',
   },
   sucursal: {
     fontSize: 14,
@@ -416,13 +415,19 @@ const styles = StyleSheet.create({
     color: '#fb8c00',
   },
   nivelAlto: {
-    color: 'red',
+    color: '#fff',
+    backgroundColor: '#d50000',
+    fontWeight: 'bold',
   },
   nivelMedio: {
-    color: 'yellow',
+    color: '#fff',
+    backgroundColor: '#fbc02d',
+    fontWeight: 'bold',
   },
   nivelBajo: {
-    color: 'green',
+    color: '#fff',
+    backgroundColor: '#2e7d32',
+    fontWeight: 'bold',
   },
 });
 
