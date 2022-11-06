@@ -30,6 +30,7 @@ const LoginScreen = ({navigation}) => {
     setloginError,
   } = useContext(AuthContext);
   const scroll = useRef(null);
+  
 
   const [requeridoEmail, setRequeridoEmail] = useState(false);
   const [requeridoPassword, setRequeridoPassword] = useState(false);

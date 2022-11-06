@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     marginVertical: '3%',
     textAlign: 'center',
     marginTop: 20,
+    textDecorationLine: 'underline',
   },
   geoText: {
     fontSize: 14,

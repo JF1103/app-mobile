@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,20 +6,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ItemSeparator} from './ItemSeparator';
-import {AuthContext} from '../context/AuthContext';
+import { ItemSeparator } from './ItemSeparator';
+import { AuthContext } from '../context/AuthContext';
 import RNSingleSelect, {
   ISingleSelectDataType,
 } from '@freakycoder/react-native-single-select';
 import RNMultiSelect from '../libs/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
-import {GetFiles} from './GetFiles';
-import {Maps} from './Maps';
+import { GetFiles } from './GetFiles';
+import { Maps } from './Maps';
 import Firma from './Firma';
-import {handleResp} from '../helpers/handleRespt';
-import {SetStorage} from './SetStorage';
-import {FormContext} from '../context/FormContext';
-import {useLocation} from '../hooks/useLocation';
+import { handleResp } from '../helpers/handleRespt';
+import { SetStorage } from './SetStorage';
+import { FormContext } from '../context/FormContext';
+import { useLocation } from '../hooks/useLocation';
 import SendFormulrio from './SendFormulrio';
 import {Chase} from 'react-native-animated-spinkit';
 import {validaCampos} from '../helpers/validaCampos';
@@ -32,7 +32,7 @@ export const Formularios = ({
   cordsOt,
   idUsuario,
 }) => {
-  const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
+  const { formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas } =
     useContext(FormContext);
   const {userInfo} = useContext(AuthContext);
   const textAsync = formAsync?.formcomplet
@@ -69,7 +69,7 @@ export const Formularios = ({
   const [IditemSelect, setIditemSelect] = useState(0);
   const [selectedItem, setSelectedItem] = useState(singleSelectInit);
   const [mountMulti, setMountMulti] = useState(false);
-  const {getCurrentLocation} = useLocation();
+  const { getCurrentLocation } = useLocation();
   const [disabled, setDisabled] = useState(false);
 
   const [singleSelectReq, setsingleSelectReq] = useState(false);
@@ -111,7 +111,7 @@ export const Formularios = ({
           .formularios.filter(
             item => item.FormularioId === formulario.id,
           )[0].ended = true;
-        setFormularioPreguntas({...copy});
+        setFormularioPreguntas({ ...copy });
       }
     } else {
       setSending(false);
@@ -160,7 +160,7 @@ export const Formularios = ({
           return (
             <View key={index2}>
               {pregunta.tiporespuesta === 'Seleccion Simple' ? (
-                <View key={pregunta.id} style={{alignItems: 'center'}}>
+                <View key={pregunta.id} style={{ alignItems: 'center' }}>
                   <Text style={styles.selsim}>{pregunta.pregunta}</Text>
                   <View
                     pointerEvents={disabled ? 'none' : 'auto'}
@@ -186,7 +186,7 @@ export const Formularios = ({
                       initialValue={selectedItem}
                       selectedItem={selectedItem}
                       buttonContainerStyle={
-                        disabled ? {backgroundColor: '#E8D3BB'} : {}
+                        disabled ? { backgroundColor: '#E8D3BB' } : {}
                       }
                       onSelect={selectedItem => {
                         setSelectedItem(selectedItem),
@@ -197,7 +197,7 @@ export const Formularios = ({
                               formulario.id,
                               formulario.refformularioconector,
                               pregunta.id,
-                              {id: selectedItem.id, value: selectedItem.value},
+                              { id: selectedItem.id, value: selectedItem.value },
                               pregunta.tiporespuesta,
                               formularioPreguntas,
                               setFormularioPreguntas,
@@ -220,7 +220,7 @@ export const Formularios = ({
                   <View
                     key={pregunta.id}
                     style={{
-                      height: 170 + 50 * dataMulti.length,
+                      height: 170 + 50 * dataMulti.length, 
                     }}>
                     <Text style={styles.selmul}>{pregunta.pregunta}</Text>
                     <View
@@ -238,7 +238,7 @@ export const Formularios = ({
                           style={multiSelectReq ? styles.smError : styles.sm}
                           disableAbsolute={true}
                           buttonContainerStyle={
-                            disabled ? {backgroundColor: '#E8D3BB'} : {}
+                            disabled ? { backgroundColor: '#E8D3BB' } : {}
                           }
                           data={dataMulti}
                           menuItemTextStyle={{textDecorationLine: 'none'}}
@@ -249,26 +249,26 @@ export const Formularios = ({
                           onSelect={selectedItems => {
                             mountMulti
                               ? getCurrentLocation().then(cords => {
-                                  handleResp(
-                                    tarea.id,
-                                    idotd,
-                                    formulario.id,
-                                    formulario.refformularioconector,
-                                    pregunta.id,
+                                handleResp(
+                                  tarea.id,
+                                  idotd,
+                                  formulario.id,
+                                  formulario.refformularioconector,
+                                  pregunta.id,
+                                  selectedItems,
+                                  pregunta.tiporespuesta,
+                                  formularioPreguntas,
+                                  setFormularioPreguntas,
+                                  employee,
+                                  idUsuario,
+                                  cords,
+                                ),
+                                  setIditemSelect(selectedItems),
+                                  console.log(
+                                    'seleccion items',
                                     selectedItems,
-                                    pregunta.tiporespuesta,
-                                    formularioPreguntas,
-                                    setFormularioPreguntas,
-                                    employee,
-                                    idUsuario,
-                                    cords,
-                                  ),
-                                    setIditemSelect(selectedItems),
-                                    console.log(
-                                      'seleccion items',
-                                      selectedItems,
-                                    );
-                                })
+                                  );
+                              })
                               : setMountMulti(true),
                               setIditemSelect(selectedItems),
                               selectedItems.length > 0 &&
@@ -283,7 +283,7 @@ export const Formularios = ({
               ) : pregunta.tiporespuesta === 'Texto' ? (
                 <View
                   key={pregunta.id}
-                  style={{alignItems: 'center'}}
+                  style={{ alignItems: 'center' }}
                   pointerEvents={disabled ? 'none' : 'auto'}>
                   <Text style={styles.text}>{pregunta.pregunta}</Text>
                   <RNTextArea
@@ -386,7 +386,7 @@ export const Formularios = ({
           );
         })}
         <View
-          style={{alignItems: 'center'}}
+          style={{ alignItems: 'center' }}
           pointerEvents={disabled ? 'none' : 'auto'}>
           <TouchableOpacity
             style={disabled ? styles.btnDisable : styles.btnSubmit}
@@ -421,7 +421,7 @@ export const Formularios = ({
             {sending ? (
               <Chase color="white" size={14} />
             ) : (
-              <Text style={{...styles.text6}}>Terminar Formulario</Text>
+              <Text style={{ ...styles.text6 }}>Enviar Formulario</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -434,8 +434,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     marginHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 15,
+    marginBottom: 50,
+    marginTop: 10,
     paddingHorizontal: 5,
     shadowColor: '#000000',
     shadowOffset: {
@@ -470,6 +470,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   texterror: {},
   selsim: {
@@ -478,6 +479,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   selmul: {
     fontSize: 14,
@@ -485,6 +487,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   textarea: {
     borderRadius: 20,
@@ -522,6 +525,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 18,
     marginBottom: 20,
+    textDecorationLine: 'underline',
   },
   smError: {
     alignItems: 'center',
@@ -555,6 +559,7 @@ const styles = StyleSheet.create({
     color: '#fb8c00',
     marginVertical: '1%',
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   btnDisable: {
     backgroundColor: '#E8D3BB',

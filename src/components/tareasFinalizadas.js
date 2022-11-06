@@ -8,19 +8,19 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import Botones from '../components/Botones';
-import {ItemSeparator} from '../components/ItemSeparator';
-import {Navbar} from '../components/Navbar';
-import {Ruta} from '../components/Ruta';
+import Botones from './Botones';
+import {ItemSeparator} from './ItemSeparator';
+import {Navbar} from './Navbar';
+import {Ruta} from './Ruta';
 import {AuthContext} from '../context/AuthContext';
 import {check, PERMISSIONS, request} from 'react-native-permissions';
-import {GetStorage} from '../components/GetStorage';
-import Tareas from '../components/Tareas';
-import {GetDataOt} from '../components/GetDataOt';
+import {GetStorage} from './GetStorage';
+import Tareas from './Tareas';
+import {GetDataOt} from './GetDataOt';
 import {FormContext} from '../context/FormContext';
-import {CheckinOut} from '../components/CheckinOut';
+import {CheckinOut} from './CheckinOut';
 import {useLocation} from '../hooks/useLocation';
-import {SendArraaycheckInOut} from '../components/SendArraayCheckInOut';
+import {SendArraaycheckInOut} from './SendArraayCheckInOut';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export const TareasFinalizadas = ({navigation}) => {
