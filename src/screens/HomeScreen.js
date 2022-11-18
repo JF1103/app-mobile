@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Botones from '../components/Botones';
 import {ItemSeparator} from '../components/ItemSeparator';
+import {ItemSeparator2} from '../components/ItemSeparator2'
 import {Navbar} from '../components/Navbar';
 import {Ruta} from '../components/Ruta';
 import {AuthContext} from '../context/AuthContext';
@@ -170,6 +171,7 @@ const HomeScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-around',
+                      width: '100%',
                     }}>
                     <Text style={styles.texto}>
                       <Text style={styles.titulo}>Fecha:</Text>{' '}
@@ -188,33 +190,34 @@ const HomeScreen = ({navigation}) => {
                   </Text>
                   <ItemSeparator />
                   <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                    }}>
-                    <Text style={styles.texto}>
-                      <Text style={styles.titulo}>Actividad:</Text>{' '}
-                      {employee?.actividad}
+                      style={
+                        employee?.nivel === '1-Alta'
+                          ? {...styles.nivelAlto}
+                          : employee?.nivel === '2-Media'
+                          ? {...styles.nivelMedio}
+                          : employee?.nivel === '3-Baja' && {
+                              ...styles.nivelBajo}}
+                            >
+                        <View 
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
+                      }}>
+                    <Text style={styles.textos}>
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Actividad:</Text>{' '}
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>{employee?.actividad}
+                      </Text>
                     </Text>
-                    <Text style={styles.texto}>
-                      <Text style={styles.titulo}>Prioridad:</Text>{' '}
-                      <Text
-                        style={
-                          employee?.nivel === '1-Alta'
-                            ? {...styles.nivelAlto}
-                            : employee?.nivel === '2-Media'
-                            ? {...styles.nivelMedio}
-                            : employee?.nivel === '3-Baja' && {
-                                ...styles.nivelBajo,
-                              }
-                        }>
+                    <Text style={styles.textos}>
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Prioridad:</Text>{' '}
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}
+                       >
                         {employee?.nivel}
                       </Text>
                     </Text>
+                    </View>
                   </View>
-                  <ItemSeparator />
                 </View>
-
                 <View style={styles.items}>
                   <View style={styles.containerb2}>
                     <TouchableOpacity
@@ -351,6 +354,16 @@ const styles = StyleSheet.create({
     padding: 5,
     color: '#000000',
   },
+  textos: {
+    fontSize: 14,
+    padding: 5,
+    color: '#f5f5f5',
+  },
+  textos1: {
+    fontSize: 14,
+    padding: 5,
+    color: '#000000',
+  },
   sucursal: {
     fontSize: 14,
     padding: 5,
@@ -384,6 +397,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
+    marginTop: -5,
   },
   btn2: {
     flex: 1,
@@ -414,20 +428,50 @@ const styles = StyleSheet.create({
   titulo: {
     color: '#fb8c00',
   },
+  titulos: {
+    color: '#f5f5f5',
+  },
+  titulos1: {
+    color: '#000000',
+  },
   nivelAlto: {
     color: '#fff',
-    backgroundColor: '#d50000',
+    backgroundColor: 'rgba(213,0,0,0.8)',
     fontWeight: 'bold',
+    borderRadius: 20,
+    width: '93%',
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 30,
+    marginTop: 5,
   },
   nivelMedio: {
     color: '#fff',
-    backgroundColor: '#fbc02d',
+    backgroundColor: 'rgba(251, 192, 45,0.8)',
     fontWeight: 'bold',
+    borderRadius: 20,
+    width: '93%',
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 30,
+    marginTop: 5,
   },
   nivelBajo: {
     color: '#fff',
-    backgroundColor: '#2e7d32',
+    backgroundColor: 'rgba(46, 125, 50,0.9)',
     fontWeight: 'bold',
+    borderRadius: 20,
+    width: '93%',
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 30,
+    marginTop: 5,
   },
 });
 

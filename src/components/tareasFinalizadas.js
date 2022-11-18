@@ -36,7 +36,7 @@ export const TareasFinalizadas = ({navigation}) => {
     setRefresh(true);
     await GetDataOt(userInfo.idusuario, setData, setLoading);
 
-    setRefresh(false);
+    setRefresh(false);                
   };
 
   useEffect(() => {
@@ -213,32 +213,34 @@ export const TareasFinalizadas = ({navigation}) => {
                     </Text>
                     <ItemSeparator />
                     <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
+                      style={
+                        employee?.nivel === '1-Alta'
+                          ? {...styles.nivelAlto}
+                          : employee?.nivel === '2-Media'
+                          ? {...styles.nivelMedio}
+                          : employee?.nivel === '3-Baja' && {
+                              ...styles.nivelBajo}}
+                            >
+                        <View 
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
                       }}>
-                      <Text style={styles.texto}>
-                        <Text style={styles.titulo}>Actividad:</Text>{' '}
-                        {employee?.actividad}
+                    <Text style={styles.textos}>
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Actividad:</Text>{' '}
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>{employee?.actividad}
                       </Text>
-                      <Text style={styles.texto}>
-                        <Text style={styles.titulo}>Prioridad:</Text>{' '}
-                        <Text
-                          style={
-                            employee?.nivel === '1-Alta'
-                              ? {...styles.nivelAlto}
-                              : employee?.nivel === '2-Media'
-                              ? {...styles.nivelMedio}
-                              : employee?.nivel === '3-Baja' && {
-                                  ...styles.nivelBajo,
-                                }
-                          }>
-                          {employee?.nivel}
-                        </Text>
+                    </Text>
+                    <Text style={styles.textos}>
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Prioridad:</Text>{' '}
+                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}
+                       >
+                        {employee?.nivel}
                       </Text>
+                    </Text>
                     </View>
-                    <ItemSeparator />
                   </View>
+                </View>
 
                   <View style={styles.items}>
                     <View style={styles.containerb2}>
@@ -370,6 +372,11 @@ const styles = StyleSheet.create({
     color: '#000000',
     textAlign: 'center',
   },
+  textos: {
+    fontSize: 14,
+    padding: 5,
+    color: '#f5f5f5',
+  },
   sucursal: {
     fontSize: 14,
     padding: 5,
@@ -433,14 +440,47 @@ const styles = StyleSheet.create({
   titulo: {
     color: '#fb8c00',
   },
+  titulos: {
+    color: '#f5f5f5',
+  },
   nivelAlto: {
-    color: 'red',
+    color: '#fff',
+    backgroundColor: 'rgba(213,0,0,0.8)',
+    fontWeight: 'bold',
+    borderRadius: 20,
+    width: '93%',
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 30,
+    marginTop: 5,
   },
   nivelMedio: {
-    color: 'yellow',
+    color: '#fff',
+    backgroundColor: 'rgba(251, 192, 45,0.8)',
+    fontWeight: 'bold',
+    borderRadius: 20,
+    width: '93%',
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 30,
+    marginTop: 5,
   },
   nivelBajo: {
-    color: 'green',
+    color: '#fff',
+    backgroundColor: 'rgba(46, 125, 50,0.9)',
+    fontWeight: 'bold',
+    borderRadius: 20,
+    width: '93%',
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 30,
+    marginTop: 5,
   },
   icon: {
     fontSize: 30,
@@ -450,5 +490,8 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: '#FAFAFA',
     marginBottom: 5,
+  },
+  titulos1: {
+    color: '#000000',
   },
 });

@@ -91,7 +91,7 @@ carpeta
           item.tipo === 'Seleccion Simple'
             ? item.respuesta.value
             : item.tipo === 'Seleccion Multiple'
-            ? item.respuesta.map(item => item.id).join('/')
+            ? item.respuesta.map(item => item.id).join('/**/')
             : item.tipo === 'Geolocalizacion'
             ? item.respuesta.latitude + ',' + item.respuesta.longitude
             : item.respuesta,
