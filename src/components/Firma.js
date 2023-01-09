@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
-import {ItemSeparator} from './ItemSeparator';
+import {ItemSeparator2} from './ItemSeparator2';
 import Icon from 'react-native-vector-icons/Ionicons';
 import RNFS from 'react-native-fs';
 import {SetStorage} from './SetStorage';
@@ -144,7 +144,7 @@ const Firma = ({
           />
         )}
         <View style={{alignItems: 'center'}}>
-          <ItemSeparator />
+          <ItemSeparator2 />
 
           <View style={{flexDirection: 'row'}}>
             {!firmPath && (
