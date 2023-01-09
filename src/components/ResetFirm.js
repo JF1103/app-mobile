@@ -26,7 +26,7 @@ export const resetSign = (
     usuario => usuario.idUsuario === idUsuario,
   );
 
-  const indexOt = formularioPreguntas.formcomplet[indexUsuario].ots.findIndex(
+  const indexOt = formularioPreguntas.formcomplet[indexUsuario]?.ots?.findIndex(
     ot => ot.id_ot === employee.id,
   );
 

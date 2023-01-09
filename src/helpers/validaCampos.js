@@ -108,14 +108,6 @@ export const validaCampos = (
     );
   }
 
-  console.log(
-    'resultados',
-    validSingleSelect,
-    validTextArea,
-    validMultiSelect,
-    validFirma,
-    validFile,
-  );
   if (
     validSingleSelect &&
     validTextArea &&

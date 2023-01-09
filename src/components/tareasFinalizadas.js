@@ -51,8 +51,6 @@ export const TareasFinalizadas = ({navigation}) => {
 
   /* const [formularioPreguntas, setFormularioPreguntas] = useState(); */
 
-  /*  console.log('formAsync', JSON.stringify(formAsync)); */
-
   const [cargandoAsync, setcargandoAsync] = useState(false);
   /* const [formAsync, setformAsync] = useState(); */
 
@@ -66,24 +64,20 @@ export const TareasFinalizadas = ({navigation}) => {
   };
 
   useEffect(() => {
-    /* console.log('inicializo preguntas'); */
     setcargandoAsync(true);
     inicializaformularioPreguntas();
   }, []);
 
-  /* console.log(JSON.stringify(formAsync)); */
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(
         PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
       );
-      // console.log('permiso' + permissionsStatus);
     }
     if (Platform.OS === 'android') {
       let permissionsStatus = await request(
         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       );
-      // console.log('permiso' + permissionsStatus);
     }
   };
 
@@ -93,7 +87,7 @@ export const TareasFinalizadas = ({navigation}) => {
 
   /* 
   const printButtonLabel = item => {
-    console.log(item);
+  
   }; */
 
   useEffect(() => {
@@ -101,7 +95,7 @@ export const TareasFinalizadas = ({navigation}) => {
   }, []);
 
   const [tareaEnd, setTareaEnd] = useState(false);
-  /* console.log('tareaEnd', tareaEnd); */
+
   return (
     <View style={styles.container}>
       <View
@@ -143,6 +137,7 @@ export const TareasFinalizadas = ({navigation}) => {
 
         {!isLoading &&
           !cargandoAsync &&
+          data?.ot !== undefined &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
             const cantTares = employee['0'].tareas.length;
@@ -155,8 +150,6 @@ export const TareasFinalizadas = ({navigation}) => {
                 const indexOt = formAsync?.formcomplet[
                   indexUsuario
                 ]?.ots.findIndex(item => item.id_ot === employee.id);
-
-                /* console.log('indexOt', indexOt); */
 
                 const indexTarea = formAsync?.formcomplet[indexUsuario].ots[
                   indexOt
@@ -178,7 +171,7 @@ export const TareasFinalizadas = ({navigation}) => {
                 return treaEnded;
               })
               .filter(item => item === true).length;
-            /*  console.log('otended', otEnded); */
+
             const otEnded = TareasEned === cantTares;
 
             if (!(TareasEned > 0 || otEnded)) {
@@ -243,23 +236,19 @@ export const TareasFinalizadas = ({navigation}) => {
                   <View style={styles.items}>
                     <View style={styles.containerb2}>
                       {employee['0'].tareas.map(tarea => {
-                        /* console.log(tarea.id); */
                         const indexUsuario = formAsync?.formcomplet?.findIndex(
                           item => item.idUsuario === userInfo.idusuario,
                         );
-                        /*  console.log('indexUsuario', indexUsuario); */
+
                         const indexOt = formAsync?.formcomplet[
                           indexUsuario
                         ]?.ots.findIndex(item => item.id_ot === employee.id);
-
-                        /* console.log('indexOt', indexOt); */
 
                         const indexTarea = formAsync?.formcomplet[
                           indexUsuario
                         ].ots[indexOt]?.tareas.findIndex(
                           item => item.TareaId === tarea.id,
                         );
-                        /*  console.log('indexTarea', indexTarea); */
 
                         const NumformEnded = formAsync?.formcomplet[
                           indexUsuario
@@ -274,10 +263,6 @@ export const TareasFinalizadas = ({navigation}) => {
                           NumformEnded && NumformEnded === cantFormularios
                             ? true
                             : false;
-
-                        /* console.log('flag', flag);
-                      console.log('formEnded', formEnded);
-                      console.log('cantFormularios', cantFormularios); */
 
                         if (!treaEnded) {
                           return (

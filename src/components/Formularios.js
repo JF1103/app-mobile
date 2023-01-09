@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,24 +6,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ItemSeparator } from './ItemSeparator';
-import { AuthContext } from '../context/AuthContext';
+import {ItemSeparator} from './ItemSeparator';
+import {AuthContext} from '../context/AuthContext';
 import RNSingleSelect, {
   ISingleSelectDataType,
 } from '@freakycoder/react-native-single-select';
 import RNMultiSelect from '../libs/react-native-multiple-select';
 import RNTextArea from '@freakycoder/react-native-text-area';
-import { GetFiles } from './GetFiles';
-import { Maps } from './Maps';
+import {GetFiles} from './GetFiles';
+import {Maps} from './Maps';
 import Firma from './Firma';
-import { handleResp } from '../helpers/handleRespt';
-import { SetStorage } from './SetStorage';
-import { FormContext } from '../context/FormContext';
-import { useLocation } from '../hooks/useLocation';
+import {handleResp} from '../helpers/handleRespt';
+import {SetStorage} from './SetStorage';
+import {FormContext} from '../context/FormContext';
+import {useLocation} from '../hooks/useLocation';
 import SendFormulrio from './SendFormulrio';
 import {Chase} from 'react-native-animated-spinkit';
 import {validaCampos} from '../helpers/validaCampos';
 
+const heightInitial = 55;
+const heightDelta = 20;
 export const Formularios = ({
   formulario,
   idotd,
@@ -32,7 +34,7 @@ export const Formularios = ({
   cordsOt,
   idUsuario,
 }) => {
-  const { formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas } =
+  const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
     useContext(FormContext);
   const {userInfo} = useContext(AuthContext);
   const textAsync = formAsync?.formcomplet
@@ -61,16 +63,17 @@ export const Formularios = ({
     SetStorage(formularioPreguntas);
     setformAsync(formularioPreguntas);
   }, [formularioPreguntas]);
-  //console.log('nuevo formularios', JSON.stringify(formularioPreguntas));
 
-  /*   console.log('formAsync', JSON.stringify(formAsync)); */
   const preguntas = formulario.preguntas;
   const [text, setText] = useState(textAsync ? textAsync : '');
   const [IditemSelect, setIditemSelect] = useState(0);
   const [selectedItem, setSelectedItem] = useState(singleSelectInit);
   const [mountMulti, setMountMulti] = useState(false);
-  const { getCurrentLocation } = useLocation();
+  const {getCurrentLocation} = useLocation();
   const [disabled, setDisabled] = useState(false);
+  const [countLine, setCountLine] = useState(
+    textAsync ? Math.floor(textAsync.length / 35 + 1) : 1,
+  );
 
   const [singleSelectReq, setsingleSelectReq] = useState(false);
   const [multiSelectReq, setmultiSelectReq] = useState(false);
@@ -79,7 +82,7 @@ export const Formularios = ({
   const [fileReq, setfileReq] = useState(false);
   const [mapsReq, setmapsReq] = useState(false);
   const [validaForm, setvalidaForm] = useState(false);
-  console.log('validaform afuera', validaForm);
+
   useEffect(() => {
     const numeroRespuestas = formAsync?.formcomplet
       ?.filter(item => item.idUsuario === idUsuario)[0]
@@ -111,19 +114,23 @@ export const Formularios = ({
           .formularios.filter(
             item => item.FormularioId === formulario.id,
           )[0].ended = true;
-        setFormularioPreguntas({ ...copy });
+
+        copy.formcomplet
+          .filter(item => item.idUsuario === idUsuario)[0]
+          .ots.filter(item => item.id_ot === employee.id)[0]
+          .tareas.filter(
+            item => item.TareaId === tarea.id,
+          )[0].ErrorSend = false;
+
+        setFormularioPreguntas({...copy});
       }
     } else {
+      console.log('no terminado');
       setSending(false);
     }
   }, [formAsync]);
 
   const [sending, setSending] = useState(false);
-
-  console.log('sending', sending);
-
-  //console.log(selectedItem);
-  //console.log('preguntas', JSON.stringify(formularioPreguntas));
 
   return (
     <>
@@ -160,7 +167,7 @@ export const Formularios = ({
           return (
             <View key={index2}>
               {pregunta.tiporespuesta === 'Seleccion Simple' ? (
-                <View key={pregunta.id} style={{ alignItems: 'center' }}>
+                <View key={pregunta.id} style={{alignItems: 'center'}}>
                   <Text style={styles.selsim}>{pregunta.pregunta}</Text>
                   <View
                     pointerEvents={disabled ? 'none' : 'auto'}
@@ -169,14 +176,14 @@ export const Formularios = ({
                         ? {
                             borderColor: 'red',
                             borderRadius: 10,
-                            width: '80%',
+                            width: '100%',
                             borderWidth: 2,
                           }
                         : {
                             borderColor: '#fb8c00',
                             borderWidth: 1,
                             borderRadius: 10,
-                            width: '80%',
+                            width: '100%',
                           }
                     }>
                     <RNSingleSelect
@@ -186,7 +193,7 @@ export const Formularios = ({
                       initialValue={selectedItem}
                       selectedItem={selectedItem}
                       buttonContainerStyle={
-                        disabled ? { backgroundColor: '#E8D3BB' } : {}
+                        disabled ? {backgroundColor: '#E8D3BB'} : {}
                       }
                       onSelect={selectedItem => {
                         setSelectedItem(selectedItem),
@@ -197,7 +204,7 @@ export const Formularios = ({
                               formulario.id,
                               formulario.refformularioconector,
                               pregunta.id,
-                              { id: selectedItem.id, value: selectedItem.value },
+                              {id: selectedItem.id, value: selectedItem.value},
                               pregunta.tiporespuesta,
                               formularioPreguntas,
                               setFormularioPreguntas,
@@ -207,8 +214,7 @@ export const Formularios = ({
                             );
                           }),
                           selectedItem !== undefined &&
-                            setsingleSelectReq(false),
-                          console.log('selectedItem', selectedItem);
+                            setsingleSelectReq(false);
                       }}
                       placeholder="Elegir opción"
                       width="100%"
@@ -220,7 +226,7 @@ export const Formularios = ({
                   <View
                     key={pregunta.id}
                     style={{
-                      height: 170 + 50 * dataMulti.length, 
+                      height: 170 + 50 * dataMulti.length,
                     }}>
                     <Text style={styles.selmul}>{pregunta.pregunta}</Text>
                     <View
@@ -238,7 +244,7 @@ export const Formularios = ({
                           style={multiSelectReq ? styles.smError : styles.sm}
                           disableAbsolute={true}
                           buttonContainerStyle={
-                            disabled ? { backgroundColor: '#E8D3BB' } : {}
+                            disabled ? {backgroundColor: '#E8D3BB'} : {}
                           }
                           data={dataMulti}
                           menuItemTextStyle={{textDecorationLine: 'none'}}
@@ -249,26 +255,22 @@ export const Formularios = ({
                           onSelect={selectedItems => {
                             mountMulti
                               ? getCurrentLocation().then(cords => {
-                                handleResp(
-                                  tarea.id,
-                                  idotd,
-                                  formulario.id,
-                                  formulario.refformularioconector,
-                                  pregunta.id,
-                                  selectedItems,
-                                  pregunta.tiporespuesta,
-                                  formularioPreguntas,
-                                  setFormularioPreguntas,
-                                  employee,
-                                  idUsuario,
-                                  cords,
-                                ),
-                                  setIditemSelect(selectedItems),
-                                  console.log(
-                                    'seleccion items',
+                                  handleResp(
+                                    tarea.id,
+                                    idotd,
+                                    formulario.id,
+                                    formulario.refformularioconector,
+                                    pregunta.id,
                                     selectedItems,
-                                  );
-                              })
+                                    pregunta.tiporespuesta,
+                                    formularioPreguntas,
+                                    setFormularioPreguntas,
+                                    employee,
+                                    idUsuario,
+                                    cords,
+                                  ),
+                                    setIditemSelect(selectedItems);
+                                })
                               : setMountMulti(true),
                               setIditemSelect(selectedItems),
                               selectedItems.length > 0 &&
@@ -283,18 +285,26 @@ export const Formularios = ({
               ) : pregunta.tiporespuesta === 'Texto' ? (
                 <View
                   key={pregunta.id}
-                  style={{ alignItems: 'center' }}
+                  style={{alignItems: 'center'}}
                   pointerEvents={disabled ? 'none' : 'auto'}>
                   <Text style={styles.text}>{pregunta.pregunta}</Text>
                   <RNTextArea
+                    defaultCharCount={text.length}
                     key={pregunta.id}
-                    textInputStyle={{fontSize: 15, color: 'black'}}
+                    textInputStyle={{
+                      fontSize: 15,
+                      color: 'black',
+                      textAlignVertical: 'top',
+                    }}
                     style={
                       disabled
                         ? styles.textareaDisable
                         : textAreaReq
                         ? styles.textareaError
-                        : styles.textarea
+                        : {
+                            ...styles.textarea,
+                            height: heightInitial + heightDelta * countLine,
+                          }
                     }
                     maxCharLimit={200}
                     placeholderTextColor="#000000"
@@ -318,6 +328,12 @@ export const Formularios = ({
                         );
                       }),
                         setText(text),
+                        setCountLine(
+                          Math.floor(
+                            text.replace(/(\r\n|\n|\r)/gm, '').length / 30 + 1,
+                          ) +
+                            (text.split('\n').length - 1),
+                        ),
                         text !== '' && settextAreaReq(false);
                     }}
                     value={text}
@@ -386,7 +402,7 @@ export const Formularios = ({
           );
         })}
         <View
-          style={{ alignItems: 'center' }}
+          style={{alignItems: 'center'}}
           pointerEvents={disabled ? 'none' : 'auto'}>
           <TouchableOpacity
             style={disabled ? styles.btnDisable : styles.btnSubmit}
@@ -416,12 +432,11 @@ export const Formularios = ({
                 idUsuario,
                 setSending,
               );
-              console.log('validaForm', validaForm);
             }}>
             {sending ? (
               <Chase color="white" size={14} />
             ) : (
-              <Text style={{ ...styles.text6 }}>Enviar Formulario</Text>
+              <Text style={{...styles.text6}}>Enviar Formulario</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -449,10 +464,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   welcome: {
-    fontSize: 18,
+    fontSize: 23,
     backgroundColor: '#fb8c00',
     borderRadius: 20,
-    color: '#000000',
+    color: 'white',
     padding: 10,
     textAlign: 'center',
     marginTop: 8,
@@ -496,7 +511,7 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1.0,
-    width: '80%',
+    width: '100%',
   },
   textareaError: {
     borderRadius: 20,

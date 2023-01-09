@@ -1,5 +1,6 @@
 import React from 'react';
 import {getCheckInOut} from './GetStorage';
+import {SendArraaycheckInOut} from './SendArraayCheckInOut';
 import {SendCheckinOut} from './SendCheckinOut';
 import {setCheckInOut} from './SetStorage';
 
@@ -11,11 +12,11 @@ export const SaveCheckinOut = async (
   today,
 ) => {
   let array = await getCheckInOut();
-
+  console.log('array', array);
   /* console.log('aarray storge', array); */
   if (array != null) {
     console.log('entre en storage');
-    array.checks.push({
+    array.checks.unshift({
       idusuario: idusuario,
       type: type,
       latitude: latitude,
@@ -23,8 +24,9 @@ export const SaveCheckinOut = async (
       today: today,
       send: false,
     });
-    setCheckInOut(array);
+    await setCheckInOut(array);
   } else {
+    console.log('entre en null');
     array = {
       checks: [
         {
@@ -38,8 +40,10 @@ export const SaveCheckinOut = async (
       ],
     };
     console.log('fichadas', array);
-    setCheckInOut(array);
+    await setCheckInOut(array);
   }
 
-  /* SendCheckinOut(idusuario, type, latitude, longitude, today); */
+  SendArraaycheckInOut();
+
+  // SendCheckinOut(idusuario, type, latitude, longitude, today);
 };

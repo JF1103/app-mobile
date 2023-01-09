@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Tareas({
   navigation,
@@ -13,6 +14,7 @@ export default function Tareas({
   setTareaEnd,
   formEnded,
   cantFormularios,
+  ErrorSend,
 }) {
   const flag = formEnded && formEnded === cantFormularios ? true : false;
 
@@ -29,7 +31,8 @@ export default function Tareas({
           idUsuario,
         });
       }}>
-      <Text style={styles.text1}>Iniciar Tarea {tarea.tarea}</Text>
+      <Text style={styles.text1}>Iniciar Tarea {tarea.tarea} </Text>
+      {ErrorSend && <Icon style={styles.icon} name="alert-circle" />}
     </TouchableOpacity>
   );
 }
@@ -40,12 +43,15 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: '#fb8c00',
     borderWidth: 1.0,
-    height: 30,
+    height: 60,
     width: '100%',
     justifyContent: 'center',
-
     color: '#f5f5f5',
     marginBottom: 10,
+
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   btnFinish: {
     backgroundColor: '#FFF8EF',
@@ -65,5 +71,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fb8c00',
     textAlign: 'center',
+    marginRight: 5,
+  },
+  icon: {
+    fontSize: 25,
+
+    color: 'red',
   },
 });

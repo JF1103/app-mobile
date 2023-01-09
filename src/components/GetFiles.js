@@ -91,11 +91,9 @@ export const GetFiles = ({
     ?.formularios.filter(item => item.FormularioId === formularioId)[0]
     ?.preguntas.filter(item => item.id === pregunta.id)[0]?.respuesta;
 
-  /* console.log('pregunta', pregunta); */
   const syncUri = datos?.base64;
   const typeFile = datos?.fileType;
 
-  /*  console.log('syncUri', syncUri); */
   useEffect(() => {
     checkLocationPermissions();
   }, []);

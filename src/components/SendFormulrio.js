@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React from 'react';
+import {ToastAndroid} from 'react-native';
 import {BASE_URL} from '../config';
 import getFileBase64 from '../helpers/getFileBase64';
 
@@ -30,6 +31,8 @@ carpeta
 
 */
   console.log('entre a enviar formualrio');
+
+  let firstFlag = true;
   /* console.log('e formulario es ', JSON.stringify(formularioPreguntas)); */
   const preguntas = formularioPreguntas.formcomplet
     .filter(item => item.idUsuario === idUsuario)[0]
@@ -159,6 +162,63 @@ carpeta
       })
       .catch(error => {
         console.log('error', error);
+        console.log('error', JSON.stringify(error));
+        console.log('error', JSON.stringify(error.response));
+        console.log('error', JSON.stringify(error.response.data));
+
+        const indexPregunta = formularioPreguntas.formcomplet[
+          indexIdUsuario
+        ].ots[indexIdOt].tareas[indexIdTarea].formularios[
+          indexIdFormulario
+        ].preguntas
+          .map(item => item.id)
+          .indexOf(item.id);
+
+        let newFormularioPreguntas = formularioPreguntas;
+        newFormularioPreguntas.formcomplet[indexIdUsuario].ots[
+          indexIdOt
+        ].tareas[indexIdTarea].formularios[indexIdFormulario].preguntas[
+          indexPregunta
+        ].checkSend = false;
+
+        newFormularioPreguntas.formcomplet[indexIdUsuario].ots[
+          indexIdOt
+        ].tareas[indexIdTarea].ErrorSend = true;
+
+        console.log(
+          'newFormularioPreguntas',
+          JSON.stringify(newFormularioPreguntas),
+        );
+        setFormularioPreguntas({...newFormularioPreguntas});
+      })
+      .finally(() => {
+        console.log('finally sali2');
+
+        const indexPregunta = formularioPreguntas.formcomplet[
+          indexIdUsuario
+        ].ots[indexIdOt].tareas[indexIdTarea].formularios[
+          indexIdFormulario
+        ].preguntas
+          .map(item => item.id)
+          .indexOf(item.id);
+        //valido si el formulario se envio completo para mostrar el toast de enviado
+        let formularioCompleto =
+          formularioPreguntas.formcomplet[indexIdUsuario].ots[indexIdOt].tareas[
+            indexIdTarea
+          ].formularios[indexIdFormulario].preguntas[indexPregunta].checkSend;
+
+        if (firstFlag) {
+          if (formularioCompleto) {
+            ToastAndroid.show('Formulario enviado', ToastAndroid.SHORT);
+            firstFlag = false;
+          } else {
+            ToastAndroid.show(
+              'Formulario  no fue enviado, porfavor intente mas tarde',
+              ToastAndroid.SHORT,
+            );
+            firstFlag = false;
+          }
+        }
       });
   });
 }

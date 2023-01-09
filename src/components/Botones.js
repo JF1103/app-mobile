@@ -1,30 +1,42 @@
 import Geolocation from '@react-native-community/geolocation';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
+import {FormContext} from '../context/FormContext';
+import {getCheckinoutServer} from '../helpers/getCheckinoutServer';
 import {useLocation} from '../hooks/useLocation';
 import {CheckinOut} from './CheckinOut';
+import {GetDataOt} from './GetDataOt';
 import {getCheckInOut} from './GetStorage';
 import {SendCheckinOut} from './SendCheckinOut';
 
 const Botones = () => {
   const {logout} = useContext(AuthContext);
-
   const [visualizaCheck, setvisualizaCheck] = useState(true);
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const {userInfo} = useContext(AuthContext);
   const navigator = useNavigation();
-  getCheckInOut().then(checkinout => {
-    if (checkinout !== null) {
-      if (checkinout.checks[checkinout.checks.length - 1].type === 1) {
-        setvisualizaCheck(false);
-      } else if (checkinout.checks[checkinout.checks.length - 1].type === 2) {
-        setvisualizaCheck(true);
+  const {data, setData} = useContext(FormContext);
+
+  const inicializaBotones = async () => {
+    await GetDataOt(userInfo.idusuario, setData);
+    getCheckinoutServer(data).then(inOut => {
+      console.log('inOut', inOut);
+      if (inOut !== null) {
+        if (inOut == 1) {
+          setvisualizaCheck(false);
+        } else if (inOut == 2) {
+          setvisualizaCheck(true);
+        }
       }
-    }
-  });
+    });
+  };
+
+  useEffect(() => {
+    inicializaBotones();
+  }, []);
 
   return (
     <View style={styles.containerb1}>

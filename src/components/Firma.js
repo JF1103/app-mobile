@@ -54,14 +54,14 @@ const Firma = ({
   );
   /* useEffect(async () => {
     const base64 = await RNFS.readFile(firmInit, 'base64');
-    console.log('de la memoria2', base64);
+    
   }, []); */
 
   const exists = async () => {
     /* let exists = await RNFS.exists(
       '/data/user/0/com.app_mobile/files/firma_14_5_3_13.png',
     ); */
-    /* console.log('exists', exists); */
+
     firmInit && setbase64(await RNFS.readFile(firmInit, 'base64'));
   };
 
@@ -69,10 +69,6 @@ const Firma = ({
     exists();
   }, [firmPath]);
   const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
-
-  /*  console.log('firmPath', firmPath);
-  console.log('firmInit', firmInit);
-  console.log(JSON.stringify(formularioPreguntas)); */
 
   const saveSign = saveBtn => {
     saveBtn.current.saveImage();
@@ -87,7 +83,6 @@ const Firma = ({
   );
 
   const _onSaveEvent = result => {
-    // console.log('pathname onsaveevent', result.encoded);
     getCurrentLocation().then(cords => {
       handleRespFirma(
         formularioPreguntas,
@@ -110,9 +105,7 @@ const Firma = ({
     });
     setfirmaReq(false);
   };
-  const _onDragEvent = () => {
-    console.log('dragged');
-  };
+  const _onDragEvent = () => {};
 
   console.log('firmPath', firmPath);
   return (

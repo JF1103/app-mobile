@@ -18,7 +18,6 @@ export const validaFirma = (
     ?.formularios.filter(form => form.FormularioId === formularioId)[0]
     ?.preguntas.filter(pre => pre.tipo === 'Firma')[0];
 
-  console.log('firma', firma);
   if (firma === undefined) {
     setfirmaReq(true);
     return false;

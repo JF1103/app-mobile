@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const screenWidth = Dimensions.get('screen').width;
+const screenWidth = Dimensions.get('screen').width - 40;
 
 class Page extends Component {
   dirs = RNFS.DocumentDirectoryPath;
@@ -140,7 +140,7 @@ class Page extends Component {
     if (!playWidth) {
       playWidth = 0;
     }
-
+    console.log('render' + playWidth);
     return (
       <SafeAreaView>
         <View style={styles.viewRecorder}>

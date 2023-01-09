@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FormContext} from '../context/FormContext';
 
 export const GetStorage = async () => {
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('form');
-      // console.log(jsonValue);
+
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log(e);
@@ -16,15 +17,17 @@ export const GetStorage = async () => {
 };
 
 export const getCheckInOut = async () => {
+  /*  const {data} = useContext(FormContext); */
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('checkinout');
-      // console.log(jsonValue);
+      console.log('valor en storage', jsonValue);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log(e);
     }
   };
   const checkinout = await getData();
+
   return checkinout;
 };

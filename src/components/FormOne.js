@@ -49,38 +49,37 @@ const FormOne = ({navigation, route}) => {
   const [location, setLocation] = useState({});
 
   /*   const {form, onChange, setFormValue} = UseForm(); */
-  //console.log(JSON.stringify(formularioPreguntas));
 
   const formData = new FormData();
   formData.append('idusuario', userInfo.idusuario);
 
   return (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            display: 'flex',
-            direction: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#fb8c00',
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 20,
-            borderColor: '#fb8c00',
-            borderWidth: 1,
+    <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          display: 'flex',
+          direction: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#fb8c00',
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 20,
+          borderColor: '#fb8c00',
+          borderWidth: 1,
+        }}>
+        <TouchableOpacity
+          style={{position: 'absolute', left: 10}}
+          onPress={() => {
+            navigation.navigate('Home');
           }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
-            onPress={() => {
-              navigation.navigate('Home');
-            }}>
-            <Icon style={styles.icon} name="arrow-back-outline" />
-          </TouchableOpacity>
+          <Icon style={styles.icon} name="arrow-back-outline" />
+        </TouchableOpacity>
 
-          <Text style={styles.text}>Formularios</Text>
-        </View>
-        <ScrollView>
+        <Text style={styles.text}>Formularios</Text>
+      </View>
+      <ScrollView>
         {tarea?.formularios.map((formualario, index) => {
           return (
             <Formularios
@@ -95,9 +94,8 @@ const FormOne = ({navigation, route}) => {
             />
           );
         })}
-        </ScrollView>
-      </View>
-      
+      </ScrollView>
+    </View>
   );
 };
 

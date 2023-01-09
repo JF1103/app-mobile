@@ -16,6 +16,7 @@ export const handleResp = async (
   idUsuario,
   preguntaCords,
 ) => {
+  console.log('respuesta' + respuesta);
   const initialFormState = [
     {
       id_ot: employee.id,
@@ -25,6 +26,7 @@ export const handleResp = async (
         {
           TareaId: tareaId,
           idotd: idotd,
+          ErrorSend: false,
           formularios: [
             {
               FormularioId: formularioId,
@@ -82,9 +84,9 @@ export const handleResp = async (
     } else {
       /* console.log('formulario tiene datos del usuario'); */
       //formulrio tienen daatos del usurio
-      const indexOt = formularioPreguntas.formcomplet[
+      const indexOt = formularioPreguntas?.formcomplet[
         indexUsuario
-      ].ots.findIndex(ot => ot.id_ot === employee.id);
+      ]?.ots?.findIndex(ot => ot.id_ot === employee.id);
 
       if (indexOt === -1) {
         /*  console.log('formulario tiene datos del usuario pero no de la ot'); */
@@ -107,6 +109,7 @@ export const handleResp = async (
           ].tareas.push({
             TareaId: tareaId,
             idotd: idotd,
+            ErrorSend: false,
             formularios: [
               {
                 FormularioId: formularioId,
@@ -214,175 +217,4 @@ export const handleResp = async (
       }
     }
   }
-
-  /* 
-  const indexTarea = formularioPreguntas.tareas.findIndex(
-    tarea => tarea.TareaId == tareaId,
-  );
-  console.log('entre en tareas con datos', JSON.stringify(formularioPreguntas));
-  console.log('indexTarea', indexTarea, tareaId);
-  if (indexTarea === -1) {
-    if (formularioPreguntas.tareas.length === 0) {
-      console.log('entre en tareas vacia');
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: [
-          {
-            TareaId: tareaId,
-            formularios: [
-              {
-                FormularioId: formularioId,
-                preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-              },
-            ],
-          },
-        ],
-      });
-    } else {
-      console.log('entre en tareas con datos');
-      //si no estan vacias agrego la tarea
-      setFormularioPreguntas({
-        ...formularioPreguntas,
-        tareas: formularioPreguntas.tareas.concat({
-          TareaId: tareaId,
-          formularios: [
-            {
-              FormularioId: formularioId,
-              preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-            },
-          ],
-        }),
-      });
-    }
-  } else {
-    const indexFormulario = formularioPreguntas.tareas[
-      indexTarea
-    ].formularios.findIndex(
-      formulario => formulario.FormularioId === formularioId,
-    );
-
-    console.log('trea existe', indexFormulario, formularioId);
-
-    if (indexFormulario === -1) {
-      //valio si el formulario existe
-      //existe la tarea, no el formulario
-      if ((formularioPreguntas.tareas[indexTarea].formularios.length = 0)) {
-        //el formulario esta vacio
-        console.log('formulario no existe ');
-        console.log('formulario vacio');
-
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            ...formularioPreguntas.tareas.slice(0, indexTarea),
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              formularios: formularioPreguntas.tareas[
-                indexTarea
-              ].formularios.concat({
-                FormularioId: formularioId,
-                preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-              }),
-            },
-            ...formularioPreguntas.tareas.slice(indexTarea + 1),
-            //sumo el resto de las tareas
-          ],
-        });
-      } else {
-        //existe la tarea, no el formulario y el formularios tiene otros formularios
-        console.log('formulario no existe');
-        console.log('formulario con datos');
-        //mantengo el fomulario y agrego el nuevo formulario
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            ...formularioPreguntas.tareas.slice(0, indexTarea),
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              formularios: formularioPreguntas.tareas[
-                indexTarea
-              ].formularios.concat({
-                FormularioId: formularioId,
-                preguntas: [{id: id, respuesta: respuesta, tipo: tipo}],
-              }),
-            },
-            ...formularioPreguntas.tareas.slice(indexTarea + 1),
-          ],
-        });
-      }
-    } else {
-      const indexPregunta = formularioPreguntas.tareas[indexTarea].formularios[
-        indexFormulario
-      ].preguntas.findIndex(pregunta => pregunta.id === id);
-
-      if (indexPregunta === -1) {
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            ...formularioPreguntas.tareas.slice(0, indexTarea),
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              formularios: [
-                ...formularioPreguntas.tareas[indexTarea].formularios.slice(
-                  0,
-                  indexFormulario,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].formularios[
-                    indexFormulario
-                  ],
-                  preguntas: [
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ].preguntas,
-                    {id: id, respuesta: respuesta, tipo: tipo},
-                  ],
-                },
-                ...formularioPreguntas.tareas[indexTarea].formularios.slice(
-                  indexFormulario + 1,
-                ),
-              ],
-            },
-            ...formularioPreguntas.tareas.slice(indexTarea + 1),
-          ],
-        });
-      } else {
-        //edito pregunta encontrada
-        console.log('edito pregunta encontrada');
-        setFormularioPreguntas({
-          ...formularioPreguntas,
-          tareas: [
-            ...formularioPreguntas.tareas.slice(0, indexTarea),
-            {
-              ...formularioPreguntas.tareas[indexTarea],
-              formularios: [
-                ...formularioPreguntas.tareas[indexTarea].formularios.slice(
-                  0,
-                  indexFormulario,
-                ),
-                {
-                  ...formularioPreguntas.tareas[indexTarea].formularios[
-                    indexFormulario
-                  ],
-                  preguntas: [
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ].preguntas.slice(0, indexPregunta),
-                    {id: id, respuesta: respuesta, tipo: tipo},
-                    ...formularioPreguntas.tareas[indexTarea].formularios[
-                      indexFormulario
-                    ].preguntas.slice(indexPregunta + 1),
-                  ],
-                },
-                ...formularioPreguntas.tareas[indexTarea].formularios.slice(
-                  indexFormulario + 1,
-                ),
-              ],
-            },
-            ...formularioPreguntas.tareas.slice(indexTarea + 1),
-          ],
-        });
-      }
-    }
-  } */
 };

@@ -21,13 +21,20 @@ import {FormContext} from '../context/FormContext';
 import {CheckinOut} from '../components/CheckinOut';
 import {useLocation} from '../hooks/useLocation';
 import {SendArraaycheckInOut} from '../components/SendArraayCheckInOut';
+import {CargaDatosForm} from '../helpers/CargaDatosForm';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
-  const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
-    useContext(FormContext);
+  const {
+    data,
+    setData,
+    formAsync,
+    setformAsync,
+    formularioPreguntas,
+    setFormularioPreguntas,
+  } = useContext(FormContext);
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const [refresh, setRefresh] = useState(false);
 
@@ -50,39 +57,36 @@ const HomeScreen = ({navigation}) => {
 
   /* const [formularioPreguntas, setFormularioPreguntas] = useState(); */
 
-  /*  console.log('formAsync', JSON.stringify(formAsync)); */
-
   const [cargandoAsync, setcargandoAsync] = useState(false);
-  /* const [formAsync, setformAsync] = useState(); */
 
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
-    if (form !== null) {
-      setformAsync(form);
-      setFormularioPreguntas(form);
-    }
+
+    setformAsync(form);
+    setFormularioPreguntas(form);
+    //inicializa  con datos del servidor
+    /*     CargaDatosForm(
+      data,
+      form,
+      setformAsync,
+      setFormularioPreguntas,
+      userInfo.idusuario,
+    ); */
+
     setcargandoAsync(false);
   };
 
-  useEffect(() => {
-    /* console.log('inicializo preguntas'); */
-    setcargandoAsync(true);
-    inicializaformularioPreguntas();
-  }, []);
-
-  /* console.log(JSON.stringify(formAsync)); */
+  /*  console.log('async home', JSON.stringify(formAsync)); */
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(
         PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
       );
-      // console.log('permiso' + permissionsStatus);
     }
     if (Platform.OS === 'android') {
       let permissionsStatus = await request(
         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       );
-      // console.log('permiso' + permissionsStatus);
     }
   };
 
@@ -92,15 +96,22 @@ const HomeScreen = ({navigation}) => {
 
   /* 
   const printButtonLabel = item => {
-    console.log(item);
+    
   }; */
 
   useEffect(() => {
     GetDataOt(userInfo.idusuario, setData, setLoading);
   }, []);
 
+  useEffect(() => {
+    if (data !== undefined) {
+      setcargandoAsync(true);
+      inicializaformularioPreguntas();
+    }
+  }, [data]);
+
   const [tareaEnd, setTareaEnd] = useState(false);
-  /* console.log('tareaEnd', tareaEnd); */
+
   return (
     <View style={styles.container}>
       <Navbar />
@@ -131,8 +142,6 @@ const HomeScreen = ({navigation}) => {
                   indexUsuario
                 ]?.ots.findIndex(item => item.id_ot === employee.id);
 
-                /* console.log('indexOt', indexOt); */
-
                 const indexTarea = formAsync?.formcomplet[indexUsuario].ots[
                   indexOt
                 ]?.tareas.findIndex(item => item.TareaId === tarea.id);
@@ -153,7 +162,7 @@ const HomeScreen = ({navigation}) => {
                 return treaEnded;
               })
               .filter(item => item === true).length;
-            /*  console.log('otended', otEnded); */
+
             const otEnded = TareasEned === cantTares;
 
             if (otEnded) {
@@ -225,29 +234,30 @@ const HomeScreen = ({navigation}) => {
                       <Text style={styles.text}>Iniciar Ruta</Text>
                     </TouchableOpacity>
                     {employee['0'].tareas.map(tarea => {
-                      /*  console.log(tarea.id); */
                       const indexUsuario = formAsync?.formcomplet?.findIndex(
                         item => item.idUsuario === userInfo.idusuario,
                       );
-                      /*  console.log('indexUsuario', indexUsuario); */
+
                       const indexOt = formAsync?.formcomplet[
                         indexUsuario
                       ]?.ots.findIndex(item => item.id_ot === employee.id);
-
-                      /* console.log('indexOt', indexOt); */
 
                       const indexTarea = formAsync?.formcomplet[
                         indexUsuario
                       ].ots[indexOt]?.tareas.findIndex(
                         item => item.TareaId === tarea.id,
                       );
-                      /*  console.log('indexTarea', indexTarea); */
 
                       const NumformEnded = formAsync?.formcomplet[
                         indexUsuario
                       ]?.ots[indexOt]?.tareas[indexTarea]?.formularios.filter(
                         item => item.ended === true,
                       ).length;
+
+                      //busco tareas que tengan errorSend en true
+                      const ErrorSend =
+                        formAsync?.formcomplet[indexUsuario]?.ots[indexOt]
+                          ?.tareas[indexTarea]?.ErrorSend;
 
                       const cantFormularios = tarea?.formularios.length;
                       const cantTareas = employee['0'].tareas.length;
@@ -256,10 +266,6 @@ const HomeScreen = ({navigation}) => {
                         NumformEnded && NumformEnded === cantFormularios
                           ? true
                           : false;
-
-                      /* console.log('flag', flag);
-                      console.log('formEnded', formEnded);
-                      console.log('cantFormularios', cantFormularios); */
 
                       if (treaEnded) {
                         return (
@@ -285,6 +291,7 @@ const HomeScreen = ({navigation}) => {
                               formEnded={NumformEnded}
                               cantFormularios={cantFormularios}
                               screenCall={'HomeScreen'}
+                              ErrorSend={ErrorSend}
                             />
                           </View>
                         );
@@ -375,7 +382,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: '#c88719',
     borderWidth: 1.0,
-    height: 30,
+    height: 50,
     width: '90%',
     justifyContent: 'center',
     color: '#f5f5f5',
@@ -388,11 +395,12 @@ const styles = StyleSheet.create({
   btn2: {
     flex: 1,
     borderRadius: 20,
-    height: 30,
+    height: 50,
     width: '90%',
     justifyContent: 'center',
     color: '#f5f5f5',
-    marginBottom: 10,
+    backgroundColor: '#ffffff',
+    marginBottom: 20,
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
