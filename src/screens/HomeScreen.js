@@ -204,7 +204,7 @@ const HomeScreen = ({navigation}) => {
                     </Text>
 
                     <Text style={styles.welcome}>
-                      <Text style={styles.titulo}>Sucursal:</Text>{' '}
+                      <Text style={styles.titulo}>Cliente:</Text>{' '}
                       {employee?.cliente}
                     </Text>
                   </View>
@@ -440,12 +440,13 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'center',
     color: '#f5f5f5',
-    marginBottom: 15,
+    marginBottom: 20,
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
     marginTop: -5,
+
   },
   btn2: {
     flex: 1,

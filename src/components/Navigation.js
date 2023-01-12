@@ -10,7 +10,7 @@ import FormOne from './FormOne';
 import {Ruta} from './Ruta';
 import {FormProvider} from '../context/FormContext';
 const Stack = createNativeStackNavigator();
-import {TareasFinalizadas} from './TareasFinalizadas';
+import {TareasFinalizadas} from './tareasFinalizadas';
 
 const Navigation = () => {
   const {userInfo, splashLoading} = useContext(AuthContext);

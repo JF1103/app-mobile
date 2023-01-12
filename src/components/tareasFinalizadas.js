@@ -195,7 +195,7 @@ export const TareasFinalizadas = ({navigation}) => {
                       </Text>
 
                       <Text style={styles.welcome}>
-                        <Text style={styles.titulo}>Sucursal:</Text>{' '}
+                        <Text style={styles.titulo}>Cliente:</Text>{' '}
                         {employee?.cliente}
                       </Text>
                     </View>
@@ -380,22 +380,6 @@ const styles = StyleSheet.create({
     /*  borderColor: '#fb8c00', */
     /* borderWidth: 1, */
   },
-  btn1: {
-    flex: 1,
-    backgroundColor: '#fb8c00',
-    borderRadius: 20,
-    borderColor: '#c88719',
-    borderWidth: 1.0,
-    height: 30,
-    width: '90%',
-    justifyContent: 'center',
-    color: '#f5f5f5',
-    marginBottom: 15,
-    shadowColor: '#000000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 10,
-  },
   btn2: {
     flex: 1,
     borderRadius: 20,
@@ -403,11 +387,12 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'center',
     color: '#f5f5f5',
-    marginBottom: 10,
+    marginBottom: 25,
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
+    margin: 15,
   },
   btnFinish: {
     flex: 1,
