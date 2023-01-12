@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -163,6 +164,17 @@ export const Formularios = ({
               isChecked: check,
             };
           });
+
+          const MyInput = () => {
+            const [inputWidth, setInputWidth] = useState(100);
+          
+            return (
+              <TextInput
+                style={{ width: inputWidth }}
+                onChangeText={text => setInputWidth(text.length * 10)}
+              />
+            );
+          }
 
           return (
             <View key={index2}>
