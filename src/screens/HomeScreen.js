@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Botones from '../components/Botones';
 import {ItemSeparator} from '../components/ItemSeparator';
-import {ItemSeparator2} from '../components/ItemSeparator2'
+import {ItemSeparator2} from '../components/ItemSeparator2';
 import {Navbar} from '../components/Navbar';
 import {Ruta} from '../components/Ruta';
 import {AuthContext} from '../context/AuthContext';
@@ -23,6 +23,7 @@ import {CheckinOut} from '../components/CheckinOut';
 import {useLocation} from '../hooks/useLocation';
 import {SendArraaycheckInOut} from '../components/SendArraayCheckInOut';
 import {CargaDatosForm} from '../helpers/CargaDatosForm';
+import {getCheckinoutServer} from '../helpers/getCheckinoutServer';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -38,6 +39,7 @@ const HomeScreen = ({navigation}) => {
 
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const [refresh, setRefresh] = useState(false);
+  const [visualizaCheck, setvisualizaCheck] = useState(true);
 
   const pullMe = async () => {
     setRefresh(true);
@@ -108,6 +110,17 @@ const HomeScreen = ({navigation}) => {
     if (data !== undefined) {
       setcargandoAsync(true);
       inicializaformularioPreguntas();
+
+      getCheckinoutServer(data).then(inOut => {
+        console.log('inOut', inOut);
+        if (inOut !== null) {
+          if (inOut == 1) {
+            setvisualizaCheck(false);
+          } else if (inOut == 2) {
+            setvisualizaCheck(true);
+          }
+        }
+      });
     }
   }, [data]);
 
@@ -115,7 +128,10 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Navbar />
+      <Navbar
+        visualizaCheck={visualizaCheck}
+        setvisualizaCheck={setvisualizaCheck}
+      />
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -199,31 +215,56 @@ const HomeScreen = ({navigation}) => {
                   </Text>
                   <ItemSeparator />
                   <View
-                      style={
-                        employee?.nivel === '1-Alta'
-                          ? {...styles.nivelAlto}
-                          : employee?.nivel === '2-Media'
-                          ? {...styles.nivelMedio}
-                          : employee?.nivel === '3-Baja' && {
-                              ...styles.nivelBajo}}
-                            >
-                        <View 
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-around',
+                    style={
+                      employee?.nivel === '1-Alta'
+                        ? {...styles.nivelAlto}
+                        : employee?.nivel === '2-Media'
+                        ? {...styles.nivelMedio}
+                        : employee?.nivel === '3-Baja' && {
+                            ...styles.nivelBajo,
+                          }
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-around',
                       }}>
-                    <Text style={styles.textos}>
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Actividad:</Text>{' '}
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>{employee?.actividad}
+                      <Text style={styles.textos}>
+                        <Text
+                          style={
+                            employee?.nivel === '2-Media'
+                              ? {...styles.titulos1}
+                              : {...styles.titulos}
+                          }>
+                          Actividad:
+                        </Text>{' '}
+                        <Text
+                          style={
+                            employee?.nivel === '2-Media'
+                              ? {...styles.titulos1}
+                              : {...styles.titulos}
+                          }>
+                          {employee?.actividad}
+                        </Text>
                       </Text>
-                    </Text>
-                    <Text style={styles.textos}>
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Prioridad:</Text>{' '}
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}
-                       >
-                        {employee?.nivel}
+                      <Text style={styles.textos}>
+                        <Text
+                          style={
+                            employee?.nivel === '2-Media'
+                              ? {...styles.titulos1}
+                              : {...styles.titulos}
+                          }>
+                          Prioridad:
+                        </Text>{' '}
+                        <Text
+                          style={
+                            employee?.nivel === '2-Media'
+                              ? {...styles.titulos1}
+                              : {...styles.titulos}
+                          }>
+                          {employee?.nivel}
+                        </Text>
                       </Text>
-                    </Text>
                     </View>
                   </View>
                 </View>

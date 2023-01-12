@@ -226,13 +226,13 @@ export const Formularios = ({
                   <View
                     key={pregunta.id}
                     style={{
-                      height: 170 + 50 * dataMulti.length,
+                      height: 35 * dataMulti.length + 200,
                     }}>
                     <Text style={styles.selmul}>{pregunta.pregunta}</Text>
                     <View
                       pointerEvents={disabled ? 'none' : 'auto'}
                       style={{
-                        height: 200,
+                        height: 35 * dataMulti.length + 100,
                       }}>
                       <ScrollView
                         horizontal={true}
@@ -247,10 +247,13 @@ export const Formularios = ({
                             disabled ? {backgroundColor: '#E8D3BB'} : {}
                           }
                           data={dataMulti}
-                          menuItemTextStyle={{textDecorationLine: 'none'}}
+                          menuItemTextStyle={{
+                            textDecorationLine: 'none',
+                            marginVertical: 5,
+                          }}
                           menuBarContainerStyle={{
                             borderRadius: 10,
-                            height: 50 * dataMulti.length,
+                            height: 35 * dataMulti.length,
                           }}
                           onSelect={selectedItems => {
                             mountMulti
@@ -276,7 +279,6 @@ export const Formularios = ({
                               selectedItems.length > 0 &&
                                 setmultiSelectReq(false);
                           }}
-                          placeholder="Elegir opción"
                         />
                       </ScrollView>
                     </View>

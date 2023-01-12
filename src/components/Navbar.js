@@ -13,7 +13,7 @@ import Botones from './Botones';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export const Navbar = () => {
+export const Navbar = ({visualizaCheck, setvisualizaCheck}) => {
   const [visualizaNavbar, setvisualizaNavbar] = useState(false);
 
   return (
@@ -43,7 +43,12 @@ export const Navbar = () => {
 
         <Text style={styles.text}>Agenda de Tareas</Text>
       </View>
-      {visualizaNavbar && <Botones />}
+      {visualizaNavbar && (
+        <Botones
+          visualizaCheck={visualizaCheck}
+          setvisualizaCheck={setvisualizaCheck}
+        />
+      )}
     </>
   );
 };

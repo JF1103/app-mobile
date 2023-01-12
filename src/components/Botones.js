@@ -12,16 +12,18 @@ import {GetDataOt} from './GetDataOt';
 import {getCheckInOut} from './GetStorage';
 import {SendCheckinOut} from './SendCheckinOut';
 
-const Botones = () => {
+const Botones = ({setvisualizaCheck, visualizaCheck}) => {
   const {logout} = useContext(AuthContext);
-  const [visualizaCheck, setvisualizaCheck] = useState(true);
+
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const {userInfo} = useContext(AuthContext);
   const navigator = useNavigation();
-  const {data, setData} = useContext(FormContext);
 
+  /*   if (data !== null) {
+  } else {
+  }
   const inicializaBotones = async () => {
-    await GetDataOt(userInfo.idusuario, setData);
+     await GetDataOt(userInfo.idusuario, setData); 
     getCheckinoutServer(data).then(inOut => {
       console.log('inOut', inOut);
       if (inOut !== null) {
@@ -36,7 +38,7 @@ const Botones = () => {
 
   useEffect(() => {
     inicializaBotones();
-  }, []);
+  }, []); */
 
   return (
     <View style={styles.containerb1}>
