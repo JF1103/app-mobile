@@ -2,9 +2,8 @@ import React from 'react';
 import {getCheckInOut} from '../components/GetStorage';
 
 export const getCheckinoutServer = async data => {
-  console.log('dataServer', data);
   const asincData = await getCheckInOut();
-  console.log('asincData', asincData);
+
   if (asincData !== null) {
     // si tiene datos en el storage se compara con los datos del servidor
     console.log('fecha  asinc ', asincData?.checks[0].today);

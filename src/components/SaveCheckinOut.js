@@ -12,8 +12,8 @@ export const SaveCheckinOut = async (
   today,
 ) => {
   let array = await getCheckInOut();
-  console.log('array', array);
-  /* console.log('aarray storge', array); */
+
+  console.log('aarray storge', array);
   if (array != null) {
     console.log('entre en storage');
     array.checks.unshift({

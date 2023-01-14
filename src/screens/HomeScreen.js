@@ -15,7 +15,7 @@ import {Navbar} from '../components/Navbar';
 import {Ruta} from '../components/Ruta';
 import {AuthContext} from '../context/AuthContext';
 import {check, PERMISSIONS, request} from 'react-native-permissions';
-import {GetStorage} from '../components/GetStorage';
+import {getCheckInOut, GetStorage} from '../components/GetStorage';
 import Tareas from '../components/Tareas';
 import {GetDataOt} from '../components/GetDataOt';
 import {FormContext} from '../context/FormContext';
@@ -24,6 +24,7 @@ import {useLocation} from '../hooks/useLocation';
 import {SendArraaycheckInOut} from '../components/SendArraayCheckInOut';
 import {CargaDatosForm} from '../helpers/CargaDatosForm';
 import {getCheckinoutServer} from '../helpers/getCheckinoutServer';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -54,6 +55,21 @@ const HomeScreen = ({navigation}) => {
     }, 600000);
   }, []);
 
+  const {isConnected} = useNetInfo();
+
+  const sendCheckinOut = async () => {
+    await SendArraaycheckInOut();
+    //setReloadCardList(true);
+  };
+
+  useEffect(() => {
+    if (isConnected === true) {
+      console.log('enviando storage');
+
+      sendCheckinOut();
+    }
+  }, [isConnected]);
+
   /*  useEffect(() => {
     SendArraaycheckInOut();
   }, []); */
@@ -64,7 +80,8 @@ const HomeScreen = ({navigation}) => {
 
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
-
+    let array = await getCheckInOut();
+    console.log('fichadas storage', array);
     setformAsync(form);
     setFormularioPreguntas(form);
     //inicializa  con datos del servidor
@@ -112,7 +129,6 @@ const HomeScreen = ({navigation}) => {
       inicializaformularioPreguntas();
 
       getCheckinoutServer(data).then(inOut => {
-        console.log('inOut', inOut);
         if (inOut !== null) {
           if (inOut == 1) {
             setvisualizaCheck(false);
@@ -146,6 +162,7 @@ const HomeScreen = ({navigation}) => {
 
         {!isLoading &&
           !cargandoAsync &&
+          data?.ot &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
             const cantTares = employee['0'].tareas.length;
@@ -446,7 +463,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10,
     marginTop: -5,
-
   },
   btn2: {
     flex: 1,

@@ -19,27 +19,6 @@ const Botones = ({setvisualizaCheck, visualizaCheck}) => {
   const {userInfo} = useContext(AuthContext);
   const navigator = useNavigation();
 
-  /*   if (data !== null) {
-  } else {
-  }
-  const inicializaBotones = async () => {
-     await GetDataOt(userInfo.idusuario, setData); 
-    getCheckinoutServer(data).then(inOut => {
-      console.log('inOut', inOut);
-      if (inOut !== null) {
-        if (inOut == 1) {
-          setvisualizaCheck(false);
-        } else if (inOut == 2) {
-          setvisualizaCheck(true);
-        }
-      }
-    });
-  };
-
-  useEffect(() => {
-    inicializaBotones();
-  }, []); */
-
   return (
     <View style={styles.containerb1}>
       <TouchableOpacity style={styles.touch2} onPress={logout}>

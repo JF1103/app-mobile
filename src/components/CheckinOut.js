@@ -19,21 +19,21 @@ export const CheckinOut = (getCurrentLocation, userInfo, type) => {
     });
   } else {
     getCurrentLocation().then(location => {
-      /*  SaveCheckinOut(
-        userInfo.idusuario,
-        type,
-        location.latitude,
-        location.longitude,
-        today,
-      ); */
-      //no enviar cuando este la funionalidad de enviar array
-      SendCheckinOut(
+      SaveCheckinOut(
         userInfo.idusuario,
         type,
         location.latitude,
         location.longitude,
         today,
       );
+      //no enviar cuando este la funionalidad de enviar array
+      /* SendCheckinOut(
+        userInfo.idusuario,
+        type,
+        location.latitude,
+        location.longitude,
+        today,
+      ); */
     });
   }
 };
