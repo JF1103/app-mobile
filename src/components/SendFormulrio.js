@@ -107,7 +107,7 @@ carpeta
       };
     }
 
-    // console.log('el item es', item);
+    console.log('el item es', item);
 
     const formData = new FormData();
     formData.append('usuario', data.usuario);
@@ -135,7 +135,7 @@ carpeta
         },
       })
       .then(response => {
-        /* console.log('termine'); */
+        console.log('termine');
         /* console.log(JSON.stringify(response.data)); */
 
         const indexPregunta = formularioPreguntas.formcomplet[

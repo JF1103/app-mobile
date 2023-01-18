@@ -41,6 +41,9 @@ const HomeScreen = ({navigation}) => {
   const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const [refresh, setRefresh] = useState(false);
   const [visualizaCheck, setvisualizaCheck] = useState(true);
+  const {isConnected} = useNetInfo();
+
+  console.log('formAsync34444', JSON.stringify(formAsync));
 
   const pullMe = async () => {
     setRefresh(true);
@@ -55,11 +58,8 @@ const HomeScreen = ({navigation}) => {
     }, 600000);
   }, []);
 
-  const {isConnected} = useNetInfo();
-
   const sendCheckinOut = async () => {
     await SendArraaycheckInOut();
-    //setReloadCardList(true);
   };
 
   useEffect(() => {
@@ -70,32 +70,25 @@ const HomeScreen = ({navigation}) => {
     }
   }, [isConnected]);
 
-  /*  useEffect(() => {
-    SendArraaycheckInOut();
-  }, []); */
-
-  /* const [formularioPreguntas, setFormularioPreguntas] = useState(); */
-
   const [cargandoAsync, setcargandoAsync] = useState(false);
 
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
-    let array = await getCheckInOut();
-    console.log('fichadas storage', array);
+    console.log('iniciazacion formulario en homescreen');
     setformAsync(form);
     setFormularioPreguntas(form);
     //inicializa  con datos del servidor
-    /*     CargaDatosForm(
+    CargaDatosForm(
       data,
       form,
       setformAsync,
       setFormularioPreguntas,
       userInfo.idusuario,
-    ); */
+    );
 
     setcargandoAsync(false);
   };
-
+  /*   console.log('form', JSON.stringify(formAsync)); */
   /*  console.log('async home', JSON.stringify(formAsync)); */
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {

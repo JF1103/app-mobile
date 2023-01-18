@@ -40,8 +40,10 @@ export const Maps = ({
   employee,
   idUsuario,
   cords,
-  mapsReq,
+  arrayReq,
+  setArrayReq,
 }) => {
+  const [mapsReq, setmapsReq] = useState(false);
   /*  const [location, setLocation] = useState();
   let nbr_latitud = 0;
   let nbr_longitud = 0; */
@@ -88,8 +90,20 @@ export const Maps = ({
           longitude: initialPosition.longitude,
         },
       );
+      setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
     }
   }, [initialPosition]);
+
+  useEffect(() => {
+    if (
+      arrayReq.length > 0 &&
+      arrayReq.filter(item => item.id === pregunta.id).length > 0
+    ) {
+      setmapsReq(true);
+    } else {
+      setmapsReq(false);
+    }
+  }, [arrayReq]);
 
   return (
     <View key={pregunta.id} style={{height: 300}}>

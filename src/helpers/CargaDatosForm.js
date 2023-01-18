@@ -8,7 +8,7 @@ export const CargaDatosForm = (
   idusuario,
 ) => {
   //  console.log('data', JSON.stringify(data));
-  console.log('formAsync2', formAsync);
+  console.log('formAsync2', JSON.stringify(formAsync));
   if (formAsync === null) {
     console.log('entre');
     //si no hay datos en el estorage

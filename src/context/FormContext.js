@@ -6,6 +6,7 @@ export const FormProvider = ({children}) => {
   const [formAsync, setformAsync] = useState();
   const [formularioPreguntas, setFormularioPreguntas] = useState();
   const [data, setData] = useState();
+  const [arrayReq, setArrayReq] = useState([]);
 
   return (
     <FormContext.Provider
@@ -16,6 +17,8 @@ export const FormProvider = ({children}) => {
         setformAsync,
         formularioPreguntas,
         setFormularioPreguntas,
+        arrayReq,
+        setArrayReq,
       }}>
       {children}
     </FormContext.Provider>

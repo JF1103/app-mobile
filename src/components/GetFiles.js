@@ -48,11 +48,12 @@ export const GetFiles = ({
   idUsuario,
   formAsync,
   disabled,
-  fileReq = {fileReq},
-  setfileReq = {setfileReq},
+  arrayReq,
+  setArrayReq,
 }) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
   const {getCurrentLocation} = useLocation();
+  const [fileReq, setfileReq] = useState(false);
 
   const checkLocationPermissions = async () => {
     let permissionStatus, permissionStatus2;
@@ -117,6 +118,17 @@ export const GetFiles = ({
     setvisualizaImagen(!visualizaAudio);
   }, [visualizaAudio]);
 
+  useEffect(() => {
+    if (
+      arrayReq.length > 0 &&
+      arrayReq.filter(item => item.id === pregunta.id).length > 0
+    ) {
+      setfileReq(true);
+    } else {
+      setfileReq(false);
+    }
+  }, [arrayReq]);
+
   const takePhoto = () => {
     launchCamera(
       {
@@ -143,6 +155,7 @@ export const GetFiles = ({
                 pregunta.tiporespuesta,
               );
           setvisualizaImagen(true);
+          setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
         } else return;
       },
     );
@@ -171,6 +184,7 @@ export const GetFiles = ({
             pregunta.tiporespuesta,
           );
           setvisualizaImagen(true);
+          setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
         } else return;
       },
     );
@@ -200,6 +214,7 @@ export const GetFiles = ({
           pregunta.tiporespuesta,
         );
         setvisualizaImagen(true);
+        setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
       },
     );
   };
@@ -260,6 +275,7 @@ export const GetFiles = ({
         idUsuario,
         cords,
       );
+      setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
     });
   };
 

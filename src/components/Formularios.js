@@ -24,9 +24,10 @@ import {useLocation} from '../hooks/useLocation';
 import SendFormulrio from './SendFormulrio';
 import {Chase} from 'react-native-animated-spinkit';
 import {validaCampos} from '../helpers/validaCampos';
+import {TextAreaCmp} from './TextAreaCmp';
+import {SingleSelectCmp} from './SingleSelectCmp';
+import {MultiSelectCmp} from './MultiSelectCmp.js';
 
-const heightInitial = 55;
-const heightDelta = 20;
 export const Formularios = ({
   formulario,
   idotd,
@@ -38,60 +39,42 @@ export const Formularios = ({
   const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
     useContext(FormContext);
   const {userInfo} = useContext(AuthContext);
-  const textAsync = formAsync?.formcomplet
-    ?.filter(item => item.idUsuario === idUsuario)[0]
-    ?.ots.filter(item => item.id_ot === employee.id)[0]
-    ?.tareas.filter(item => item.TareaId === tarea.id)[0]
-    ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
-    ?.preguntas.filter(item => item.tipo === 'Texto')[0]?.respuesta;
-
-  const singleSelectInit = formAsync?.formcomplet
-    ?.filter(item => item.idUsuario === idUsuario)[0]
-    ?.ots.filter(item => item.id_ot === employee.id)[0]
-    ?.tareas.filter(item => item.TareaId === tarea.id)[0]
-    ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
-    ?.preguntas.filter(item => item.tipo === 'Seleccion Simple')
-    ?.map(item => {
-      return {
-        id: item.respuesta.id,
-        value: item.respuesta.value,
-      };
-    })[0];
 
   const [formsended, setformsended] = useState(false);
+  const [arrayReq, setArrayReq] = useState([]);
 
+  /*  console.log('arrayReq del formulario', arrayReq); */
   useEffect(() => {
+    console.log('ENTRE EN EL USEEFFECT DEL FORMULARIO');
     SetStorage(formularioPreguntas);
     setformAsync(formularioPreguntas);
   }, [formularioPreguntas]);
 
   const preguntas = formulario.preguntas;
-  const [text, setText] = useState(textAsync ? textAsync : '');
-  const [IditemSelect, setIditemSelect] = useState(0);
-  const [selectedItem, setSelectedItem] = useState(singleSelectInit);
-  const [mountMulti, setMountMulti] = useState(false);
+
+  console.log('arrayReqqqqqqq', formAsync);
+
   const {getCurrentLocation} = useLocation();
   const [disabled, setDisabled] = useState(false);
-  const [countLine, setCountLine] = useState(
-    textAsync ? Math.floor(textAsync.length / 35 + 1) : 1,
-  );
 
-  const [singleSelectReq, setsingleSelectReq] = useState(false);
-  const [multiSelectReq, setmultiSelectReq] = useState(false);
-  const [textAreaReq, settextAreaReq] = useState(false);
-  const [firmaReq, setfirmaReq] = useState(false);
-  const [fileReq, setfileReq] = useState(false);
-  const [mapsReq, setmapsReq] = useState(false);
   const [validaForm, setvalidaForm] = useState(false);
 
+  /*   useEffect(() => {
+    console.log('cambiooo el requerido');
+  }, [arrayReq]); */
+  /*  console.log('formulariooooooo', JSON.stringify(formAsync)); */
   useEffect(() => {
-    const numeroRespuestas = formAsync?.formcomplet
+    /* console.log('formulariooooooo', JSON.stringify(formAsync)); */
+    const nroRespuestasNoEnv = formAsync?.formcomplet
       ?.filter(item => item.idUsuario === idUsuario)[0]
       ?.ots.filter(item => item.id_ot === employee.id)[0]
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
-      ?.preguntas.filter(item => item.checkSend === true).length;
+      ?.preguntas.filter(
+        item => item.checkSend === false || item.checkSend === '',
+      ).length;
 
+    /*   console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv); */
     const numeroPreguntas = formulario.preguntas.length;
 
     const ended = formAsync?.formcomplet
@@ -102,7 +85,7 @@ export const Formularios = ({
         item => item.FormularioId === formulario.id,
       )[0]?.ended;
 
-    if (numeroRespuestas === numeroPreguntas) {
+    if (nroRespuestasNoEnv === 0) {
       setformsended(true);
       setDisabled(true);
       setSending(false);
@@ -126,7 +109,7 @@ export const Formularios = ({
         setFormularioPreguntas({...copy});
       }
     } else {
-      console.log('no terminado');
+      /*  console.log('no terminado'); */
       setSending(false);
     }
   }, [formAsync]);
@@ -145,156 +128,48 @@ export const Formularios = ({
             };
           });
 
-          const dataMulti = pregunta.respuestas.map((respuesta, index) => {
-            const multiresp = formAsync?.formcomplet
-              ?.filter(item => item.idUsuario === idUsuario)[0]
-              ?.ots.filter(item => item.id_ot === employee.id)[0]
-              ?.tareas.filter(item => item.TareaId === tarea.id)[0]
-              ?.formularios.filter(
-                item => item.FormularioId === formulario.id,
-              )[0]
-              ?.preguntas.filter(
-                item => item.tipo === 'Seleccion Multiple',
-              )[0]?.respuesta;
-            const check = multiresp?.filter(item => item.id === respuesta.id)[0]
-              ?.isChecked;
-            return {
-              id: respuesta.id,
-              value: respuesta.leyenda,
-              isChecked: check,
-            };
-          });
-
           const MyInput = () => {
             const [inputWidth, setInputWidth] = useState(100);
-          
+
             return (
               <TextInput
-                style={{ width: inputWidth }}
+                style={{width: inputWidth}}
                 onChangeText={text => setInputWidth(text.length * 10)}
               />
             );
-          }
+          };
 
           return (
             <View key={index2}>
               {pregunta.tiporespuesta === 'Seleccion Simple' ? (
                 <View key={pregunta.id} style={{alignItems: 'center'}}>
                   <Text style={styles.selsim}>{pregunta.pregunta}</Text>
-                  <View
-                    pointerEvents={disabled ? 'none' : 'auto'}
-                    style={
-                      singleSelectReq
-                        ? {
-                            borderColor: 'red',
-                            borderRadius: 10,
-                            width: '100%',
-                            borderWidth: 2,
-                          }
-                        : {
-                            borderColor: '#fb8c00',
-                            borderWidth: 1,
-                            borderRadius: 10,
-                            width: '100%',
-                          }
-                    }>
-                    <RNSingleSelect
-                      key={pregunta.id}
-                      searchEnabled={false}
-                      data={data}
-                      initialValue={selectedItem}
-                      selectedItem={selectedItem}
-                      buttonContainerStyle={
-                        disabled ? {backgroundColor: '#E8D3BB'} : {}
-                      }
-                      onSelect={selectedItem => {
-                        setSelectedItem(selectedItem),
-                          getCurrentLocation().then(cords => {
-                            handleResp(
-                              tarea.id,
-                              idotd,
-                              formulario.id,
-                              formulario.refformularioconector,
-                              pregunta.id,
-                              {id: selectedItem.id, value: selectedItem.value},
-                              pregunta.tiporespuesta,
-                              formularioPreguntas,
-                              setFormularioPreguntas,
-                              employee,
-                              idUsuario,
-                              cords,
-                            );
-                          }),
-                          selectedItem !== undefined &&
-                            setsingleSelectReq(false);
-                      }}
-                      placeholder="Elegir opción"
-                      width="100%"
-                    />
-                  </View>
+
+                  <SingleSelectCmp
+                    pregunta={pregunta}
+                    disabled={disabled}
+                    tarea={tarea}
+                    idotd={idotd}
+                    formulario={formulario}
+                    employee={employee}
+                    idUsuario={idUsuario}
+                    arrayReq={arrayReq}
+                    setArrayReq={setArrayReq}
+                  />
                 </View>
               ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
                 <View style={{alignItems: 'center', marginBottom: -80}}>
-                  <View
-                    key={pregunta.id}
-                    style={{
-                      height: 35 * dataMulti.length + 200,
-                    }}>
-                    <Text style={styles.selmul}>{pregunta.pregunta}</Text>
-                    <View
-                      pointerEvents={disabled ? 'none' : 'auto'}
-                      style={{
-                        height: 35 * dataMulti.length + 100,
-                      }}>
-                      <ScrollView
-                        horizontal={true}
-                        style={{
-                          width: '100%',
-                        }}>
-                        <RNMultiSelect
-                          key={pregunta.id}
-                          style={multiSelectReq ? styles.smError : styles.sm}
-                          disableAbsolute={true}
-                          buttonContainerStyle={
-                            disabled ? {backgroundColor: '#E8D3BB'} : {}
-                          }
-                          data={dataMulti}
-                          menuItemTextStyle={{
-                            textDecorationLine: 'none',
-                            marginVertical: 5,
-                          }}
-                          menuBarContainerStyle={{
-                            borderRadius: 10,
-                            height: 35 * dataMulti.length,
-                          }}
-                          onSelect={selectedItems => {
-                            mountMulti
-                              ? getCurrentLocation().then(cords => {
-                                  handleResp(
-                                    tarea.id,
-                                    idotd,
-                                    formulario.id,
-                                    formulario.refformularioconector,
-                                    pregunta.id,
-                                    selectedItems,
-                                    pregunta.tiporespuesta,
-                                    formularioPreguntas,
-                                    setFormularioPreguntas,
-                                    employee,
-                                    idUsuario,
-                                    cords,
-                                  ),
-                                    setIditemSelect(selectedItems);
-                                })
-                              : setMountMulti(true),
-                              setIditemSelect(selectedItems),
-                              selectedItems.length > 0 &&
-                                setmultiSelectReq(false);
-                          }}
-                        />
-                      </ScrollView>
-                    </View>
-                  </View>
+                  <MultiSelectCmp
+                    pregunta={pregunta}
+                    disabled={disabled}
+                    tarea={tarea}
+                    idotd={idotd}
+                    formulario={formulario}
+                    employee={employee}
+                    idUsuario={idUsuario}
+                    arrayReq={arrayReq}
+                    setArrayReq={setArrayReq}
+                  />
                 </View>
               ) : pregunta.tiporespuesta === 'Texto' ? (
                 <View
@@ -302,55 +177,16 @@ export const Formularios = ({
                   style={{alignItems: 'center'}}
                   pointerEvents={disabled ? 'none' : 'auto'}>
                   <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <RNTextArea
-                    defaultCharCount={text.length}
-                    key={pregunta.id}
-                    textInputStyle={{
-                      fontSize: 15,
-                      color: 'black',
-                      textAlignVertical: 'top',
-                    }}
-                    style={
-                      disabled
-                        ? styles.textareaDisable
-                        : textAreaReq
-                        ? styles.textareaError
-                        : {
-                            ...styles.textarea,
-                            height: heightInitial + heightDelta * countLine,
-                          }
-                    }
-                    maxCharLimit={200}
-                    placeholderTextColor="#000000"
-                    exceedCharCountColor="#990606"
-                    placeholder={'Escriba aquí ...'}
-                    onChangeText={text => {
-                      getCurrentLocation().then(cords => {
-                        handleResp(
-                          tarea.id,
-                          idotd,
-                          formulario.id,
-                          formulario.refformularioconector,
-                          pregunta.id,
-                          text,
-                          pregunta.tiporespuesta,
-                          formularioPreguntas,
-                          setFormularioPreguntas,
-                          employee,
-                          idUsuario,
-                          cords,
-                        );
-                      }),
-                        setText(text),
-                        setCountLine(
-                          Math.floor(
-                            text.replace(/(\r\n|\n|\r)/gm, '').length / 30 + 1,
-                          ) +
-                            (text.split('\n').length - 1),
-                        ),
-                        text !== '' && settextAreaReq(false);
-                    }}
-                    value={text}
+                  <TextAreaCmp
+                    pregunta={pregunta}
+                    disabled={disabled}
+                    tarea={tarea}
+                    idotd={idotd}
+                    formulario={formulario}
+                    employee={employee}
+                    idUsuario={idUsuario}
+                    arrayReq={arrayReq}
+                    setArrayReq={setArrayReq}
                   />
                 </View>
               ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
@@ -367,7 +203,8 @@ export const Formularios = ({
                     employee={employee}
                     idUsuario={idUsuario}
                     formAsync={formAsync}
-                    mapsReq={mapsReq}
+                    arrayReq={arrayReq}
+                    setArrayReq={setArrayReq}
                   />
                 </View>
               ) : pregunta.tiporespuesta === 'Archivo' ? (
@@ -384,8 +221,8 @@ export const Formularios = ({
                     idUsuario={idUsuario}
                     formAsync={formAsync}
                     disabled={disabled}
-                    fileReq={fileReq}
-                    setfileReq={setfileReq}
+                    arrayReq={arrayReq}
+                    setArrayReq={setArrayReq}
                   />
                 </View>
               ) : pregunta.tiporespuesta === 'Firma' ? (
@@ -397,15 +234,15 @@ export const Formularios = ({
                       idotd={idotd}
                       formularioId={formulario.id}
                       refformularioconector={formulario.refformularioconector}
-                      preguntaid={pregunta.id}
+                      pregunta={pregunta}
                       formularioPreguntas={formularioPreguntas}
                       setFormularioPreguntas={setFormularioPreguntas}
                       preguntatiporespuesta={pregunta.tiporespuesta}
                       employee={employee}
                       idUsuario={idUsuario}
                       formAsync={formAsync}
-                      firmaReq={firmaReq}
-                      setfirmaReq={setfirmaReq}
+                      arrayReq={arrayReq}
+                      setArrayReq={setArrayReq}
                     />
                   </View>
                 </>
@@ -423,15 +260,6 @@ export const Formularios = ({
             onPress={() => {
               setSending(true);
               validaCampos(
-                selectedItem,
-                setsingleSelectReq,
-                text,
-                settextAreaReq,
-                IditemSelect,
-                setmultiSelectReq,
-                setfirmaReq,
-                setfileReq,
-                setmapsReq,
                 tarea.id,
                 idotd,
                 formulario.id,
@@ -445,6 +273,8 @@ export const Formularios = ({
                 setvalidaForm,
                 idUsuario,
                 setSending,
+                arrayReq,
+                setArrayReq,
               );
             }}>
             {sending ? (

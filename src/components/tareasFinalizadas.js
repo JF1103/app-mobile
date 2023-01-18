@@ -36,7 +36,7 @@ export const TareasFinalizadas = ({navigation}) => {
     setRefresh(true);
     await GetDataOt(userInfo.idusuario, setData, setLoading);
 
-    setRefresh(false);                
+    setRefresh(false);
   };
 
   useEffect(() => {
@@ -57,6 +57,7 @@ export const TareasFinalizadas = ({navigation}) => {
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
     if (form !== null) {
+      console.log('entr en el if de inicializaformularioPreguntas');
       setformAsync(form);
       setFormularioPreguntas(form);
     }
@@ -212,28 +213,53 @@ export const TareasFinalizadas = ({navigation}) => {
                           : employee?.nivel === '2-Media'
                           ? {...styles.nivelMedio}
                           : employee?.nivel === '3-Baja' && {
-                              ...styles.nivelBajo}}
-                            >
-                        <View 
+                              ...styles.nivelBajo,
+                            }
+                      }>
+                      <View
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'space-around',
-                      }}>
-                    <Text style={styles.textos}>
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Actividad:</Text>{' '}
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>{employee?.actividad}
-                      </Text>
-                    </Text>
-                    <Text style={styles.textos}>
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}>Prioridad:</Text>{' '}
-                      <Text style={employee?.nivel==="2-Media"?{...styles.titulos1}:{...styles.titulos}}
-                       >
-                        {employee?.nivel}
-                      </Text>
-                    </Text>
+                        }}>
+                        <Text style={styles.textos}>
+                          <Text
+                            style={
+                              employee?.nivel === '2-Media'
+                                ? {...styles.titulos1}
+                                : {...styles.titulos}
+                            }>
+                            Actividad:
+                          </Text>{' '}
+                          <Text
+                            style={
+                              employee?.nivel === '2-Media'
+                                ? {...styles.titulos1}
+                                : {...styles.titulos}
+                            }>
+                            {employee?.actividad}
+                          </Text>
+                        </Text>
+                        <Text style={styles.textos}>
+                          <Text
+                            style={
+                              employee?.nivel === '2-Media'
+                                ? {...styles.titulos1}
+                                : {...styles.titulos}
+                            }>
+                            Prioridad:
+                          </Text>{' '}
+                          <Text
+                            style={
+                              employee?.nivel === '2-Media'
+                                ? {...styles.titulos1}
+                                : {...styles.titulos}
+                            }>
+                            {employee?.nivel}
+                          </Text>
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
 
                   <View style={styles.items}>
                     <View style={styles.containerb2}>

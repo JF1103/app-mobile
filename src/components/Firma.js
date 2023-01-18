@@ -25,22 +25,23 @@ const Firma = ({
   idotd,
   formularioId,
   refformularioconector,
-  preguntaid,
+  pregunta,
   formularioPreguntas,
   setFormularioPreguntas,
   preguntatiporespuesta,
   employee,
   idUsuario,
   formAsync,
-  firmaReq,
-  setfirmaReq,
+  arrayReq,
+  setArrayReq,
 }) => {
   const {getCurrentLocation} = useLocation();
   let path =
     RNFS.DocumentDirectoryPath +
-    `/firma_${employee.id}_${tareaId}_${formularioId}_${preguntaid}.png`;
+    `/firma_${employee.id}_${tareaId}_${formularioId}_${pregunta.id}.png`;
   RNFS.DocumentDirectoryPath;
   const [base64, setbase64] = useState(null);
+  const [firmaReq, setfirmaReq] = useState(false);
 
   const firmInit = formAsync?.formcomplet
     .filter(item => item.idUsuario === idUsuario)[0]
@@ -82,6 +83,17 @@ const Firma = ({
       : {height: 0, width: 0, borderColor: 'transparent'},
   );
 
+  useEffect(() => {
+    if (
+      arrayReq.length > 0 &&
+      arrayReq.filter(item => item.id === pregunta.id).length > 0
+    ) {
+      setfirmaReq(true);
+    } else {
+      setfirmaReq(false);
+    }
+  }, [arrayReq]);
+
   const _onSaveEvent = result => {
     getCurrentLocation().then(cords => {
       handleRespFirma(
@@ -94,7 +106,7 @@ const Firma = ({
         idotd,
         formularioId,
         refformularioconector,
-        preguntaid,
+        pregunta.id,
         {dat: result.encoded, tempUri: result.pathName, fileType: 'file/png'},
         preguntatiporespuesta,
         employee,
@@ -104,6 +116,7 @@ const Firma = ({
       /*   saveBtn.current.resetImage(); */
     });
     setfirmaReq(false);
+    setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
   };
   const _onDragEvent = () => {};
 
@@ -172,7 +185,7 @@ const Firma = ({
                   idotd,
                   tareaId,
                   formularioId,
-                  preguntaid,
+                  pregunta.id,
                   preguntatiporespuesta,
                 );
                 /* saveBtn.current.resetImage(); */
