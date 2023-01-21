@@ -35,6 +35,7 @@ import Recaudio from './Recaudio';
 import {SetStorage} from './SetStorage';
 import {handleResp} from '../helpers/handleRespt';
 import {useLocation} from '../hooks/useLocation';
+import {ValidoExistsArchivo} from '../helpers/ValidoExistsArchivo';
 
 export const GetFiles = ({
   tareaId,
@@ -338,19 +339,40 @@ export const GetFiles = ({
       {visualizaImagen &&
         tempUri !== '' &&
         (disabled ? (
-          <Grayscale>
+          //valido si el archivo existe
+          ValidoExistsArchivo(tempUri) === true ? (
+            <Grayscale>
+              <Image
+                source={{uri: tempUri}}
+                style={{
+                  marginTop: 20,
+                  width: '100%',
+                  height: 300,
+                }}
+              />
+            </Grayscale>
+          ) : (
             <Image
-              source={{uri: tempUri}}
+              source={require('./../assets/img/icon-image-not-found-free-vector.jpg')}
               style={{
                 marginTop: 20,
                 width: '100%',
                 height: 300,
               }}
             />
-          </Grayscale>
-        ) : (
+          )
+        ) : ValidoExistsArchivo(tempUri) === true ? (
           <Image
             source={{uri: tempUri}}
+            style={{
+              marginTop: 20,
+              width: '100%',
+              height: 300,
+            }}
+          />
+        ) : (
+          <Image
+            source={require('./../assets/img/icon-image-not-found-free-vector.jpg')}
             style={{
               marginTop: 20,
               width: '100%',

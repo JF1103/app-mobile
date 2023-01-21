@@ -37,7 +37,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const FormOne = ({navigation, route}) => {
-  const {tarea, latitud, longitud, employee, idUsuario} = route.params;
+  const {tarea, latitud, longitud, employee, idUsuario, finish} = route.params;
 
   const [respuestas, setRespuestas] = useState();
   const [tex, setTex] = useState();
@@ -91,6 +91,7 @@ const FormOne = ({navigation, route}) => {
               cordsOt={cordsOt}
               index={index}
               idUsuario={idUsuario}
+              finish={finish}
             />
           );
         })}

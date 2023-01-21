@@ -42,6 +42,7 @@ export const Maps = ({
   cords,
   arrayReq,
   setArrayReq,
+  disabled,
 }) => {
   const [mapsReq, setmapsReq] = useState(false);
   /*  const [location, setLocation] = useState();
@@ -69,28 +70,30 @@ export const Maps = ({
   const {hasLocation, initialPosition} = useLocation();
   useEffect(() => {
     /* handleRespLocation(tareaId, pregunta.id, location, pregunta.tiporespuesta); */
-    if (initialPosition.latitude !== 0 && initialPosition.longitude !== 0) {
-      handleResp(
-        tareaId,
-        idotd,
-        formularioId,
-        refformularioconector,
-        pregunta.id,
-        {
-          latitude: initialPosition.latitude,
-          longitude: initialPosition.longitude,
-        },
-        pregunta.tiporespuesta,
-        formularioPreguntas,
-        setFormularioPreguntas,
-        employee,
-        idUsuario,
-        {
-          latitude: initialPosition.latitude,
-          longitude: initialPosition.longitude,
-        },
-      );
-      setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+    if (!disabled) {
+      if (initialPosition.latitude !== 0 && initialPosition.longitude !== 0) {
+        handleResp(
+          tareaId,
+          idotd,
+          formularioId,
+          refformularioconector,
+          pregunta.id,
+          {
+            latitude: initialPosition.latitude,
+            longitude: initialPosition.longitude,
+          },
+          pregunta.tiporespuesta,
+          formularioPreguntas,
+          setFormularioPreguntas,
+          employee,
+          idUsuario,
+          {
+            latitude: initialPosition.latitude,
+            longitude: initialPosition.longitude,
+          },
+        );
+        setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+      }
     }
   }, [initialPosition]);
 

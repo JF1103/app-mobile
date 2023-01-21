@@ -30,9 +30,7 @@ export const MultiSelectCmp = ({
       ?.ots.filter(item => item.id_ot === employee.id)[0]
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
-      ?.preguntas.filter(
-        item => item.tipo === 'Seleccion Multiple',
-      )[0]?.respuesta;
+      ?.preguntas.filter(item => item.id === pregunta.id)[0]?.respuesta;
     const check = multiresp?.filter(item => item.id === respuesta.id)[0]
       ?.isChecked;
     return {
@@ -85,31 +83,33 @@ export const MultiSelectCmp = ({
               height: 35 * dataMulti.length,
             }}
             onSelect={selectedItems => {
-              mountMulti
-                ? getCurrentLocation().then(cords => {
-                    handleResp(
-                      tarea.id,
-                      idotd,
-                      formulario.id,
-                      formulario.refformularioconector,
-                      pregunta.id,
-                      selectedItems,
-                      pregunta.tiporespuesta,
-                      formularioPreguntas,
-                      setFormularioPreguntas,
-                      employee,
-                      idUsuario,
-                      cords,
-                    ),
-                      setIditemSelect(selectedItems);
-                  })
-                : setMountMulti(true),
-                setIditemSelect(selectedItems),
-                selectedItems.length > 0 &&
-                  setArrayReq(
-                    arrayReq.filter(item => item.id !== pregunta.id),
-                  ) &&
-                  setmultiSelectReq(false);
+              if (!disabled) {
+                mountMulti
+                  ? getCurrentLocation().then(cords => {
+                      handleResp(
+                        tarea.id,
+                        idotd,
+                        formulario.id,
+                        formulario.refformularioconector,
+                        pregunta.id,
+                        selectedItems,
+                        pregunta.tiporespuesta,
+                        formularioPreguntas,
+                        setFormularioPreguntas,
+                        employee,
+                        idUsuario,
+                        cords,
+                      ),
+                        setIditemSelect(selectedItems);
+                    })
+                  : setMountMulti(true),
+                  setIditemSelect(selectedItems),
+                  selectedItems.length > 0 &&
+                    setArrayReq(
+                      arrayReq.filter(item => item.id !== pregunta.id),
+                    ) &&
+                    setmultiSelectReq(false);
+              }
             }}
           />
         </ScrollView>

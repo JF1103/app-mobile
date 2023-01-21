@@ -41,6 +41,8 @@ export const SingleSelectCmp = ({
       };
     })[0];
 
+  console.log('singleSelectInit', singleSelectInit);
+
   const {getCurrentLocation} = useLocation();
   const [selectedItem, setSelectedItem] = useState(singleSelectInit);
   const [singleSelectReq, setsingleSelectReq] = useState(false);
@@ -88,26 +90,28 @@ export const SingleSelectCmp = ({
         selectedItem={selectedItem}
         buttonContainerStyle={disabled ? {backgroundColor: '#E8D3BB'} : {}}
         onSelect={selectedItem => {
-          setSelectedItem(selectedItem),
-            getCurrentLocation().then(cords => {
-              handleResp(
-                tarea.id,
-                idotd,
-                formulario.id,
-                formulario.refformularioconector,
-                pregunta.id,
-                {id: selectedItem.id, value: selectedItem.value},
-                pregunta.tiporespuesta,
-                formularioPreguntas,
-                setFormularioPreguntas,
-                employee,
-                idUsuario,
-                cords,
-              );
-            }),
-            selectedItem !== undefined &&
-              setArrayReq(arrayReq.filter(item => item.id !== pregunta.id)) &&
-              setsingleSelectReq(false);
+          if (!disabled) {
+            setSelectedItem(selectedItem),
+              getCurrentLocation().then(cords => {
+                handleResp(
+                  tarea.id,
+                  idotd,
+                  formulario.id,
+                  formulario.refformularioconector,
+                  pregunta.id,
+                  {id: selectedItem.id, value: selectedItem.value},
+                  pregunta.tiporespuesta,
+                  formularioPreguntas,
+                  setFormularioPreguntas,
+                  employee,
+                  idUsuario,
+                  cords,
+                );
+              }),
+              selectedItem !== undefined &&
+                setArrayReq(arrayReq.filter(item => item.id !== pregunta.id)) &&
+                setsingleSelectReq(false);
+          }
         }}
         placeholder="Elegir opción"
         width="100%"

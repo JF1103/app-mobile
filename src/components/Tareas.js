@@ -15,6 +15,7 @@ export default function Tareas({
   formEnded,
   cantFormularios,
   ErrorSend,
+  finish,
 }) {
   const flag = formEnded && formEnded === cantFormularios ? true : false;
 
@@ -29,6 +30,7 @@ export default function Tareas({
           latitud,
           longitud,
           idUsuario,
+          finish,
         });
       }}>
       <Text style={styles.text1}>Iniciar Tarea {tarea.tarea} </Text>

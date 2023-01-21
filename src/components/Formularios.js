@@ -35,6 +35,7 @@ export const Formularios = ({
   employee,
   cordsOt,
   idUsuario,
+  finish,
 }) => {
   const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
     useContext(FormContext);
@@ -44,11 +45,6 @@ export const Formularios = ({
   const [arrayReq, setArrayReq] = useState([]);
 
   /*  console.log('arrayReq del formulario', arrayReq); */
-  useEffect(() => {
-    console.log('ENTRE EN EL USEEFFECT DEL FORMULARIO');
-    SetStorage(formularioPreguntas);
-    setformAsync(formularioPreguntas);
-  }, [formularioPreguntas]);
 
   const preguntas = formulario.preguntas;
 
@@ -58,6 +54,16 @@ export const Formularios = ({
   const [disabled, setDisabled] = useState(false);
 
   const [validaForm, setvalidaForm] = useState(false);
+  console.log('disabled afuera', disabled);
+  useEffect(() => {
+    if (!finish) {
+      console.log('ENTRE EN EL USEEFFECT DEL FORMULARIO');
+      console.log('disabled', disabled);
+      console.log('formularioPreguntas', formularioPreguntas);
+      SetStorage(formularioPreguntas);
+      setformAsync(formularioPreguntas);
+    }
+  }, [formularioPreguntas]);
 
   /*   useEffect(() => {
     console.log('cambiooo el requerido');
@@ -205,6 +211,7 @@ export const Formularios = ({
                     formAsync={formAsync}
                     arrayReq={arrayReq}
                     setArrayReq={setArrayReq}
+                    disabled={disabled}
                   />
                 </View>
               ) : pregunta.tiporespuesta === 'Archivo' ? (

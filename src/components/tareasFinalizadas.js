@@ -316,6 +316,7 @@ export const TareasFinalizadas = ({navigation}) => {
                                 formEnded={NumformEnded}
                                 cantFormularios={cantFormularios}
                                 screenCall={'HomeScreen'}
+                                finish={true}
                               />
                             </View>
                           );

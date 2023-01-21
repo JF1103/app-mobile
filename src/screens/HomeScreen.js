@@ -25,6 +25,7 @@ import {SendArraaycheckInOut} from '../components/SendArraayCheckInOut';
 import {CargaDatosForm} from '../helpers/CargaDatosForm';
 import {getCheckinoutServer} from '../helpers/getCheckinoutServer';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {SetStorage} from '../components/SetStorage';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -74,13 +75,13 @@ const HomeScreen = ({navigation}) => {
 
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
-    console.log('iniciazacion formulario en homescreen');
     setformAsync(form);
     setFormularioPreguntas(form);
     //inicializa  con datos del servidor
     CargaDatosForm(
       data,
       form,
+      formAsync,
       setformAsync,
       setFormularioPreguntas,
       userInfo.idusuario,
@@ -88,8 +89,7 @@ const HomeScreen = ({navigation}) => {
 
     setcargandoAsync(false);
   };
-  /*   console.log('form', JSON.stringify(formAsync)); */
-  /*  console.log('async home', JSON.stringify(formAsync)); */
+
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(
@@ -346,6 +346,7 @@ const HomeScreen = ({navigation}) => {
                               cantFormularios={cantFormularios}
                               screenCall={'HomeScreen'}
                               ErrorSend={ErrorSend}
+                              finish={false}
                             />
                           </View>
                         );
