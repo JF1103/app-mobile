@@ -31,11 +31,12 @@ export const MultiSelectCmp = ({
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
       ?.preguntas.filter(item => item.id === pregunta.id)[0]?.respuesta;
-    const check = multiresp?.filter(item => item.id === respuesta.id)[0]
+
+    const check = multiresp?.filter(item => item.id == respuesta.id)[0]
       ?.isChecked;
     return {
       id: respuesta.id,
-      value: respuesta.leyenda,
+      value: respuesta.respuesta,
       isChecked: check,
     };
   });

@@ -43,23 +43,19 @@ export const Formularios = ({
 
   const [formsended, setformsended] = useState(false);
   const [arrayReq, setArrayReq] = useState([]);
+  const [sending, setSending] = useState(false);
 
   /*  console.log('arrayReq del formulario', arrayReq); */
 
   const preguntas = formulario.preguntas;
 
-  console.log('arrayReqqqqqqq', formAsync);
-
   const {getCurrentLocation} = useLocation();
   const [disabled, setDisabled] = useState(false);
 
   const [validaForm, setvalidaForm] = useState(false);
-  console.log('disabled afuera', disabled);
+
   useEffect(() => {
     if (!finish) {
-      console.log('ENTRE EN EL USEEFFECT DEL FORMULARIO');
-      console.log('disabled', disabled);
-      console.log('formularioPreguntas', formularioPreguntas);
       SetStorage(formularioPreguntas);
       setformAsync(formularioPreguntas);
     }
@@ -119,8 +115,6 @@ export const Formularios = ({
       setSending(false);
     }
   }, [formAsync]);
-
-  const [sending, setSending] = useState(false);
 
   return (
     <>

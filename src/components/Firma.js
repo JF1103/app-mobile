@@ -19,6 +19,7 @@ import {deleteFiles} from './DeleteFiles';
 import {resetSign} from './ResetFirm';
 import {handleRespFirma} from './handleRespFirma';
 import {useLocation} from '../hooks/useLocation';
+import {ValidoExistsArchivo} from '../helpers/ValidoExistsArchivo';
 
 const Firma = ({
   tareaId,
@@ -42,6 +43,7 @@ const Firma = ({
   RNFS.DocumentDirectoryPath;
   const [base64, setbase64] = useState(null);
   const [firmaReq, setfirmaReq] = useState(false);
+  const [fileValid, setFileValid] = useState(false);
 
   const firmInit = formAsync?.formcomplet
     .filter(item => item.idUsuario === idUsuario)[0]
@@ -53,23 +55,25 @@ const Firma = ({
   const [firmPath, setFirmPath] = useState(
     firmInit ? 'file:' + firmInit : null,
   );
+
   /* useEffect(async () => {
     const base64 = await RNFS.readFile(firmInit, 'base64');
     
   }, []); */
-
+  const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
+  console.log('firmInitttttttttttttttttttttttttttttttt', firmInit);
   const exists = async () => {
     /* let exists = await RNFS.exists(
       '/data/user/0/com.app_mobile/files/firma_14_5_3_13.png',
     ); */
-
+    console.log('firmInit2', firmInit);
+    firmInit && ValidoExistsArchivo(firmInit, setFileValid);
     firmInit && setbase64(await RNFS.readFile(firmInit, 'base64'));
   };
 
   useEffect(() => {
     exists();
   }, [firmPath]);
-  const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
 
   const saveSign = saveBtn => {
     saveBtn.current.saveImage();
@@ -144,7 +148,7 @@ const Firma = ({
               height: 200,
             }}
           />
-        ) : (
+        ) : !firmPath ? (
           <SignatureCapture
             ref={saveBtn}
             style={{...styles.signature}}
@@ -155,6 +159,17 @@ const Firma = ({
             showTitleLabel={false}
             viewMode={'portrait'}
           />
+        ) : !fileValid ? (
+          <Image
+            source={require('./../assets/img/icon-image-not-found-free-vector.jpg')}
+            style={{
+              marginTop: 20,
+              width: '100%',
+              height: 200,
+            }}
+          />
+        ) : (
+          <></>
         )}
         <View style={{alignItems: 'center'}}>
           <ItemSeparator2 />

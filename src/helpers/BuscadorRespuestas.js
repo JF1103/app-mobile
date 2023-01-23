@@ -45,6 +45,7 @@ export const BuscadorRespuestas = data => {
                     const respuesta = formulario.preguntas.find(pregunta => {
                       return pregunta.respuestaCargada !== '';
                     });
+
                     if (respuesta) {
                       return {id: formulario.id};
                     } else {

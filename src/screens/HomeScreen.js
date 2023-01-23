@@ -44,7 +44,7 @@ const HomeScreen = ({navigation}) => {
   const [visualizaCheck, setvisualizaCheck] = useState(true);
   const {isConnected} = useNetInfo();
 
-  console.log('formAsync34444', JSON.stringify(formAsync));
+  console.log('formAsync3444', JSON.stringify(formAsync));
 
   const pullMe = async () => {
     setRefresh(true);

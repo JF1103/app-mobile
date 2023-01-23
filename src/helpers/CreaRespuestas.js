@@ -2,7 +2,6 @@ import React from 'react';
 import {DivideRespMult} from './DivideRespMult';
 
 export const CreaRespuestas = pregunta => {
-  console.log('pregunta', pregunta);
   switch (pregunta.tiporespuesta) {
     case 'Archivo':
       return {
@@ -45,16 +44,16 @@ export const CreaRespuestas = pregunta => {
       break;
     case 'Seleccion Multiple':
       let arrayResp = DivideRespMult(pregunta.respuestaCargada);
-      let resp = arrayResp.map(item => {
-        return {
-          id: item.id,
-          value: item.value,
-          isChecked: true,
-        };
-      });
       return {
         id: pregunta.id,
-        respuesta: {resp},
+        respuesta: arrayResp.map(item => {
+          return {
+            id: item.id,
+            value: pregunta.respuestas.filter(resp => resp.id == item.id)[0]
+              ?.respuesta,
+            isChecked: true,
+          };
+        }),
         tipo: pregunta.tiporespuesta,
         latitud: 0.0,
         longitud: 0.0,

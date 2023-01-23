@@ -102,6 +102,7 @@ export const GetFiles = ({
 
   const [tempUri, setTempUri] = useState(syncUri ? 'file:' + syncUri : '');
   const [visualizaImagen, setvisualizaImagen] = useState(false);
+  const [fileValid, setFileValid] = useState(false);
 
   useEffect(() => {
     if (tempUri && typeFile) {
@@ -113,6 +114,7 @@ export const GetFiles = ({
         setvisualizaAudio(false);
       }
     }
+    syncUri && ValidoExistsArchivo(syncUri, setFileValid);
   }, [tempUri]);
 
   useEffect(() => {
@@ -340,7 +342,7 @@ export const GetFiles = ({
         tempUri !== '' &&
         (disabled ? (
           //valido si el archivo existe
-          ValidoExistsArchivo(tempUri) === true ? (
+          fileValid === true ? (
             <Grayscale>
               <Image
                 source={{uri: tempUri}}
@@ -361,7 +363,7 @@ export const GetFiles = ({
               }}
             />
           )
-        ) : ValidoExistsArchivo(tempUri) === true ? (
+        ) : fileValid === true ? (
           <Image
             source={{uri: tempUri}}
             style={{

@@ -50,7 +50,7 @@ export const SingleSelectCmp = ({
   const data = pregunta.respuestas.map((respuesta, index) => {
     return {
       id: respuesta.id,
-      value: respuesta.leyenda,
+      value: respuesta.respuesta,
     };
   });
 
