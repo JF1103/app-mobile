@@ -41,7 +41,7 @@ export const SingleSelectCmp = ({
       };
     })[0];
 
-  console.log('singleSelectInit', singleSelectInit);
+  /*   console.log('singleSelectInit', singleSelectInit); */
 
   const {getCurrentLocation} = useLocation();
   const [selectedItem, setSelectedItem] = useState(singleSelectInit);

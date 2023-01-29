@@ -56,6 +56,7 @@ export const Formularios = ({
 
   useEffect(() => {
     if (!finish) {
+      console.log('entrooooooo cambio el storage');
       SetStorage(formularioPreguntas);
       setformAsync(formularioPreguntas);
     }

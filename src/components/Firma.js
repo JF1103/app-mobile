@@ -61,12 +61,12 @@ const Firma = ({
     
   }, []); */
   const [visualizaFirma, setVisualizaFirma] = useState(firmPath ? true : false);
-  console.log('firmInitttttttttttttttttttttttttttttttt', firmInit);
+  /*   console.log('firmInitttttttttttttttttttttttttttttttt', firmInit); */
   const exists = async () => {
     /* let exists = await RNFS.exists(
       '/data/user/0/com.app_mobile/files/firma_14_5_3_13.png',
     ); */
-    console.log('firmInit2', firmInit);
+    /*  console.log('firmInit2', firmInit); */
     firmInit && ValidoExistsArchivo(firmInit, setFileValid);
     firmInit && setbase64(await RNFS.readFile(firmInit, 'base64'));
   };
@@ -124,7 +124,7 @@ const Firma = ({
   };
   const _onDragEvent = () => {};
 
-  console.log('firmPath', firmPath);
+  /*  console.log('firmPath', firmPath); */
   return (
     <>
       <TouchableOpacity

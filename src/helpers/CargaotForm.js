@@ -24,13 +24,14 @@ export const CargaOtForm = (
           );
           if (
             respuestas.ot
-              .filter(item => item.id === otId)[0]
+              .filter(item => item.id === ot.id)[0]
               .tarea.filter(item => item.id === tarea.id).length > 0
           ) {
             console.log('entre en tarea  con respuestas', tarea.id);
             //si la tarea existe
             if (tareaExists) {
               //si la tarea existe
+              console.log('entre en tarea  existente', tarea.id);
               return {
                 TareaId: tarea.id,
                 idotd: tarea.idotd,
@@ -39,12 +40,14 @@ export const CargaOtForm = (
                   .map(formulario => {
                     if (
                       respuestas.ot
-                        ?.filter(item => item.id === otId)[0]
+                        ?.filter(item => item.id === ot.id)[0]
                         ?.tarea.filter(item => item.id === tarea.id)[0]
                         ?.formularios.filter(item => item.id === formulario.id)
                         ?.length > 0
                     ) {
+                      console.log('entre en formulario  con respuestas');
                       if (formularioExists) {
+                        console.log('entre en formulario  existente');
                         //si el formulario existe
                         return {
                           FormularioId: formulario.id,
@@ -56,6 +59,7 @@ export const CargaOtForm = (
                           }),
                         };
                       } else {
+                        console.log('entre en formulario  NO existente');
                         return {
                           FormularioId: formulario.id,
                           refformularioconector:
@@ -72,6 +76,7 @@ export const CargaOtForm = (
               };
             } else {
               //si la tarea no existe
+              console.log('entre en tarea  NO existente', tarea.id);
               return {
                 TareaId: tarea.id,
                 idotd: tarea.idotd,
@@ -102,9 +107,10 @@ export const CargaOtForm = (
           // valido se la tarea tiene respuestas
           if (
             respuestas.ot
-              .filter(item => item.id === otId)[0]
+              .filter(item => item.id === ot.id)[0]
               .tarea.filter(item => item.id === tarea.id).length > 0
           ) {
+            console.log('entre en tarea  con respuestas222', tarea.id);
             return {
               TareaId: tarea.id,
               idotd: tarea.idotd,
@@ -113,11 +119,15 @@ export const CargaOtForm = (
                 .map(formulario => {
                   if (
                     respuestas.ot
-                      ?.filter(item => item.id === otId)[0]
+                      ?.filter(item => item.id === ot.id)[0]
                       ?.tarea.filter(item => item.id === tarea.id)[0]
                       ?.formularios.filter(item => item.id === formulario.id)
                       ?.length > 0
                   ) {
+                    console.log(
+                      'entre en formulario  con respuestas222',
+                      formulario.id,
+                    );
                     return {
                       //valido si el formulario tiene respuestas
 

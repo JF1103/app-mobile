@@ -2,6 +2,7 @@ import React from 'react';
 import {DivideRespMult} from './DivideRespMult';
 
 export const CreaRespuestas = pregunta => {
+  /*   console.log('entre en respuestasssssss', pregunta); */
   switch (pregunta.tiporespuesta) {
     case 'Archivo':
       return {

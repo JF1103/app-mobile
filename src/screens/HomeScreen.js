@@ -26,6 +26,8 @@ import {CargaDatosForm} from '../helpers/CargaDatosForm';
 import {getCheckinoutServer} from '../helpers/getCheckinoutServer';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {SetStorage} from '../components/SetStorage';
+import {SendAsyncStorage} from '../components/SendAsyncStorage';
+import {CorrectFormAsync} from '../helpers/CorrectFormAsync';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -44,7 +46,7 @@ const HomeScreen = ({navigation}) => {
   const [visualizaCheck, setvisualizaCheck] = useState(true);
   const {isConnected} = useNetInfo();
 
-  console.log('formAsync3444', JSON.stringify(formAsync));
+  /* console.log('formAsync3444', JSON.stringify(formAsync)); */
 
   const pullMe = async () => {
     setRefresh(true);
@@ -68,6 +70,9 @@ const HomeScreen = ({navigation}) => {
       console.log('enviando storage');
 
       sendCheckinOut();
+      /*  SendAsyncStorage(userInfo.idusuario,formAsync,setformAsync).then(() => {
+         CorrectFormAsync(userInfo.idusuario); 
+      }); */
     }
   }, [isConnected]);
 

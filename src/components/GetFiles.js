@@ -104,7 +104,10 @@ export const GetFiles = ({
   const [visualizaImagen, setvisualizaImagen] = useState(false);
   const [fileValid, setFileValid] = useState(false);
 
+  console.log('fileValid', fileValid);
+
   useEffect(() => {
+    console.log('entreeeeee en tempUri cambiado', tempUri);
     if (tempUri && typeFile) {
       if (tempUri.includes('.mp4')) {
         setvisualizaImagen(false);
@@ -114,7 +117,7 @@ export const GetFiles = ({
         setvisualizaAudio(false);
       }
     }
-    syncUri && ValidoExistsArchivo(syncUri, setFileValid);
+    tempUri && ValidoExistsArchivo(tempUri, setFileValid);
   }, [tempUri]);
 
   useEffect(() => {

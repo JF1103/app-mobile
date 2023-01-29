@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const SetStorage = async formularioPreguntas => {
   /* console.log('SetStorage'); */
 
-  console.log(formularioPreguntas);
+  console.log('guardo en el  storage', JSON.stringify(formularioPreguntas));
   try {
     await AsyncStorage.setItem(
       'form',
