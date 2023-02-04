@@ -163,8 +163,8 @@ export const SendAsyncStorage = async (idUsuario, formAsync, setformAsync) => {
                       //  JSON.stringify(newFormularioPreguntas),
                       // );
                       SetStorage({...newFormularioPreguntas});
-                      setformAsync(newFormularioPreguntas);
-                      s;
+                      /* setformAsync(newFormularioPreguntas); */
+
                       console.log(
                         'cambieeeeeeeeeeeeeeee'.newFormularioPreguntas,
                       );

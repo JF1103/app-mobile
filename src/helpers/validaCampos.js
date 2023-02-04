@@ -121,7 +121,7 @@ export const validaCampos = (
     );
     /*  console.log('aarayreq en la validacion', arrayReq); */
   }
-
+  console.log('arrayrequeridos', arrayrequeridos);
   if (arrayrequeridos.length !== 0) {
     setArrayReq(arrayrequeridos);
   }

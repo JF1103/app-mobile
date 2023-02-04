@@ -16,7 +16,7 @@ export const handleResp = async (
   idUsuario,
   preguntaCords,
 ) => {
-  /* console.log('entro handleeeee respppppppppppppt' + respuesta); */
+  console.log('entro handleeeee respppppppppppppt' + JSON.stringify(respuesta));
   const initialFormState = [
     {
       id_ot: employee.id,

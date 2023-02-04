@@ -1,21 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
-import RNTextArea from '@freakycoder/react-native-text-area';
-import {handleResp} from '../helpers/handleRespt';
-import {useLocation} from '../hooks/useLocation';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useContext, useState} from 'react';
 import {FormContext} from '../context/FormContext';
+import {useLocation} from '../hooks/useLocation';
+import NumericInput from 'react-native-numeric-input';
+import {handleResp} from '../helpers/handleRespt';
+import {StyleSheet, Text, View} from 'react-native';
 
-const heightInitial = 55;
-const heightDelta = 20;
-
-export const TextAreaCmp = ({
+export const MaterialesCmp = ({
+  idMaterial,
   pregunta,
   disabled,
   tarea,
@@ -25,95 +16,98 @@ export const TextAreaCmp = ({
   idUsuario,
   arrayReq,
   setArrayReq,
+  respuesta,
+  cantMaterialArray,
+  setCantMaterialArray,
 }) => {
   const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
     useContext(FormContext);
+  const [textAreaReq, settextAreaReq] = useState(false);
 
-  /*   console.log('cambieeeeeeee en text component'); */
-
-  const textAsync = formAsync?.formcomplet
+  const {getCurrentLocation} = useLocation();
+  const [cantMaterial, setCantMaterial] = useState(
+    cantMaterialArray.length > 0
+      ? cantMaterialArray.filter(item => (item.id = idMaterial))[0].value
+      : 0,
+  );
+  /* console.log(
+    'array',
+    cantMaterialArray.filter(item => (item.id = idMaterial))[0].value,
+  ); */
+  console.log('cantMaterial', cantMaterial, idMaterial);
+  const MaterialAsync = formAsync?.formcomplet
     ?.filter(item => item.idUsuario === idUsuario)[0]
     ?.ots.filter(item => item.id_ot === employee.id)[0]
     ?.tareas.filter(item => item.TareaId === tarea.id)[0]
     ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
-    ?.preguntas?.filter(item => item.id === pregunta.id)[0]?.respuesta;
+    ?.preguntas.filter(item => item.id === pregunta.id)[0]
+    ?.respuesta.filter(item => item.id === idMaterial);
 
-  const [text, setText] = useState(textAsync ? textAsync : '');
-  const {getCurrentLocation} = useLocation();
-  const [countLine, setCountLine] = useState(
-    textAsync ? Math.floor(textAsync.length / 35 + 1) : 1,
-  );
-  const [textAreaReq, settextAreaReq] = useState(false);
-
-  useEffect(() => {
-    if (
-      arrayReq.length > 0 &&
-      arrayReq.filter(item => item.id === pregunta.id).length > 0
-    ) {
-      settextAreaReq(true);
+  const handlerespMateriales = value => {
+    let arracpy = [...cantMaterialArray];
+    console.log('materiales', cantMaterialArray);
+    setCantMaterial(value);
+    //valido si el material ya existe en el array
+    if (cantMaterialArray.filter(item => item.id === idMaterial).length > 0) {
+      //si existe lo modifico
+      console.log('entre en el if', arracpy);
+      arracpy.filter(item => item.id === idMaterial)[0].value = value;
+      console.log('entre en el true', arracpy);
+      setCantMaterialArray(arracpy);
     } else {
-      settextAreaReq(false);
+      //si no existe lo agrego
+      arracpy.push({id: idMaterial, value: value});
+      console.log('entre en el else', arracpy);
+      setCantMaterialArray(arracpy);
     }
-  }, [arrayReq]);
-
+    getCurrentLocation().then(cords => {
+      handleResp(
+        tarea.id,
+        idotd,
+        formulario.id,
+        formulario.refformularioconector,
+        pregunta.id,
+        arracpy,
+        pregunta.tiporespuesta,
+        formularioPreguntas,
+        setFormularioPreguntas,
+        employee,
+        idUsuario,
+        cords,
+      );
+    });
+  };
   return (
-    <RNTextArea
-      defaultCharCount={text.length}
-      key={pregunta.id}
-      textInputStyle={{
-        fontSize: 15,
-        color: 'black',
-        textAlignVertical: 'top',
-      }}
-      style={
-        disabled
-          ? styles.textareaDisable
-          : textAreaReq
-          ? {
-              ...styles.textareaError,
-              height: heightInitial + heightDelta * countLine,
-            }
-          : {
-              ...styles.textarea,
-              height: heightInitial + heightDelta * countLine,
-            }
-      }
-      maxCharLimit={200}
-      placeholderTextColor="#000000"
-      exceedCharCountColor="#990606"
-      placeholder={'Escriba aquí ...'}
-      onChangeText={text => {
-        if (!disabled) {
-          getCurrentLocation().then(cords => {
-            handleResp(
-              tarea.id,
-              idotd,
-              formulario.id,
-              formulario.refformularioconector,
-              pregunta.id,
-              text,
-              pregunta.tiporespuesta,
-              formularioPreguntas,
-              setFormularioPreguntas,
-              employee,
-              idUsuario,
-              cords,
-            );
-          }),
-            setText(text),
-            setCountLine(
-              Math.floor(text.replace(/(\r\n|\n|\r)/gm, '').length / 30 + 1) +
-                (text.split('\n').length - 1),
-            ),
-            text !== '' &&
-              setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
-        }
-      }}
-      value={text}
-    />
+    <View style={styles.items}>
+      <Text style={styles.text}>{respuesta.respuesta}</Text>
+      <NumericInput
+        value={cantMaterial}
+        onChange={value => {
+          handlerespMateriales(value);
+        }}
+        onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+        totalWidth={150}
+        totalHeight={40}
+        iconSize={30}
+        step={1}
+        valueType="real"
+        rounded
+        textColor="#000000"
+        iconStyle={{color: 'white'}}
+        rightButtonBackgroundColor="#fb8c00"
+        leftButtonBackgroundColor="#fb8c00"
+      />
+    </View>
   );
 };
+
 const styles = StyleSheet.create({
+  items: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
   row: {
     backgroundColor: '#fff',
     borderRadius: 20,
@@ -149,12 +143,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   text: {
-    fontSize: 14,
+    fontSize: 20,
     color: '#fb8c00',
     padding: 5,
     marginVertical: '3%',
     textAlign: 'center',
-    textDecorationLine: 'underline',
   },
   texterror: {},
   selsim: {
@@ -189,7 +182,7 @@ const styles = StyleSheet.create({
     boxShadow: 5,
     borderColor: 'red',
     borderWidth: 2,
-    width: '100%',
+    width: '80%',
   },
   textareaDisable: {
     borderRadius: 20,

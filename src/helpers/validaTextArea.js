@@ -21,7 +21,7 @@ export const validaTextArea = (
 
     if (respuesta === null || respuesta === '' || respuesta === undefined) {
       let existe = arrayrequeridos.filter(req => req.id === item.id);
-
+      console.log('esta vacio');
       /*     if (existe.length === 0) { */
 
       console.log(existe.length === 0);

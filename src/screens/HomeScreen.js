@@ -70,8 +70,8 @@ const HomeScreen = ({navigation}) => {
       console.log('enviando storage');
 
       sendCheckinOut();
-      /*  SendAsyncStorage(userInfo.idusuario,formAsync,setformAsync).then(() => {
-         CorrectFormAsync(userInfo.idusuario); 
+      /*     SendAsyncStorage(userInfo.idusuario, formAsync, setformAsync).then(() => {
+        CorrectFormAsync(userInfo.idusuario);
       }); */
     }
   }, [isConnected]);
@@ -83,14 +83,14 @@ const HomeScreen = ({navigation}) => {
     setformAsync(form);
     setFormularioPreguntas(form);
     //inicializa  con datos del servidor
-    CargaDatosForm(
+    /* CargaDatosForm(
       data,
       form,
       formAsync,
       setformAsync,
       setFormularioPreguntas,
       userInfo.idusuario,
-    );
+    ); */
 
     setcargandoAsync(false);
   };

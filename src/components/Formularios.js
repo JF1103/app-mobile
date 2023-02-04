@@ -27,6 +27,8 @@ import {validaCampos} from '../helpers/validaCampos';
 import {TextAreaCmp} from './TextAreaCmp';
 import {SingleSelectCmp} from './SingleSelectCmp';
 import {MultiSelectCmp} from './MultiSelectCmp.js';
+import {MaterialesCmp} from './MaterialesCmp';
+import {MaterialesArray} from './MaterialesArray';
 
 export const Formularios = ({
   formulario,
@@ -73,10 +75,14 @@ export const Formularios = ({
       ?.ots.filter(item => item.id_ot === employee.id)[0]
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
-      ?.preguntas.filter(
-        item => item.checkSend === false || item.checkSend === '',
-      ).length;
+      ?.preguntas.filter(item => item.checkSend === false).length;
 
+    const nroRespuestasVerdad = formAsync?.formcomplet
+      ?.filter(item => item.idUsuario === idUsuario)[0]
+      ?.ots.filter(item => item.id_ot === employee.id)[0]
+      ?.tareas.filter(item => item.TareaId === tarea.id)[0]
+      ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
+      ?.preguntas.filter(item => item.checkSend === true).length;
     /*   console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv); */
     const numeroPreguntas = formulario.preguntas.length;
 
@@ -87,8 +93,9 @@ export const Formularios = ({
       ?.formularios.filter(
         item => item.FormularioId === formulario.id,
       )[0]?.ended;
-
-    if (nroRespuestasNoEnv === 0) {
+    console.log('nroRespuestasNoEnv', nroRespuestasNoEnv);
+    if (nroRespuestasNoEnv > 0) {
+      console.log('entrooooooo NO ENVE', nroRespuestasNoEnv);
       setformsended(true);
       setDisabled(true);
       setSending(false);
@@ -105,15 +112,39 @@ export const Formularios = ({
         copy.formcomplet
           .filter(item => item.idUsuario === idUsuario)[0]
           .ots.filter(item => item.id_ot === employee.id)[0]
-          .tareas.filter(
-            item => item.TareaId === tarea.id,
-          )[0].ErrorSend = false;
+          .tareas.filter(item => item.TareaId === tarea.id)[0].ErrorSend = true;
 
         setFormularioPreguntas({...copy});
       }
     } else {
-      /*  console.log('no terminado'); */
-      setSending(false);
+      if (nroRespuestasVerdad > 0) {
+        console.log('entrooooooo VERDAD', nroRespuestasVerdad);
+        setformsended(true);
+        setDisabled(true);
+        setSending(false);
+        if (ended !== true) {
+          let copy = formularioPreguntas;
+          copy.formcomplet
+            .filter(item => item.idUsuario === idUsuario)[0]
+            .ots.filter(item => item.id_ot === employee.id)[0]
+            .tareas.filter(item => item.TareaId === tarea.id)[0]
+            .formularios.filter(
+              item => item.FormularioId === formulario.id,
+            )[0].ended = true;
+
+          copy.formcomplet
+            .filter(item => item.idUsuario === idUsuario)[0]
+            .ots.filter(item => item.id_ot === employee.id)[0]
+            .tareas.filter(
+              item => item.TareaId === tarea.id,
+            )[0].ErrorSend = false;
+
+          setFormularioPreguntas({...copy});
+        }
+      } else {
+        console.log('ENTRO ELSE');
+        setSending(false);
+      }
     }
   }, [formAsync]);
 
@@ -243,6 +274,23 @@ export const Formularios = ({
                       employee={employee}
                       idUsuario={idUsuario}
                       formAsync={formAsync}
+                      arrayReq={arrayReq}
+                      setArrayReq={setArrayReq}
+                    />
+                  </View>
+                </>
+              ) : pregunta.tiporespuesta === 'Materiales' ? (
+                <>
+                  <Text style={styles.textfirma}>{pregunta.pregunta}</Text>
+                  <View pointerEvents={disabled ? 'none' : 'auto'}>
+                    <MaterialesArray
+                      pregunta={pregunta}
+                      disabled={disabled}
+                      tarea={tarea}
+                      idotd={idotd}
+                      formulario={formulario}
+                      employee={employee}
+                      idUsuario={idUsuario}
                       arrayReq={arrayReq}
                       setArrayReq={setArrayReq}
                     />
