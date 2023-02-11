@@ -70,9 +70,9 @@ const HomeScreen = ({navigation}) => {
       console.log('enviando storage');
 
       sendCheckinOut();
-      /*     SendAsyncStorage(userInfo.idusuario, formAsync, setformAsync).then(() => {
+      SendAsyncStorage(userInfo.idusuario, formAsync, setformAsync).then(() => {
         CorrectFormAsync(userInfo.idusuario);
-      }); */
+      });
     }
   }, [isConnected]);
 
@@ -140,6 +140,7 @@ const HomeScreen = ({navigation}) => {
 
   const [tareaEnd, setTareaEnd] = useState(false);
 
+  console.log(data);
   return (
     <View style={styles.container}>
       <Navbar

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {FormContext} from '../context/FormContext';
 import {MaterialesCmp} from './MaterialesCmp';
@@ -27,7 +27,7 @@ export const MaterialesArray = ({
   const [cantMaterialArray, setCantMaterialArray] = useState(
     MaterialAsync ? MaterialAsync : [],
   );
-  console.log('cantMaterialArray', cantMaterialArray);
+  console.log('cantMaterialArray afueraa', cantMaterialArray);
 
   return (
     <View>

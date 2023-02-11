@@ -96,7 +96,7 @@ export const TareasFinalizadas = ({navigation}) => {
   }, []);
 
   const [tareaEnd, setTareaEnd] = useState(false);
-
+  /*  console.log('data', data); */
   return (
     <View style={styles.container}>
       <View
@@ -139,6 +139,7 @@ export const TareasFinalizadas = ({navigation}) => {
         {!isLoading &&
           !cargandoAsync &&
           data?.ot !== undefined &&
+          data?.ot !== '' &&
           data?.ot?.map(employee => {
             const {latitud, longitud} = employee;
             const cantTares = employee['0'].tareas.length;
@@ -283,7 +284,9 @@ export const TareasFinalizadas = ({navigation}) => {
                         ]?.ots[indexOt]?.tareas[indexTarea]?.formularios.filter(
                           item => item.ended === true,
                         ).length;
-
+                        const ErrorSend =
+                          formAsync?.formcomplet[indexUsuario]?.ots[indexOt]
+                            ?.tareas[indexTarea]?.ErrorSend;
                         const cantFormularios = tarea?.formularios.length;
                         const cantTareas = employee['0'].tareas.length;
 
@@ -315,7 +318,7 @@ export const TareasFinalizadas = ({navigation}) => {
                                 setTareaEnd={setTareaEnd}
                                 formEnded={NumformEnded}
                                 cantFormularios={cantFormularios}
-                                screenCall={'HomeScreen'}
+                                ErrorSend={ErrorSend}
                                 finish={true}
                               />
                             </View>

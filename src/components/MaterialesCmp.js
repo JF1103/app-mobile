@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FormContext} from '../context/FormContext';
 import {useLocation} from '../hooks/useLocation';
 import NumericInput from 'react-native-numeric-input';
@@ -22,44 +22,42 @@ export const MaterialesCmp = ({
 }) => {
   const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
     useContext(FormContext);
-  const [textAreaReq, settextAreaReq] = useState(false);
 
   const {getCurrentLocation} = useLocation();
   const [cantMaterial, setCantMaterial] = useState(
     cantMaterialArray.length > 0
-      ? cantMaterialArray.filter(item => (item.id = idMaterial))[0].value
+      ? cantMaterialArray.filter(item => item.id === idMaterial)[0]?.value
       : 0,
   );
-  /* console.log(
-    'array',
-    cantMaterialArray.filter(item => (item.id = idMaterial))[0].value,
-  ); */
-  console.log('cantMaterial', cantMaterial, idMaterial);
-  const MaterialAsync = formAsync?.formcomplet
-    ?.filter(item => item.idUsuario === idUsuario)[0]
-    ?.ots.filter(item => item.id_ot === employee.id)[0]
-    ?.tareas.filter(item => item.TareaId === tarea.id)[0]
-    ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
-    ?.preguntas.filter(item => item.id === pregunta.id)[0]
-    ?.respuesta.filter(item => item.id === idMaterial);
+
+  const [materialesReq, setMaterialesReq] = useState(false);
+  useEffect(() => {
+    if (
+      arrayReq.length > 0 &&
+      arrayReq.filter(item => item.id === pregunta.id).length > 0
+    ) {
+      setMaterialesReq(true);
+    } else {
+      setMaterialesReq(false);
+    }
+  }, [arrayReq]);
 
   const handlerespMateriales = value => {
-    let arracpy = [...cantMaterialArray];
-    console.log('materiales', cantMaterialArray);
-    setCantMaterial(value);
-    //valido si el material ya existe en el array
+    const arracpy = [...cantMaterialArray];
+
     if (cantMaterialArray.filter(item => item.id === idMaterial).length > 0) {
       //si existe lo modifico
-      console.log('entre en el if', arracpy);
+
       arracpy.filter(item => item.id === idMaterial)[0].value = value;
-      console.log('entre en el true', arracpy);
+
       setCantMaterialArray(arracpy);
     } else {
       //si no existe lo agrego
       arracpy.push({id: idMaterial, value: value});
-      console.log('entre en el else', arracpy);
+
       setCantMaterialArray(arracpy);
     }
+
     getCurrentLocation().then(cords => {
       handleResp(
         tarea.id,
@@ -76,14 +74,18 @@ export const MaterialesCmp = ({
         cords,
       );
     });
+    setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+    setCantMaterial(value);
   };
   return (
-    <View style={styles.items}>
+    <View style={materialesReq ? styles.requerido : styles.items}>
       <Text style={styles.text}>{respuesta.respuesta}</Text>
       <NumericInput
         value={cantMaterial}
         onChange={value => {
-          handlerespMateriales(value);
+          if (!disabled) {
+            handlerespMateriales(value);
+          }
         }}
         onLimitReached={(isMax, msg) => console.log(isMax, msg)}
         totalWidth={150}
@@ -94,8 +96,11 @@ export const MaterialesCmp = ({
         rounded
         textColor="#000000"
         iconStyle={{color: 'white'}}
-        rightButtonBackgroundColor="#fb8c00"
-        leftButtonBackgroundColor="#fb8c00"
+        rightButtonBackgroundColor={disabled ? '#e0e0e0' : '#fb8c00'}
+        leftButtonBackgroundColor={disabled ? '#e0e0e0' : '#fb8c00'}
+        inputStyle={
+          disabled ? {backgroundColor: '#e0e0e0'} : {backgroundColor: 'white'}
+        }
       />
     </View>
   );
@@ -107,6 +112,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     marginVertical: 5,
+  },
+  requerido: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginVertical: 5,
+    borderColor: 'red',
+    borderWidth: 1,
   },
   row: {
     backgroundColor: '#fff',

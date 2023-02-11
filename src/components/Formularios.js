@@ -69,7 +69,7 @@ export const Formularios = ({
   }, [arrayReq]); */
   /*  console.log('formulariooooooo', JSON.stringify(formAsync)); */
   useEffect(() => {
-    /* console.log('formulariooooooo', JSON.stringify(formAsync)); */
+    console.log('formulariooooooo', JSON.stringify(formAsync));
     const nroRespuestasNoEnv = formAsync?.formcomplet
       ?.filter(item => item.idUsuario === idUsuario)[0]
       ?.ots.filter(item => item.id_ot === employee.id)[0]
@@ -83,7 +83,7 @@ export const Formularios = ({
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
       ?.preguntas.filter(item => item.checkSend === true).length;
-    /*   console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv); */
+    console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv);
     const numeroPreguntas = formulario.preguntas.length;
 
     const ended = formAsync?.formcomplet

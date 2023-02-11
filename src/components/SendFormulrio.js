@@ -97,7 +97,16 @@ carpeta
             ? item.respuesta.map(item => item.id).join('/**/')
             : item.tipo === 'Geolocalizacion'
             ? item.respuesta.latitude + ',' + item.respuesta.longitude
+            : item.tipo === 'Materiales'
+            ? item.respuesta.map(respuesta => {
+                return {
+                  id_pregunta: item.id,
+                  id_respuesta: respuesta.id,
+                  cantida: respuesta.value,
+                };
+              })
             : item.respuesta,
+
         latitud: item.respuesta.latitud,
         longitud: item.respuesta.longitud,
         refrespuestascuestionario:

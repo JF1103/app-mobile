@@ -4,10 +4,10 @@ import {SetStorage} from '../components/SetStorage';
 
 export const CorrectFormAsync = async idUsuario => {
   const asyncForm = await GetStorage();
-  console.log('entre a corregir');
+  console.log('entre a corregirrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
   console.log('corregir', JSON.stringify(asyncForm));
   if (asyncForm !== null) {
-    const data = asyncForm.formcomplet
+    const data = asyncForm?.formcomplet
       .filter(item => idUsuario == item.idUsuario)[0]
       ?.ots.map(ot => {
         ot.tareas.map(tarea => {
@@ -38,7 +38,7 @@ export const CorrectFormAsync = async idUsuario => {
         });
       });
 
-    const data2 = asyncForm.formcomplet
+    const data2 = asyncForm?.formcomplet
       .filter(item => idUsuario == item.idUsuario)[0]
       ?.ots.map(async ot => {
         ot.tareas.map(async tarea => {
@@ -54,7 +54,7 @@ export const CorrectFormAsync = async idUsuario => {
         });
       });
 
-    console.log('FINALLLLLL', JSON.stringify(asyncForm));
+    /* console.log('FINALLLLLL', JSON.stringify(asyncForm)); */
     SetStorage({...asyncForm});
   }
 };

@@ -7,6 +7,7 @@ import {validaFiles} from './validaFiles';
 import {ToastAndroid} from 'react-native';
 import SendFormulrio from '../components/SendFormulrio';
 import {FormContext} from '../context/FormContext';
+import {validaMateriales} from './validaMateriales';
 
 export const validaCampos = (
   treaID,
@@ -31,6 +32,7 @@ export const validaCampos = (
   let validTextArea = [];
   let validMultiSelect = [];
   let validMaps = [];
+  let validMateriales = [];
   let arrayrequeridos = [];
 
   console.log('formulario', arrayReq);
@@ -50,6 +52,10 @@ export const validaCampos = (
 
   const nestValMultiSelect = formulario.preguntas.filter(
     pre => pre.tiporespuesta === 'Seleccion Multiple' && pre.obligatoria === 1,
+  );
+
+  const nestValMateriales = formulario.preguntas.filter(
+    pre => pre.tiporespuesta === 'Materiales' && pre.obligatoria === 1,
   );
 
   if (nestValTextArea[0] !== undefined) {
@@ -119,6 +125,20 @@ export const validaCampos = (
       setArrayReq,
       arrayrequeridos,
     );
+
+    if (nestValMateriales[0] !== undefined) {
+      validMateriales = validaMateriales(
+        nestValMateriales,
+        formularioPreguntas,
+        treaID,
+        formularioId,
+        userInfo,
+        otid,
+        arrayReq,
+        setArrayReq,
+        arrayrequeridos,
+      );
+    }
     /*  console.log('aarayreq en la validacion', arrayReq); */
   }
   console.log('arrayrequeridos', arrayrequeridos);
@@ -137,7 +157,8 @@ export const validaCampos = (
     validTextArea?.length == 0 &&
     validMultiSelect?.length == 0 &&
     validFirma?.length == 0 &&
-    validFile?.length == 0
+    validFile?.length == 0 &&
+    validMateriales?.length == 0
   ) {
     setvalidaForm(true);
 
@@ -163,6 +184,7 @@ export const validaCampos = (
     validTextArea &&
     validMultiSelect &&
     validFirma &&
-    validFile
+    validFile &&
+    validMateriales
   );
 };

@@ -11,20 +11,20 @@ export const SendAsyncStorage = async (idUsuario, formAsync, setformAsync) => {
 
   console.log('entre SendAsyncStorage ', JSON.stringify(asyncForm));
 
-  const indexIdUsuario = asyncForm.formcomplet
+  const indexIdUsuario = asyncForm?.formcomplet
     .map(item => item.idUsuario)
     .indexOf(idUsuario);
 
   if (asyncForm !== null) {
     console.log('entre en el if de asyncForm !== null');
-    const data = asyncForm.formcomplet
+    const data = asyncForm?.formcomplet
       .filter(item => idUsuario == item.idUsuario)[0]
       ?.ots.map(async ot => {
         const indexIdOt = asyncForm.formcomplet[indexIdUsuario].ots
           .map(item => item.id_ot)
           .indexOf(ot.id_ot);
         ot.tareas.map(tarea => {
-          const indexIdTarea = asyncForm.formcomplet[indexIdUsuario].ots[
+          const indexIdTarea = asyncForm?.formcomplet[indexIdUsuario].ots[
             indexIdOt
           ].tareas
             .map(item => item.TareaId)
@@ -42,7 +42,7 @@ export const SendAsyncStorage = async (idUsuario, formAsync, setformAsync) => {
                 ],
                 indexIdTarea,
               ); */
-              const indexIdFormulario = asyncForm.formcomplet[
+              const indexIdFormulario = asyncForm?.formcomplet[
                 indexIdUsuario
               ].ots[indexIdOt].tareas[indexIdTarea].formularios
                 .map(item => item.FormularioId)
@@ -97,6 +97,14 @@ export const SendAsyncStorage = async (idUsuario, formAsync, setformAsync) => {
                           ? pregunta.respuesta.latitude +
                             ',' +
                             pregunta.respuesta.longitude
+                          : pregunta.tipo === 'Materiales'
+                          ? pregunta.respuesta.map(item => {
+                              return {
+                                id_pregunta: pregunta.id,
+                                id_respuesta: item.id,
+                                cantida: item.value,
+                              };
+                            })
                           : pregunta.respuesta,
                       latitud: pregunta.respuesta.latitud,
                       longitud: pregunta.respuesta.longitud,
@@ -143,8 +151,9 @@ export const SendAsyncStorage = async (idUsuario, formAsync, setformAsync) => {
                     )
                     .then(response => {
                       console.log('entre en  el then de la respuesta');
+                      console.log('response', response);
 
-                      const indexPregunta = asyncForm.formcomplet[
+                      const indexPregunta = asyncForm?.formcomplet[
                         indexIdUsuario
                       ].ots[indexIdOt].tareas[indexIdTarea].formularios[
                         indexIdFormulario
