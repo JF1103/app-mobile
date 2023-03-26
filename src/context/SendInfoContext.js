@@ -14,7 +14,7 @@ export const AuthProvider = ({children}) => {
 
   useEffect(() => {
     if (isConnected === true) {
-      console.log('enviando storage');
+      /* console.log('enviando storage'); */
 
       sendCheckinOut();
     }

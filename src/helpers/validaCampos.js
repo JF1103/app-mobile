@@ -35,7 +35,7 @@ export const validaCampos = (
   let validMateriales = [];
   let arrayrequeridos = [];
 
-  console.log('formulario', arrayReq);
+  /*  console.log('formulario', arrayReq); */
 
   const nestValFirma = formulario.preguntas.filter(
     pre => pre.tiporespuesta === 'Firma' && pre.obligatoria === 1,
@@ -84,7 +84,7 @@ export const validaCampos = (
       arrayrequeridos,
     );
   }
-  console.log('despues de val texto', arrayrequeridos);
+  /*   console.log('despues de val texto', arrayrequeridos); */
   if (nestValMultiSelect[0] !== undefined) {
     validMultiSelect = validaddMultiple(
       nestValMultiSelect,
@@ -141,16 +141,16 @@ export const validaCampos = (
     }
     /*  console.log('aarayreq en la validacion', arrayReq); */
   }
-  console.log('arrayrequeridos', arrayrequeridos);
+  /*   console.log('arrayrequeridos', arrayrequeridos); */
   if (arrayrequeridos.length !== 0) {
     setArrayReq(arrayrequeridos);
   }
 
-  console.log('validSingleSelect', validSingleSelect);
-  console.log('validTextArea', validTextArea);
+  /* console.log('validSingleSelect', validSingleSelect); */
+  /*   console.log('validTextArea', validTextArea);
   console.log('validMultiSelect', validMultiSelect);
   console.log('validFirma', validFirma);
-  console.log('validFile', validFile);
+  console.log('validFile', validFile); */
 
   if (
     validSingleSelect?.length == 0 &&

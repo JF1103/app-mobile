@@ -14,7 +14,7 @@ export const SendArraaycheckInOut = async () => {
   };
   const checkinout = await getData();
   if (checkinout) {
-    console.log('checkinout adentro', checkinout);
+    /*  console.log('checkinout adentro', checkinout); */
     checkinout.checks.reverse();
     let arrayresponse = [];
     const arrayFinal = async () => {
@@ -41,7 +41,7 @@ export const SendArraaycheckInOut = async () => {
           let messageRespon = await respone
             .json()
             .then(async messageRespon => {
-              console.log('response', messageRespon);
+              /*  console.log('response', messageRespon); */
               if (messageRespon?.error === false) {
                 await AsyncStorage.removeItem('checkinout');
               } else {

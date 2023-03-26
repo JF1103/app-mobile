@@ -104,10 +104,8 @@ export const GetFiles = ({
   const [visualizaImagen, setvisualizaImagen] = useState(false);
   const [fileValid, setFileValid] = useState(false);
 
-  console.log('fileValid', fileValid);
-
   useEffect(() => {
-    console.log('entreeeeee en tempUri cambiado', tempUri);
+    /*  console.log('entreeeeee en tempUri cambiado', tempUri); */
     if (tempUri && typeFile) {
       if (tempUri.includes('.mp4')) {
         setvisualizaImagen(false);

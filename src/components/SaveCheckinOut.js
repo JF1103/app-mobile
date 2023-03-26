@@ -12,10 +12,10 @@ export const SaveCheckinOut = async (
   today,
 ) => {
   let array = await getCheckInOut();
-
-  console.log('aarray storge', array);
+  /* 
+  console.log('aarray storge', array); */
   if (array != null) {
-    console.log('entre en storage');
+    /*   console.log('entre en storage'); */
     array.checks.unshift({
       idusuario: idusuario,
       type: type,
@@ -26,7 +26,7 @@ export const SaveCheckinOut = async (
     });
     await setCheckInOut(array);
   } else {
-    console.log('entre en null');
+    /*   console.log('entre en null'); */
     array = {
       checks: [
         {
@@ -39,7 +39,7 @@ export const SaveCheckinOut = async (
         },
       ],
     };
-    console.log('fichadas', array);
+    /*  console.log('fichadas', array); */
     await setCheckInOut(array);
   }
 

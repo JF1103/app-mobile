@@ -140,7 +140,7 @@ class Page extends Component {
     if (!playWidth) {
       playWidth = 0;
     }
-    console.log('render' + playWidth);
+    /* console.log('render' + playWidth); */
     return (
       <SafeAreaView>
         <View style={styles.viewRecorder}>
@@ -200,18 +200,18 @@ class Page extends Component {
     const playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56);
-    console.log(`currentPlayWidth: ${playWidth}`);
+    /*     console.log(`currentPlayWidth: ${playWidth}`); */
 
     const currentPosition = Math.round(this.state.currentPositionSec);
 
     if (playWidth && playWidth < touchX) {
       const addSecs = Math.round(currentPosition + 1000);
       this.audioRecorderPlayer.seekToPlayer(addSecs);
-      console.log(`addSecs: ${addSecs}`);
+      /* console.log(`addSecs: ${addSecs}`); */
     } else {
       const subSecs = Math.round(currentPosition - 1000);
       this.audioRecorderPlayer.seekToPlayer(subSecs);
-      console.log(`subSecs: ${subSecs}`);
+      /* console.log(`subSecs: ${subSecs}`); */
     }
   };
 
@@ -224,7 +224,7 @@ class Page extends Component {
           PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
         ]);
 
-        console.log('write external stroage', grants);
+        /*   console.log('write external stroage', grants); */
 
         if (
           grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
@@ -234,9 +234,9 @@ class Page extends Component {
           grants['android.permission.RECORD_AUDIO'] ===
             PermissionsAndroid.RESULTS.GRANTED
         ) {
-          console.log('permissions granted');
+          /*  console.log('permissions granted'); */
         } else {
-          console.log('All required permissions not granted');
+          /*  console.log('All required permissions not granted'); */
           return;
         }
       } catch (err) {
@@ -253,7 +253,7 @@ class Page extends Component {
       AVFormatIDKeyIOS: AVEncodingOption.aac,
     };
 
-    console.log('audioSet', audioSet);
+    /*     console.log('audioSet', audioSet); */
 
     const uri = await this.audioRecorderPlayer.startRecorder(
       this.path,
@@ -276,7 +276,7 @@ class Page extends Component {
         grabando: true,
       });
     });
-    console.log(`uri: ${uri}`);
+    /*   console.log(`uri: ${uri}`); */
   };
 
   onPauseRecord = async () => {
@@ -284,7 +284,7 @@ class Page extends Component {
       const r = await this.audioRecorderPlayer.pauseRecorder();
       console.log(r);
     } catch (err) {
-      console.log('pauseRecord', err);
+      /*  console.log('pauseRecord', err); */
     }
   };
 
@@ -301,7 +301,7 @@ class Page extends Component {
     });
 
     const base64 = await RNFS.readFile(result, 'base64');
-    console.log('base64', result);
+    /*  console.log('base64', result); */
     this.props.handleRespAudio(
       this.props.tareaId,
       this.props.formularioId,
@@ -312,14 +312,14 @@ class Page extends Component {
   };
 
   onStartPlay = async () => {
-    console.log('onStartPlay');
+    /*   console.log('onStartPlay'); */
     //? Custom path
     const msg = await this.audioRecorderPlayer.startPlayer(this.path);
 
     //? Default path
     /*  const msg = await this.audioRecorderPlayer.startPlayer(); */
     const volume = await this.audioRecorderPlayer.setVolume(1.0);
-    console.log(`file: ${msg}`, `volume: ${volume}`);
+    /*     console.log(`file: ${msg}`, `volume: ${volume}`); */
 
     this.audioRecorderPlayer.addPlayBackListener(e => {
       this.setState({
@@ -342,7 +342,7 @@ class Page extends Component {
   };
 
   onStopPlay = async () => {
-    console.log('onStopPlay');
+    /* console.log('onStopPlay'); */
     this.audioRecorderPlayer.stopPlayer();
     this.audioRecorderPlayer.removePlayBackListener();
   };

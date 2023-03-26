@@ -28,6 +28,7 @@ import {useNetInfo} from '@react-native-community/netinfo';
 import {SetStorage} from '../components/SetStorage';
 import {SendAsyncStorage} from '../components/SendAsyncStorage';
 import {CorrectFormAsync} from '../helpers/CorrectFormAsync';
+import {OtScreen} from './OtScreen';
 
 const HomeScreen = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -77,7 +78,7 @@ const HomeScreen = ({navigation}) => {
   }, [isConnected]);
 
   const [cargandoAsync, setcargandoAsync] = useState(false);
-
+  const [datosMostar, setDatosMostar] = useState('');
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
     setformAsync(form);
@@ -95,6 +96,7 @@ const HomeScreen = ({navigation}) => {
     setcargandoAsync(false);
   };
 
+  /* console.log('formAsync', JSON.stringify(formAsync)); */
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {
       let permissionsStatus = await request(
@@ -138,9 +140,9 @@ const HomeScreen = ({navigation}) => {
     }
   }, [data]);
 
-  const [tareaEnd, setTareaEnd] = useState(false);
+  /* const [tareaEnd, setTareaEnd] = useState(false); */
 
-  console.log(data);
+  /*   console.log(data); */
   return (
     <View style={styles.container}>
       <Navbar
@@ -162,7 +164,15 @@ const HomeScreen = ({navigation}) => {
         {!isLoading &&
           !cargandoAsync &&
           data?.ot &&
-          data?.ot?.map(employee => {
+          data?.ot?.map((employee, index) => {
+            return (
+              <OtScreen
+                employee={employee}
+                navigation={navigation}
+                key={index}
+              />
+            );
+            /* 
             const {latitud, longitud} = employee;
             const cantTares = employee['0'].tareas.length;
 
@@ -225,6 +235,7 @@ const HomeScreen = ({navigation}) => {
                     </Text>
                   </View>
                   <ItemSeparator />
+                  {}
                   <Text style={styles.sucursal}>
                     <Text style={styles.titulo}>Dirección:</Text>{' '}
                     {employee?.sucursal}
@@ -361,6 +372,7 @@ const HomeScreen = ({navigation}) => {
                 </View>
               </View>
             );
+          */
           })}
       </ScrollView>
     </View>

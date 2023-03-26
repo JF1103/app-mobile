@@ -58,7 +58,7 @@ export const Formularios = ({
 
   useEffect(() => {
     if (!finish) {
-      console.log('entrooooooo cambio el storage');
+      /*  console.log('entrooooooo cambio el storage'); */
       SetStorage(formularioPreguntas);
       setformAsync(formularioPreguntas);
     }
@@ -69,7 +69,7 @@ export const Formularios = ({
   }, [arrayReq]); */
   /*  console.log('formulariooooooo', JSON.stringify(formAsync)); */
   useEffect(() => {
-    console.log('formulariooooooo', JSON.stringify(formAsync));
+    /*   console.log('formulariooooooo', JSON.stringify(formAsync)); */
     const nroRespuestasNoEnv = formAsync?.formcomplet
       ?.filter(item => item.idUsuario === idUsuario)[0]
       ?.ots.filter(item => item.id_ot === employee.id)[0]
@@ -83,7 +83,7 @@ export const Formularios = ({
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
       ?.preguntas.filter(item => item.checkSend === true).length;
-    console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv);
+    /*     console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv); */
     const numeroPreguntas = formulario.preguntas.length;
 
     const ended = formAsync?.formcomplet
@@ -93,9 +93,9 @@ export const Formularios = ({
       ?.formularios.filter(
         item => item.FormularioId === formulario.id,
       )[0]?.ended;
-    console.log('nroRespuestasNoEnv', nroRespuestasNoEnv);
+    /*   console.log('nroRespuestasNoEnv', nroRespuestasNoEnv); */
     if (nroRespuestasNoEnv > 0) {
-      console.log('entrooooooo NO ENVE', nroRespuestasNoEnv);
+      /*  console.log('entrooooooo NO ENVE', nroRespuestasNoEnv); */
       setformsended(true);
       setDisabled(true);
       setSending(false);
@@ -118,7 +118,7 @@ export const Formularios = ({
       }
     } else {
       if (nroRespuestasVerdad > 0) {
-        console.log('entrooooooo VERDAD', nroRespuestasVerdad);
+        /*  console.log('entrooooooo VERDAD', nroRespuestasVerdad); */
         setformsended(true);
         setDisabled(true);
         setSending(false);
@@ -142,7 +142,7 @@ export const Formularios = ({
           setFormularioPreguntas({...copy});
         }
       } else {
-        console.log('ENTRO ELSE');
+        /*         console.log('ENTRO ELSE'); */
         setSending(false);
       }
     }
@@ -296,6 +296,14 @@ export const Formularios = ({
                     />
                   </View>
                 </>
+              ) : pregunta.tiporespuesta === 'Datos' ? (
+                <>
+                  <View style={styles.containerText}>
+                    <Text style={styles.textDatos}>
+                      {pregunta.respuestas[0].respuesta}
+                    </Text>
+                  </View>
+                </>
               ) : (
                 <></>
               )}
@@ -339,6 +347,10 @@ export const Formularios = ({
   );
 };
 const styles = StyleSheet.create({
+  containerText: {
+    marginVertical: 15,
+    paddingHorizontal: 5,
+  },
   row: {
     backgroundColor: '#fff',
     borderRadius: 20,
@@ -462,6 +474,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     textAlign: 'center',
+  },
+  textDatos: {
+    fontSize: 18,
+    color: '#fb8c00',
+    marginVertical: '1%',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   textfirma: {
     fontSize: 14,

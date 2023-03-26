@@ -63,9 +63,10 @@ carpeta
     .indexOf(formularioid);
 
   const data = preguntas.map(async (item, index) => {
-    let data = {};
+    console.log('entrooooo numero ', index, item.id);
 
-    /*  console.log('item', item); */
+    let data = {};
+    let arrayMaterial = [];
     if (item.tipo === 'Firma' || item.tipo === 'Archivo') {
       const archivo = await getFileBase64(item.respuesta.base64);
 
@@ -84,6 +85,10 @@ carpeta
         longitud: item.longitud,
       };
     } else {
+      arrayMaterial = item.respuesta.map(respuesta => {
+        return [respuesta.id, respuesta.value];
+      });
+      /* console.log('arrayMaterial', JSON.stringify(arrayMaterial)); */
       data = {
         usuario: idUsuario,
         refformulariosconector: refformularioconector,
@@ -98,13 +103,7 @@ carpeta
             : item.tipo === 'Geolocalizacion'
             ? item.respuesta.latitude + ',' + item.respuesta.longitude
             : item.tipo === 'Materiales'
-            ? item.respuesta.map(respuesta => {
-                return {
-                  id_pregunta: item.id,
-                  id_respuesta: respuesta.id,
-                  cantida: respuesta.value,
-                };
-              })
+            ? arrayMaterial
             : item.respuesta,
 
         latitud: item.respuesta.latitud,
@@ -115,8 +114,6 @@ carpeta
         longitud: item.longitud,
       };
     }
-
-    console.log('el item es', item);
 
     const formData = new FormData();
     formData.append('usuario', data.usuario);
@@ -132,10 +129,12 @@ carpeta
     formData.append('latitud', data.latitud);
     formData.append('longitud', data.longitud);
     formData.append('archivo', data.archivo);
-    formData.append('tipo', data.tipo);
-    formData.append('carpeta', data.carpeta);
+    if (item.tipo === 'Firma' || item.tipo === 'Archivo') {
+      formData.append('tipo', data.tipo);
+      formData.append('carpeta', data.carpeta);
+    }
 
-    /*     console.log('envia-----------', JSON.stringify(formData)); */
+    /* console.log('envia-----------', JSON.stringify(formData)); */
 
     axios
       .post(`${BASE_URL}/formulariosdetalles/insertbyone.php`, formData, {
@@ -144,9 +143,9 @@ carpeta
         },
       })
       .then(response => {
-        console.log('termine');
         /* console.log(JSON.stringify(response.data)); */
-
+        console.log('success', response.data);
+        /*  console.log('success', JSON.stringify(formData)); */
         const indexPregunta = formularioPreguntas.formcomplet[
           indexIdUsuario
         ].ots[indexIdOt].tareas[indexIdTarea].formularios[
@@ -154,8 +153,6 @@ carpeta
         ].preguntas
           .map(item => item.id)
           .indexOf(item.id);
-
-        console.log('success');
 
         let newFormularioPreguntas = formularioPreguntas;
         newFormularioPreguntas.formcomplet[indexIdUsuario].ots[
@@ -194,15 +191,9 @@ carpeta
           indexIdOt
         ].tareas[indexIdTarea].ErrorSend = true;
 
-        console.log(
-          'newFormularioPreguntas',
-          JSON.stringify(newFormularioPreguntas),
-        );
         setFormularioPreguntas({...newFormularioPreguntas});
       })
       .finally(() => {
-        console.log('finally sali2');
-
         const indexPregunta = formularioPreguntas.formcomplet[
           indexIdUsuario
         ].ots[indexIdOt].tareas[indexIdTarea].formularios[
@@ -210,6 +201,7 @@ carpeta
         ].preguntas
           .map(item => item.id)
           .indexOf(item.id);
+        console.log('finally');
         //valido si el formulario se envio completo para mostrar el toast de enviado
         let formularioCompleto =
           formularioPreguntas.formcomplet[indexIdUsuario].ots[indexIdOt].tareas[

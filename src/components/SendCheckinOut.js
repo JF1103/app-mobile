@@ -10,7 +10,7 @@ export const SendCheckinOut = (idusuario, check, latitud, longitud, fecha) => {
   formdata.append('longitud', longitud);
   formdata.append('fecha', fecha);
 
-  console.log('formdata', formdata);
+  /*  console.log('formdata', formdata); */
 
   fetch(BASE_URL + '/ubicacionusuarios/insert.php', {
     method: 'POST',
@@ -22,7 +22,7 @@ export const SendCheckinOut = (idusuario, check, latitud, longitud, fecha) => {
   })
     .then(response => response.json())
     .then(responseJson => {
-      console.log(responseJson);
+      /*  console.log(responseJson); */
     })
     .catch(error => {
       console.error(error);

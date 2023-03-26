@@ -12,7 +12,7 @@ export const validaFiles = (
   arrayrequeridos,
 ) => {
   const aarayresp = nestValArchivo.filter((item, index) => {
-    console.log('entre en files');
+    /*   console.log('entre en files'); */
     let respuesta = formularioPreguntas?.formcomplet
       ?.filter(useario => useario.idUsuario === userInfo.idusuario)[0]
       ?.ots.filter(ot => ot.id_ot === otid)[0]

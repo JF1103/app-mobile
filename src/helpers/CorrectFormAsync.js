@@ -4,8 +4,8 @@ import {SetStorage} from '../components/SetStorage';
 
 export const CorrectFormAsync = async idUsuario => {
   const asyncForm = await GetStorage();
-  console.log('entre a corregirrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
-  console.log('corregir', JSON.stringify(asyncForm));
+  /*  console.log('entre a corregirrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+  console.log('corregir', JSON.stringify(asyncForm)); */
   if (asyncForm !== null) {
     const data = asyncForm?.formcomplet
       .filter(item => idUsuario == item.idUsuario)[0]
@@ -15,7 +15,7 @@ export const CorrectFormAsync = async idUsuario => {
             tarea.formularios.filter(
               formulario =>
                 formulario.preguntas.filter(
-                  pregunta => pregunta.checkSend === false,
+                  pregunta => pregunta?.checkSend === false,
                 ).length > 0,
             ).length > 0
               ? true
@@ -46,7 +46,7 @@ export const CorrectFormAsync = async idUsuario => {
             formulario =>
               (formulario.ended =
                 formulario.preguntas.filter(
-                  pregunta => pregunta.checkSend === false,
+                  pregunta => pregunta?.checkSend === false,
                 ).length > 0
                   ? false
                   : true),

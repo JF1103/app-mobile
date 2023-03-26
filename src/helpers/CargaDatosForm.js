@@ -27,7 +27,7 @@ export const CargaDatosForm = (
           ots: data.ot
             .map(ot => {
               if (respuestas.ot.filter(item => item.id === ot.id).length > 0) {
-                console.log('entre en ot datos forrrrmmm');
+                /* console.log('entre en ot datos forrrrmmm'); */
                 return CargaOtForm(
                   ot,
                   false,
@@ -210,7 +210,7 @@ export const CargaDatosForm = (
                               form => form.id === formulario.id,
                             ).length > 0
                         ) {
-                          console.log('ENTRO ASETAR EL ASYNC');
+                          /* console.log('ENTRO ASETAR EL ASYNC'); */
 
                           setformAsync({
                             formcomplet: [

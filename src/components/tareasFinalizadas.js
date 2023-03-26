@@ -57,7 +57,7 @@ export const TareasFinalizadas = ({navigation}) => {
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
     if (form !== null) {
-      console.log('entr en el if de inicializaformularioPreguntas');
+      /*  console.log('entr en el if de inicializaformularioPreguntas'); */
       setformAsync(form);
       setFormularioPreguntas(form);
     }

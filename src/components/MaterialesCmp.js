@@ -79,7 +79,7 @@ export const MaterialesCmp = ({
   };
   return (
     <View style={materialesReq ? styles.requerido : styles.items}>
-      <Text style={styles.text}>{respuesta.respuesta}</Text>
+      <Text style={styles.text}>{respuesta.material}</Text>
       <NumericInput
         value={cantMaterial}
         onChange={value => {
