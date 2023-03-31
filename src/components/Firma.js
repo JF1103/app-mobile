@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   LogBox,
   Image,
+  ToastAndroid,
 } from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
 import {ItemSeparator2} from './ItemSeparator2';
@@ -36,7 +37,7 @@ const Firma = ({
   arrayReq,
   setArrayReq,
 }) => {
-  const {getCurrentLocation} = useLocation();
+  const {getCurrentLocation, initialPosition} = useLocation();
   let path =
     RNFS.DocumentDirectoryPath +
     `/firma_${employee.id}_${tareaId}_${formularioId}_${pregunta.id}.png`;
@@ -99,28 +100,35 @@ const Firma = ({
   }, [arrayReq]);
 
   const _onSaveEvent = result => {
-    getCurrentLocation().then(cords => {
-      handleRespFirma(
-        formularioPreguntas,
-        setFormularioPreguntas,
-        path,
-        firmPath,
-        setFirmPath,
-        tareaId,
-        idotd,
-        formularioId,
-        refformularioconector,
-        pregunta.id,
-        {dat: result.encoded, tempUri: result.pathName, fileType: 'file/png'},
-        preguntatiporespuesta,
-        employee,
-        idUsuario,
-        cords,
+    if (!initialPosition.mocked) {
+      getCurrentLocation().then(cords => {
+        handleRespFirma(
+          formularioPreguntas,
+          setFormularioPreguntas,
+          path,
+          firmPath,
+          setFirmPath,
+          tareaId,
+          idotd,
+          formularioId,
+          refformularioconector,
+          pregunta.id,
+          {dat: result.encoded, tempUri: result.pathName, fileType: 'file/png'},
+          preguntatiporespuesta,
+          employee,
+          idUsuario,
+          cords,
+        );
+        /*   saveBtn.current.resetImage(); */
+      });
+      setfirmaReq(false);
+      setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+    } else {
+      ToastAndroid.show(
+        'está usando fake gps y no se pueden enviar los datos',
+        ToastAndroid.LONG,
       );
-      /*   saveBtn.current.resetImage(); */
-    });
-    setfirmaReq(false);
-    setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+    }
   };
   const _onDragEvent = () => {};
 

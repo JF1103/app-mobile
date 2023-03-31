@@ -2,7 +2,6 @@ import {deleteFiles} from './DeleteFiles';
 import {SetStorage} from './SetStorage';
 import RNFS from 'react-native-fs';
 import {handleResp} from '../helpers/handleRespt';
-import {useLocation} from '../hooks/useLocation';
 
 export const handleRespFirma = async (
   formularioPreguntas,

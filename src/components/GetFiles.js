@@ -9,6 +9,7 @@ import {
   Platform,
   PermissionsAndroid,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -53,7 +54,7 @@ export const GetFiles = ({
   setArrayReq,
 }) => {
   const [visualizaAudio, setvisualizaAudio] = useState(false);
-  const {getCurrentLocation} = useLocation();
+  const {getCurrentLocation, initialPosition} = useLocation();
   const [fileReq, setfileReq] = useState(false);
 
   const checkLocationPermissions = async () => {
@@ -142,25 +143,34 @@ export const GetFiles = ({
         includeBase64: true,
       },
       resp => {
-        if (resp.didCancel) return;
-        if (resp.assets[0].uri) {
-          /* console.log(resp.assets[0].base64); */
+        if (!initialPosition.mocked) {
+          if (resp.didCancel) return;
+          if (resp.assets[0].uri) {
+            /* console.log(resp.assets[0].base64); */
 
-          resp.assets[0] && setTempUri(resp.assets[0].uri),
-            resp.assets[0] &&
-              handleRespFoto(
-                tareaId,
-                formularioId,
-                pregunta.id,
-                resp.assets[0].fileName,
-                resp.assets[0].type,
-                resp.assets[0].uri,
-                resp.assets[0].base64,
-                pregunta.tiporespuesta,
-              );
-          setvisualizaImagen(true);
-          setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
-        } else return;
+            resp.assets[0] && setTempUri(resp.assets[0].uri),
+              resp.assets[0] &&
+                handleRespFoto(
+                  tareaId,
+                  formularioId,
+                  pregunta.id,
+                  resp.assets[0].fileName,
+                  resp.assets[0].type,
+                  resp.assets[0].uri,
+                  resp.assets[0].base64,
+                  pregunta.tiporespuesta,
+                );
+            setvisualizaImagen(true);
+            setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+          } else return;
+        } else {
+          {
+            ToastAndroid.show(
+              'está usando fake gps y no se pueden enviar los datos',
+              ToastAndroid.LONG,
+            );
+          }
+        }
       },
     );
   };
@@ -174,22 +184,29 @@ export const GetFiles = ({
         saveToPhotos: true,
       },
       resp => {
-        if (resp.didCancel) return;
-        if (resp.assets[0].uri) {
-          setTempUri(resp.assets[0].uri);
-          handleRespFoto(
-            tareaId,
-            formularioId,
-            pregunta.id,
-            resp.assets[0].fileName,
-            resp.assets[0].type,
-            resp.assets[0].uri,
-            resp.assets[0].base64,
-            pregunta.tiporespuesta,
+        if (!initialPosition.mocked) {
+          if (resp.didCancel) return;
+          if (resp.assets[0].uri) {
+            setTempUri(resp.assets[0].uri);
+            handleRespFoto(
+              tareaId,
+              formularioId,
+              pregunta.id,
+              resp.assets[0].fileName,
+              resp.assets[0].type,
+              resp.assets[0].uri,
+              resp.assets[0].base64,
+              pregunta.tiporespuesta,
+            );
+            setvisualizaImagen(true);
+            setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+          } else return;
+        } else {
+          ToastAndroid.show(
+            'está usando fake gps y no se pueden enviar los datos',
+            ToastAndroid.LONG,
           );
-          setvisualizaImagen(true);
-          setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
-        } else return;
+        }
       },
     );
   };
@@ -203,22 +220,29 @@ export const GetFiles = ({
         includeBase64: true,
       },
       resp => {
-        if (resp.didCancel) return;
+        if (!initialPosition.mocked) {
+          if (resp.didCancel) return;
 
-        if (!resp.assets[0].uri) return;
-        setTempUri(resp.assets[0].uri);
-        handleRespFoto(
-          tareaId,
-          formularioId,
-          pregunta.id,
-          resp.assets[0].fileName,
-          resp.assets[0].type,
-          resp.assets[0].uri,
-          resp.assets[0].base64,
-          pregunta.tiporespuesta,
-        );
-        setvisualizaImagen(true);
-        setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+          if (!resp.assets[0].uri) return;
+          setTempUri(resp.assets[0].uri);
+          handleRespFoto(
+            tareaId,
+            formularioId,
+            pregunta.id,
+            resp.assets[0].fileName,
+            resp.assets[0].type,
+            resp.assets[0].uri,
+            resp.assets[0].base64,
+            pregunta.tiporespuesta,
+          );
+          setvisualizaImagen(true);
+          setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+        } else {
+          ToastAndroid.show(
+            'está usando fake gps y no se pueden enviar los datos',
+            ToastAndroid.LONG,
+          );
+        }
       },
     );
   };
@@ -264,23 +288,30 @@ export const GetFiles = ({
   };
 
   const handleRespAudio = async (tareaId, formularioId, id, tempUri, tipo) => {
-    getCurrentLocation().then(cords => {
-      handleResp(
-        tareaId,
-        idotd,
-        formularioId,
-        refformularioconector,
-        id,
-        {base64: tempUri, fileType: 'audio/mp4'},
-        tipo,
-        formularioPreguntas,
-        setFormularioPreguntas,
-        employee,
-        idUsuario,
-        cords,
+    if (!initialPosition.mocked) {
+      getCurrentLocation().then(cords => {
+        handleResp(
+          tareaId,
+          idotd,
+          formularioId,
+          refformularioconector,
+          id,
+          {base64: tempUri, fileType: 'audio/mp4'},
+          tipo,
+          formularioPreguntas,
+          setFormularioPreguntas,
+          employee,
+          idUsuario,
+          cords,
+        );
+        setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+      });
+    } else {
+      ToastAndroid.show(
+        'está usando fake gps y no se pueden enviar los datos',
+        ToastAndroid.LONG,
       );
-      setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
-    });
+    }
   };
 
   return (
@@ -337,6 +368,7 @@ export const GetFiles = ({
           formAsync={formAsync}
           tempUri={tempUri}
           typeFile={typeFile}
+          mocked={initialPosition.mocked}
         />
       )}
       {visualizaImagen &&

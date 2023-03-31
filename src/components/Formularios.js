@@ -20,7 +20,6 @@ import Firma from './Firma';
 import {handleResp} from '../helpers/handleRespt';
 import {SetStorage} from './SetStorage';
 import {FormContext} from '../context/FormContext';
-import {useLocation} from '../hooks/useLocation';
 import SendFormulrio from './SendFormulrio';
 import {Chase} from 'react-native-animated-spinkit';
 import {validaCampos} from '../helpers/validaCampos';
@@ -51,7 +50,6 @@ export const Formularios = ({
 
   const preguntas = formulario.preguntas;
 
-  const {getCurrentLocation} = useLocation();
   const [disabled, setDisabled] = useState(false);
 
   const [validaForm, setvalidaForm] = useState(false);
@@ -83,9 +81,15 @@ export const Formularios = ({
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
       ?.preguntas.filter(item => item.checkSend === true).length;
-    /*     console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv); */
+    console.log(
+      'nroRespuestasNoEnveeeeeeeee',
+      formAsync?.formcomplet
+        ?.filter(item => item.idUsuario === idUsuario)[0]
+        ?.ots.filter(item => item.id_ot === employee.id)[0],
+    );
     const numeroPreguntas = formulario.preguntas.length;
 
+    /*  console.log('FORMAYSINC', JSON.stringify(formAsync)); */
     const ended = formAsync?.formcomplet
       ?.filter(item => item.idUsuario === idUsuario)[0]
       ?.ots.filter(item => item.id_ot === employee.id)[0]
@@ -123,7 +127,17 @@ export const Formularios = ({
         setDisabled(true);
         setSending(false);
         if (ended !== true) {
+          /* console.log('formulariooooooo', JSON.stringify(formularioPreguntas)); */
           let copy = formularioPreguntas;
+          /*  console.log('TAREA', tarea.id);
+          console.log(
+            'formulariooooooo',
+            JSON.stringify(
+              copy.formcomplet
+                .filter(item => item.idUsuario === idUsuario)[0]
+                .ots.filter(item => item.id_ot === employee.id)[0],
+            ),
+          ); */
           copy.formcomplet
             .filter(item => item.idUsuario === idUsuario)[0]
             .ots.filter(item => item.id_ot === employee.id)[0]

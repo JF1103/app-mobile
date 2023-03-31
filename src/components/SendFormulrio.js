@@ -85,9 +85,6 @@ carpeta
         longitud: item.longitud,
       };
     } else {
-      arrayMaterial = item.respuesta.map(respuesta => {
-        return [respuesta.id, respuesta.value];
-      });
       /* console.log('arrayMaterial', JSON.stringify(arrayMaterial)); */
       data = {
         usuario: idUsuario,
@@ -103,7 +100,9 @@ carpeta
             : item.tipo === 'Geolocalizacion'
             ? item.respuesta.latitude + ',' + item.respuesta.longitude
             : item.tipo === 'Materiales'
-            ? arrayMaterial
+            ? item.respuesta.map(respuesta => {
+                return [respuesta.id, respuesta.value];
+              })
             : item.respuesta,
 
         latitud: item.respuesta.latitud,

@@ -3,7 +3,7 @@ import {FormContext} from '../context/FormContext';
 import {useLocation} from '../hooks/useLocation';
 import NumericInput from 'react-native-numeric-input';
 import {handleResp} from '../helpers/handleRespt';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, ToastAndroid, View} from 'react-native';
 
 export const MaterialesCmp = ({
   idMaterial,
@@ -23,7 +23,7 @@ export const MaterialesCmp = ({
   const {formAsync, setformAsync, formularioPreguntas, setFormularioPreguntas} =
     useContext(FormContext);
 
-  const {getCurrentLocation} = useLocation();
+  const {getCurrentLocation, initialPosition} = useLocation();
   const [cantMaterial, setCantMaterial] = useState(
     cantMaterialArray.length > 0
       ? cantMaterialArray.filter(item => item.id === idMaterial)[0]?.value
@@ -57,25 +57,31 @@ export const MaterialesCmp = ({
 
       setCantMaterialArray(arracpy);
     }
-
-    getCurrentLocation().then(cords => {
-      handleResp(
-        tarea.id,
-        idotd,
-        formulario.id,
-        formulario.refformularioconector,
-        pregunta.id,
-        arracpy,
-        pregunta.tiporespuesta,
-        formularioPreguntas,
-        setFormularioPreguntas,
-        employee,
-        idUsuario,
-        cords,
+    if (!initialPosition.mocked) {
+      getCurrentLocation().then(cords => {
+        handleResp(
+          tarea.id,
+          idotd,
+          formulario.id,
+          formulario.refformularioconector,
+          pregunta.id,
+          arracpy,
+          pregunta.tiporespuesta,
+          formularioPreguntas,
+          setFormularioPreguntas,
+          employee,
+          idUsuario,
+          cords,
+        );
+      });
+      setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+      setCantMaterial(value);
+    } else {
+      ToastAndroid.show(
+        'está usando fake gps y no se pueden enviar los datos',
+        ToastAndroid.LONG,
       );
-    });
-    setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
-    setCantMaterial(value);
+    }
   };
   return (
     <View style={materialesReq ? styles.requerido : styles.items}>

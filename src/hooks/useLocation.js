@@ -40,10 +40,11 @@ export const useLocation = () => {
   const getCurrentLocation = () => {
     return new Promise((resolve, reject) => {
       Geolocation.getCurrentPosition(
-        ({coords}) => {
+        ({coords, mocked}) => {
           resolve({
             latitude: coords.latitude,
             longitude: coords.longitude,
+            mocked,
           });
         },
         err => reject({err}),

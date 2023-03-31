@@ -17,6 +17,8 @@ export const CargaDatosForm = (
   idusuario,
 ) => {
   const respuestas = BuscadorRespuestas(data);
+  /* console.log('ENTRO CARGADATOS');
+  console.log('respuestas', JSON.stringify(respuestas)); */
   /*   console.log('asyncccccc', JSON.stringify(form)); */
   if (form === null && respuestas.ot.length > 0) {
     //si no hay datos en el estorage
@@ -58,11 +60,12 @@ export const CargaDatosForm = (
       data.ot.map(ot => {
         if (respuestas.ot.filter(item => item.id === ot.id).length > 0) {
           /* if (respuestas.ot.filter(item => item.id === ot.id).length > 0) { */
+          /* console.log('entre en ot datos forrrrmmm'); */
           let Ot = form.formcomplet
             .filter(item => item.idUsuario === idusuario)[0]
             .ots.filter(item => item.id_ot === ot.id);
           if (Ot.length > 0) {
-            /* console.log('exite una ot con respuestas en el asinc'); */
+            console.log('exite una ot con respuestas en el asinc');
             //si existe la ot
             //verifico si existe la tarea
             //valido si la ot tiene respuestas
@@ -75,14 +78,14 @@ export const CargaDatosForm = (
                   .filter(item => item.idUsuario === idusuario)[0]
                   .ots.filter(item => item.id_ot === ot.id)[0]
                   .tareas.filter(item => item.TareaId === tarea.id);
-                /*   console.log('tareaExisssssssssssst', tareaExist); */
+                console.log('tareaExisssssssssssst', tareaExist);
                 if (tareaExist.length > 0) {
                   //valido si la tarea tiene respuestas
-                  /*  console.log('existe la tarea en el asinc'); */
+                  console.log('existe la tarea en el asinc');
                   if (
                     respuestas.ot
                       .filter(item => item.id === ot.id)[0]
-                      .tarea.filter(tarea => tarea.id === tarea.id).length > 0
+                      .tarea.filter(tareaR => tareaR.id === tarea.id).length > 0
                   ) {
                     //si existe la tarea
                     //verifico si existe el formulario
@@ -108,7 +111,7 @@ export const CargaDatosForm = (
                         if (
                           respuestas.ot
                             .filter(item => item.id === ot.id)[0]
-                            .tarea.filter(tarea => tarea.id === tarea.id)[0]
+                            .tarea.filter(tareaR => tareaR.id === tarea.id)[0]
                             ?.formularios.filter(
                               formulario => formulario.id === formulario.id,
                             ).length > 0
@@ -172,11 +175,12 @@ export const CargaDatosForm = (
                                             refformularioconector:
                                               formulario.refformularioconector,
                                             ended: false,
-                                            preguntas: formulario.preguntas.map(
-                                              pregunta => {
+                                            preguntas: formulario.preguntas
+                                              .map(pregunta => {
                                                 return CreaRespuestas(pregunta);
-                                              },
-                                            ),
+                                              })
+                                              //filtro valores nulos
+                                              .filter(item => !!item),
                                           },
                                         ],
                                       },
@@ -205,7 +209,7 @@ export const CargaDatosForm = (
                         if (
                           respuestas.ot
                             .filter(item => item.id === ot.id)[0]
-                            .tarea.filter(tarea => tarea.id === tarea.id)[0]
+                            .tarea.filter(item => item.id === tarea.id)[0]
                             ?.formularios.filter(
                               form => form.id === formulario.id,
                             ).length > 0
@@ -289,20 +293,21 @@ export const CargaDatosForm = (
                   //si no existe la tarea y si existe la ot
                   //lo sumo al existente
                   /*        console.log('no existe la tarea en el asinc'); */
-
+                  console.log('no existe la tarea en el asinc');
                   if (
                     respuestas.ot
                       .filter(item => item.id === ot.id)[0]
-                      .tarea.filter(tarea => tarea.id === tarea.id).length > 0
+                      .tarea.filter(item => item.id === tarea.id).length > 0
                   ) {
+                    console.log('ENTRO ASETAR EL ASYNC si existe la tarea');
                     /* console.log('TEEEESSSSSS'); */
-                    console.log(
+                    /*  console.log(
                       JSON.stringify(
                         form.formcomplet
                           .filter(item => item.idUsuario == idusuario)[0]
                           .ots.filter(item => item.id_ot == ot.id)[0],
                       ),
-                    );
+                    ); */
                     setformAsync({
                       formcomplet: [
                         ...form.formcomplet.filter(
@@ -324,7 +329,7 @@ export const CargaDatosForm = (
                                     item => item.idUsuario == idusuario,
                                   )[0]
                                   .ots.filter(item => item.id_ot == ot.id)[0]
-                                  .tareas.filter(
+                                  ?.tareas?.filter(
                                     item => item.TareaId !== tarea.id,
                                   ),
                                 {
@@ -336,8 +341,8 @@ export const CargaDatosForm = (
                                       if (
                                         respuestas.ot
                                           .filter(item => item.id === ot.id)[0]
-                                          .tarea.filter(
-                                            tarea => tarea.id === tarea.id,
+                                          ?.tarea?.filter(
+                                            item => item.id === tarea.id,
                                           ).length > 0
                                       ) {
                                         return {
@@ -355,7 +360,7 @@ export const CargaDatosForm = (
                                     })
                                     .filter(item => item !== undefined),
                                 },
-                              ],
+                              ].filter(item => item !== undefined),
                             },
                           ].filter(item => item !== undefined),
                         },
@@ -371,7 +376,16 @@ export const CargaDatosForm = (
             //si no existe la ot
             //lo sumo al existente
             //valido si hay respuestas en el servidor
+            /*  console.log('no existe la ot en el asinc'); */
             if (respuestas.ot.filter(item => item.id === ot.id).length > 0) {
+              console.log(ot.id);
+
+              /* console.log(
+                'ENTRO ASETAR EL ASYNC si existe la ot',
+                ...form.formcomplet
+                  .filter(item => item.idUsuario == idusuario)[0]
+                  ?.ots?.filter(item => item.id_ot == ot.id)[0],
+              ); */
               setformAsync({
                 formcomplet: [
                   ...form.formcomplet.filter(
@@ -388,25 +402,61 @@ export const CargaDatosForm = (
                         fecha: ot.fecha,
                         fechafin: ot.fechafin,
                         tareas: [
-                          ...form.formcomplet
-                            .filter(item => item.idUsuario == idusuario)[0]
-                            .ots.filter(item => item.id_ot == ot.id)[0]
-                            .tareas.filter(item => item.TareaId !== tarea.id),
-                          {
+                          ...ot['0'].tareas
+                            .map(tarea => {
+                              if (
+                                respuestas.ot
+                                  .filter(item => item.id === ot.id)[0]
+                                  .tarea.filter(
+                                    tareaR => tareaR.id === tarea.id,
+                                  ).length > 0
+                              ) {
+                                return {
+                                  TareaId: tarea.id,
+                                  idotd: tarea.idotd,
+                                  ErrorSend: false,
+                                  formularios: tarea.formularios
+                                    .map(formulario => {
+                                      if (
+                                        respuestas.ot
+                                          .filter(item => item.id === ot.id)[0]
+                                          .tarea.filter(
+                                            item => item.id === tarea.id,
+                                          ).length > 0
+                                      ) {
+                                        return {
+                                          FormularioId: formulario.id,
+                                          refformularioconector:
+                                            formulario.refformularioconector,
+                                          ended: false,
+                                          preguntas: formulario.preguntas.map(
+                                            pregunta => {
+                                              return CreaRespuestas(pregunta);
+                                            },
+                                          ),
+                                        };
+                                      }
+                                    })
+                                    .filter(item => item !== undefined),
+                                };
+                              }
+                            })
+                            .filter(item => item !== undefined),
+                          /*  {  
                             TareaId: tarea.id,
                             idotd: tarea.idotd,
                             ErrorSend: false,
-                            formularios: [
-                              ...form.formcomplet
+                            formularios: [ */
+                          /*  ...form.formcomplet
                                 .filter(item => item.idUsuario == idusuario)[0]
-                                .ots.filter(item => item.id_ot == ot.id)[0]
-                                .tareas.filter(
+                                ?.ots.filter(item => item.id_ot == ot.id)[0]
+                                ?.tareas?.filter(
                                   item => item.TareaId == tarea.id,
                                 )[0]
                                 ?.formularios.filter(
                                   item => item.id !== formulario.id,
-                                ),
-                              {
+                                ), */
+                          /*     {
                                 FormularioId: formulario.id,
                                 refformularioconector:
                                   formulario.refformularioconector,
@@ -418,7 +468,7 @@ export const CargaDatosForm = (
                                 ),
                               },
                             ],
-                          },
+                          }, */
                         ],
                       },
                     ].filter(item => item !== undefined),
@@ -427,7 +477,7 @@ export const CargaDatosForm = (
               });
             }
           }
-          console.log('saliiii55');
+          /* console.log('saliiii55'); */
         }
       });
     } else {

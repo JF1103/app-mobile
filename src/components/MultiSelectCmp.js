@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, View, StyleSheet, Text} from 'react-native';
+import {ScrollView, View, StyleSheet, Text, ToastAndroid} from 'react-native';
 import {FormContext} from '../context/FormContext';
 import {handleResp} from '../helpers/handleRespt';
 import {useLocation} from '../hooks/useLocation';
@@ -22,7 +22,7 @@ export const MultiSelectCmp = ({
   const [IditemSelect, setIditemSelect] = useState(0);
   const [mountMulti, setMountMulti] = useState(false);
   const [multiSelectReq, setmultiSelectReq] = useState(false);
-  const {getCurrentLocation} = useLocation();
+  const {getCurrentLocation, initialPosition} = useLocation();
 
   const dataMulti = pregunta.respuestas.map((respuesta, index) => {
     const multiresp = formAsync?.formcomplet
@@ -84,32 +84,39 @@ export const MultiSelectCmp = ({
               height: 35 * dataMulti.length,
             }}
             onSelect={selectedItems => {
-              if (!disabled) {
-                mountMulti
-                  ? getCurrentLocation().then(cords => {
-                      handleResp(
-                        tarea.id,
-                        idotd,
-                        formulario.id,
-                        formulario.refformularioconector,
-                        pregunta.id,
-                        selectedItems,
-                        pregunta.tiporespuesta,
-                        formularioPreguntas,
-                        setFormularioPreguntas,
-                        employee,
-                        idUsuario,
-                        cords,
-                      ),
-                        setIditemSelect(selectedItems);
-                    })
-                  : setMountMulti(true),
-                  setIditemSelect(selectedItems),
-                  selectedItems.length > 0 &&
-                    setArrayReq(
-                      arrayReq.filter(item => item.id !== pregunta.id),
-                    ) &&
-                    setmultiSelectReq(false);
+              if (!initialPosition.mocked) {
+                if (!disabled) {
+                  mountMulti
+                    ? getCurrentLocation().then(cords => {
+                        handleResp(
+                          tarea.id,
+                          idotd,
+                          formulario.id,
+                          formulario.refformularioconector,
+                          pregunta.id,
+                          selectedItems,
+                          pregunta.tiporespuesta,
+                          formularioPreguntas,
+                          setFormularioPreguntas,
+                          employee,
+                          idUsuario,
+                          cords,
+                        ),
+                          setIditemSelect(selectedItems);
+                      })
+                    : setMountMulti(true),
+                    setIditemSelect(selectedItems),
+                    selectedItems.length > 0 &&
+                      setArrayReq(
+                        arrayReq.filter(item => item.id !== pregunta.id),
+                      ) &&
+                      setmultiSelectReq(false);
+                }
+              } else {
+                ToastAndroid.show(
+                  'está usando fake gps y no se pueden enviar los datos',
+                  ToastAndroid.LONG,
+                );
               }
             }}
           />

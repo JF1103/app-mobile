@@ -47,7 +47,7 @@ const HomeScreen = ({navigation}) => {
   const [visualizaCheck, setvisualizaCheck] = useState(true);
   const {isConnected} = useNetInfo();
 
-  /* console.log('formAsync3444', JSON.stringify(formAsync)); */
+  /*  console.log('formAsync3444', JSON.stringify(formAsync)); */
 
   const pullMe = async () => {
     setRefresh(true);
@@ -58,7 +58,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     setInterval(() => {
-      CheckinOut(getCurrentLocation, userInfo, 0);
+      CheckinOut(getCurrentLocation, initialPosition, userInfo, 0);
     }, 600000);
   }, []);
 
@@ -84,14 +84,14 @@ const HomeScreen = ({navigation}) => {
     setformAsync(form);
     setFormularioPreguntas(form);
     //inicializa  con datos del servidor
-    /* CargaDatosForm(
+    CargaDatosForm(
       data,
       form,
       formAsync,
       setformAsync,
       setFormularioPreguntas,
       userInfo.idusuario,
-    ); */
+    );
 
     setcargandoAsync(false);
   };

@@ -1,6 +1,5 @@
 import React from 'react';
 import {SetStorage} from '../components/SetStorage';
-import {useLocation} from '../hooks/useLocation';
 
 export const handleResp = async (
   tareaId,

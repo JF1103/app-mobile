@@ -19,7 +19,6 @@ import Tareas from './Tareas';
 import {GetDataOt} from './GetDataOt';
 import {FormContext} from '../context/FormContext';
 import {CheckinOut} from './CheckinOut';
-import {useLocation} from '../hooks/useLocation';
 import {SendArraaycheckInOut} from './SendArraayCheckInOut';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -29,7 +28,7 @@ export const TareasFinalizadas = ({navigation}) => {
     useContext(FormContext);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
+
   const [refresh, setRefresh] = useState(false);
 
   const pullMe = async () => {
@@ -190,6 +189,7 @@ export const TareasFinalizadas = ({navigation}) => {
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'space-around',
+                        width: '100%',
                       }}>
                       <Text style={styles.texto}>
                         <Text style={styles.titulo}>Fecha:</Text>{' '}
@@ -202,6 +202,28 @@ export const TareasFinalizadas = ({navigation}) => {
                       </Text>
                     </View>
                     <ItemSeparator />
+                    <View
+                      style={{
+                        width: '100%',
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                        paddingHorizontal: 5,
+                      }}>
+                      <View style={{}}>
+                        <Text style={styles.texto}>
+                          <Text style={styles.titulo}>Ot:</Text> {employee?.id}
+                        </Text>
+                      </View>
+                      <View style={{}}>
+                        <Text style={styles.texto}>
+                          <Text style={styles.titulo}>SV:</Text>{' '}
+                          {employee?.nroaviso}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <ItemSeparator />
+
                     <Text style={styles.sucursal}>
                       <Text style={styles.titulo}>Dirección:</Text>{' '}
                       {employee?.sucursal}

@@ -14,6 +14,7 @@ import {
   SearchableSectionList,
 } from 'react-native-searchable-list';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {isNull} from 'lodash';
 
 export const MaterialesArray = ({
@@ -56,8 +57,8 @@ export const MaterialesArray = ({
   );
 
   const [datos, setDatos] = useState({
-    /* data: arrayMaterialeSearch, */
-    data: [
+    data: arrayMaterialeSearch,
+    /* data: [
       {id: 1, material: 'material 1'},
       {id: 2, material: 'material 2'},
       {id: 3, material: 'material 3'},
@@ -68,7 +69,7 @@ export const MaterialesArray = ({
       {id: 8, material: 'material 8'},
       {id: 9, material: 'material 9'},
       {id: 10, material: 'material 10'},
-    ],
+    ], */
     searchTerm: '',
     searchAttribute: 'material',
     ignoreCase: true,
@@ -106,7 +107,7 @@ export const MaterialesArray = ({
     return (
       <View key={item.id} style={styles.listItem}>
         <TouchableOpacity onPress={() => sumoMateriales(arrayMaterials, item)}>
-          <Text style={{color: 'black'}}>{item.material}</Text>
+          <Text style={{color: '#fb8c00'}}>{item.material}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -115,14 +116,17 @@ export const MaterialesArray = ({
   return (
     <View>
       <SafeAreaView style={{flex: 1}}>
-        <TextInput
-          style={styles.textSearch}
-          placeholder="materiales utilizados"
-          placeholderTextColor="#bcbcbc"
-          onChangeText={searchTerm => setDatos({...datos, searchTerm})}
-        />
+        <View style={styles.rowSearch}>
+          <TextInput
+            style={styles.textSearch}
+            placeholder="materiales utilizados"
+            placeholderTextColor="#bcbcbc"
+            onChangeText={searchTerm => setDatos({...datos, searchTerm})}
+          />
+          <Icon style={styles.icon} name="search" />
+        </View>
         {searchTerm.length > 0 && (
-          <ScrollView style={styles.scrollcontainer}>
+          <ScrollView style={styles.scrollcontainer} nestedScrollEnabled={true}>
             <SearchableFlatList
               style={{}}
               data={data}
@@ -164,9 +168,25 @@ export const MaterialesArray = ({
 };
 
 const styles = StyleSheet.create({
+  rowSearch: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fb8c00',
+    borderRadius: 10,
+    padding: 2,
+
+    margin: 10,
+  },
+  icon: {
+    fontSize: 25,
+    //marginRight: 300,
+    color: 'grey',
+  },
   scrollcontainer: {
     flex: 1,
-
+    marginBottom: 40,
     maxHeight: 250,
   },
   pageContainer: {
@@ -222,10 +242,9 @@ const styles = StyleSheet.create({
   },
   textSearch: {
     color: 'black',
-    fontSize: 15,
+    fontSize: 18,
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+
     margin: 10,
   },
 });

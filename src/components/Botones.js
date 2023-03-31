@@ -2,7 +2,13 @@ import Geolocation from '@react-native-community/geolocation';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import React, {useContext, useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  ToastAndroid,
+} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import {FormContext} from '../context/FormContext';
 import {getCheckinoutServer} from '../helpers/getCheckinoutServer';
@@ -15,9 +21,9 @@ import {SendCheckinOut} from './SendCheckinOut';
 const Botones = ({setvisualizaCheck, visualizaCheck}) => {
   const {logout} = useContext(AuthContext);
 
-  const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
   const {userInfo} = useContext(AuthContext);
   const navigator = useNavigation();
+  const {getCurrentLocation, initialPosition} = useLocation();
 
   return (
     <View style={styles.containerb1}>
@@ -35,8 +41,15 @@ const Botones = ({setvisualizaCheck, visualizaCheck}) => {
         <TouchableOpacity
           style={styles.touch3}
           onPress={() => {
-            CheckinOut(getCurrentLocation, userInfo, 1);
-            setvisualizaCheck(false);
+            if (!initialPosition.mocked) {
+              CheckinOut(getCurrentLocation, initialPosition, userInfo, 1);
+              setvisualizaCheck(false);
+            } else {
+              ToastAndroid.show(
+                'está usando fake gps y no se pueden enviar los datos',
+                ToastAndroid.LONG,
+              );
+            }
           }}>
           <Text style={styles.text3}>CheckIn</Text>
         </TouchableOpacity>
@@ -44,8 +57,15 @@ const Botones = ({setvisualizaCheck, visualizaCheck}) => {
         <TouchableOpacity
           style={styles.touch4}
           onPress={() => {
-            CheckinOut(getCurrentLocation, userInfo, 2);
-            setvisualizaCheck(true);
+            if (!initialPosition.mocked) {
+              CheckinOut(getCurrentLocation, initialPosition, userInfo, 2);
+              setvisualizaCheck(true);
+            } else {
+              ToastAndroid.show(
+                'está usando fake gps y no se pueden enviar los datos',
+                ToastAndroid.LONG,
+              );
+            }
           }}>
           <Text style={styles.text4}>CheckOut</Text>
         </TouchableOpacity>

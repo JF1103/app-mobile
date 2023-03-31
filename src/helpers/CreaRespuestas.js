@@ -83,6 +83,31 @@ export const CreaRespuestas = pregunta => {
         longitud: 0.0,
         checkSend: true,
       };
+    case 'Materiales':
+      return {
+        id: pregunta.id,
+        respuesta: pregunta.respuestaCargada.map(item => {
+          return {
+            id: item.id,
+            value: pregunta.respuestaCargada.filter(
+              resp => resp.id == item.id,
+            )[0]?.respuesta,
+          };
+        }),
+        tipo: pregunta.tiporespuesta,
+        latitud: 0.0,
+        longitud: 0.0,
+        checkSend: true,
+      };
+    case 'Datos':
+      return {
+        id: pregunta.id,
+        respuesta: pregunta.respuestaCargada,
+        tipo: pregunta.tiporespuesta,
+        latitud: 0.0,
+        longitud: 0.0,
+        checkSend: true,
+      };
     default:
       break;
   }

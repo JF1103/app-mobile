@@ -69,30 +69,38 @@ export const Maps = ({
   }, []); */
   const {hasLocation, initialPosition} = useLocation();
   useEffect(() => {
+    console.log('initialllllllllll', initialPosition);
     /* handleRespLocation(tareaId, pregunta.id, location, pregunta.tiporespuesta); */
     if (!disabled) {
       if (initialPosition.latitude !== 0 && initialPosition.longitude !== 0) {
-        handleResp(
-          tareaId,
-          idotd,
-          formularioId,
-          refformularioconector,
-          pregunta.id,
-          {
-            latitude: initialPosition.latitude,
-            longitude: initialPosition.longitude,
-          },
-          pregunta.tiporespuesta,
-          formularioPreguntas,
-          setFormularioPreguntas,
-          employee,
-          idUsuario,
-          {
-            latitude: initialPosition.latitude,
-            longitude: initialPosition.longitude,
-          },
-        );
-        setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+        if (!initialPosition.mocked) {
+          handleResp(
+            tareaId,
+            idotd,
+            formularioId,
+            refformularioconector,
+            pregunta.id,
+            {
+              latitude: initialPosition.latitude,
+              longitude: initialPosition.longitude,
+            },
+            pregunta.tiporespuesta,
+            formularioPreguntas,
+            setFormularioPreguntas,
+            employee,
+            idUsuario,
+            {
+              latitude: initialPosition.latitude,
+              longitude: initialPosition.longitude,
+            },
+          );
+          setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+        } else {
+          ToastAndroid.show(
+            'está usando fake gps y no se pueden enviar los datos',
+            ToastAndroid.LONG,
+          );
+        }
       }
     }
   }, [initialPosition]);
@@ -117,7 +125,7 @@ export const Maps = ({
           {initialPosition.longitude}
         </Text>
       </View>
-      {hasLocation ? (
+      {hasLocation && !initialPosition.mocked ? (
         <>
           <MapView
             showsUserLocation={true}

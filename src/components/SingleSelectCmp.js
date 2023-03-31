@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -43,7 +44,7 @@ export const SingleSelectCmp = ({
 
   /*   console.log('singleSelectInit', singleSelectInit); */
 
-  const {getCurrentLocation} = useLocation();
+  const {getCurrentLocation, initialPosition} = useLocation();
   const [selectedItem, setSelectedItem] = useState(singleSelectInit);
   const [singleSelectReq, setsingleSelectReq] = useState(false);
 
@@ -90,27 +91,36 @@ export const SingleSelectCmp = ({
         selectedItem={selectedItem}
         buttonContainerStyle={disabled ? {backgroundColor: '#E8D3BB'} : {}}
         onSelect={selectedItem => {
-          if (!disabled) {
-            setSelectedItem(selectedItem),
-              getCurrentLocation().then(cords => {
-                handleResp(
-                  tarea.id,
-                  idotd,
-                  formulario.id,
-                  formulario.refformularioconector,
-                  pregunta.id,
-                  {id: selectedItem.id, value: selectedItem.value},
-                  pregunta.tiporespuesta,
-                  formularioPreguntas,
-                  setFormularioPreguntas,
-                  employee,
-                  idUsuario,
-                  cords,
-                );
-              }),
-              selectedItem !== undefined &&
-                setArrayReq(arrayReq.filter(item => item.id !== pregunta.id)) &&
-                setsingleSelectReq(false);
+          if (!initialPosition.mocked) {
+            if (!disabled) {
+              setSelectedItem(selectedItem),
+                getCurrentLocation().then(cords => {
+                  handleResp(
+                    tarea.id,
+                    idotd,
+                    formulario.id,
+                    formulario.refformularioconector,
+                    pregunta.id,
+                    {id: selectedItem.id, value: selectedItem.value},
+                    pregunta.tiporespuesta,
+                    formularioPreguntas,
+                    setFormularioPreguntas,
+                    employee,
+                    idUsuario,
+                    cords,
+                  );
+                }),
+                selectedItem !== undefined &&
+                  setArrayReq(
+                    arrayReq.filter(item => item.id !== pregunta.id),
+                  ) &&
+                  setsingleSelectReq(false);
+            }
+          } else {
+            ToastAndroid.show(
+              'está usando fake gps y no se pueden enviar los datos',
+              ToastAndroid.LONG,
+            );
           }
         }}
         placeholder="Elegir opción"

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -39,7 +40,7 @@ export const TextAreaCmp = ({
     ?.preguntas?.filter(item => item.id === pregunta.id)[0]?.respuesta;
 
   const [text, setText] = useState(textAsync ? textAsync : '');
-  const {getCurrentLocation} = useLocation();
+  const {getCurrentLocation, initialPosition} = useLocation();
   const [countLine, setCountLine] = useState(
     textAsync ? Math.floor(textAsync.length / 35 + 1) : 1,
   );
@@ -83,30 +84,37 @@ export const TextAreaCmp = ({
       exceedCharCountColor="#990606"
       placeholder={'Escriba aquí ...'}
       onChangeText={text => {
-        if (!disabled) {
-          getCurrentLocation().then(cords => {
-            handleResp(
-              tarea.id,
-              idotd,
-              formulario.id,
-              formulario.refformularioconector,
-              pregunta.id,
-              text,
-              pregunta.tiporespuesta,
-              formularioPreguntas,
-              setFormularioPreguntas,
-              employee,
-              idUsuario,
-              cords,
-            );
-          }),
-            setText(text),
-            setCountLine(
-              Math.floor(text.replace(/(\r\n|\n|\r)/gm, '').length / 30 + 1) +
-                (text.split('\n').length - 1),
-            ),
-            text !== '' &&
-              setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+        if (!initialPosition.mocked) {
+          if (!disabled) {
+            getCurrentLocation().then(cords => {
+              handleResp(
+                tarea.id,
+                idotd,
+                formulario.id,
+                formulario.refformularioconector,
+                pregunta.id,
+                text,
+                pregunta.tiporespuesta,
+                formularioPreguntas,
+                setFormularioPreguntas,
+                employee,
+                idUsuario,
+                cords,
+              );
+            }),
+              setText(text),
+              setCountLine(
+                Math.floor(text.replace(/(\r\n|\n|\r)/gm, '').length / 30 + 1) +
+                  (text.split('\n').length - 1),
+              ),
+              text !== '' &&
+                setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
+          }
+        } else {
+          ToastAndroid.show(
+            'está usando fake gps y no se pueden enviar los datos',
+            ToastAndroid.LONG,
+          );
         }
       }}
       value={text}

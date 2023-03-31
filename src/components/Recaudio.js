@@ -14,6 +14,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -302,13 +303,20 @@ class Page extends Component {
 
     const base64 = await RNFS.readFile(result, 'base64');
     /*  console.log('base64', result); */
-    this.props.handleRespAudio(
-      this.props.tareaId,
-      this.props.formularioId,
-      this.props.pregunta.id,
-      result.substring(result.lastIndexOf(':') + 1),
-      this.props.pregunta.tiporespuesta,
-    );
+    if (!this.props.mocked) {
+      this.props.handleRespAudio(
+        this.props.tareaId,
+        this.props.formularioId,
+        this.props.pregunta.id,
+        result.substring(result.lastIndexOf(':') + 1),
+        this.props.pregunta.tiporespuesta,
+      );
+    } else {
+      ToastAndroid.show(
+        'está usando fake gps y no se pueden enviar los datos',
+        ToastAndroid.LONG,
+      );
+    }
   };
 
   onStartPlay = async () => {

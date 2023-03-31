@@ -43,9 +43,18 @@ export const BuscadorRespuestas = data => {
                     //si tiene respuesta, devuelvo el id del formulario
                     //si no tiene respuesta, devuelvo null
                     const respuesta = formulario.preguntas.find(pregunta => {
-                      return pregunta.respuestaCargada !== '';
+                      return !(
+                        pregunta.respuestaCargada === '' ||
+                        (pregunta.tiporespuesta === 'Materiales' &&
+                          pregunta.respuestaCargada?.length === 0)
+                      );
                     });
-
+                    console.log(
+                      'respuestaaaaaa',
+                      respuesta,
+                      'formulariooooooooooo',
+                      formulario.id,
+                    );
                     if (respuesta) {
                       return {id: formulario.id};
                     } else {
