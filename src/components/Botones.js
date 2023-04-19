@@ -17,6 +17,7 @@ import {CheckinOut} from './CheckinOut';
 import {GetDataOt} from './GetDataOt';
 import {getCheckInOut} from './GetStorage';
 import {SendCheckinOut} from './SendCheckinOut';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 const Botones = ({setvisualizaCheck, visualizaCheck}) => {
   const {logout} = useContext(AuthContext);
@@ -45,10 +46,7 @@ const Botones = ({setvisualizaCheck, visualizaCheck}) => {
               CheckinOut(getCurrentLocation, initialPosition, userInfo, 1);
               setvisualizaCheck(false);
             } else {
-              ToastAndroid.show(
-                'está usando fake gps y no se pueden enviar los datos',
-                ToastAndroid.LONG,
-              );
+              FakeGpsError(userInfo.idusuario);
             }
           }}>
           <Text style={styles.text3}>CheckIn</Text>
@@ -61,10 +59,7 @@ const Botones = ({setvisualizaCheck, visualizaCheck}) => {
               CheckinOut(getCurrentLocation, initialPosition, userInfo, 2);
               setvisualizaCheck(true);
             } else {
-              ToastAndroid.show(
-                'está usando fake gps y no se pueden enviar los datos',
-                ToastAndroid.LONG,
-              );
+              FakeGpsError(userInfo.idusuario);
             }
           }}>
           <Text style={styles.text4}>CheckOut</Text>

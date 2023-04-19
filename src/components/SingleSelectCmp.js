@@ -15,6 +15,7 @@ import {useLocation} from '../hooks/useLocation';
 import {handleResp} from '../helpers/handleRespt';
 
 import {FormContext} from '../context/FormContext';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 export const SingleSelectCmp = ({
   pregunta,
@@ -117,10 +118,7 @@ export const SingleSelectCmp = ({
                   setsingleSelectReq(false);
             }
           } else {
-            ToastAndroid.show(
-              'está usando fake gps y no se pueden enviar los datos',
-              ToastAndroid.LONG,
-            );
+            FakeGpsError(idUsuario);
           }
         }}
         placeholder="Elegir opción"

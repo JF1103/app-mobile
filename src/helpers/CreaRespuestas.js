@@ -29,13 +29,15 @@ export const CreaRespuestas = pregunta => {
       };
       break;
     case 'Seleccion Simple':
+      const idResCargada = pregunta.respuestas.filter(
+        item => item.leyenda === pregunta.respuestaCargada,
+      )[0];
+      console.log('idResCargada', idResCargada);
       return {
         id: pregunta.id,
         respuesta: {
-          id: pregunta.respuestaCargada,
-          value: pregunta.respuestas.filter(
-            item => item.id === pregunta.respuestaCargada,
-          )[0]?.leyenda,
+          id: idResCargada.id,
+          value: idResCargada.respuesta,
         },
         tipo: pregunta.tiporespuesta,
         latitud: 0.0,

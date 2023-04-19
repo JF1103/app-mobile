@@ -24,6 +24,7 @@ import RNFS from 'react-native-fs';
 import Button from './Button';
 /* import RNFetchBlob from 'rn-fetch-blob'; */
 import {Wave} from 'react-native-animated-spinkit';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 const styles = StyleSheet.create({
   container: {
@@ -312,10 +313,7 @@ class Page extends Component {
         this.props.pregunta.tiporespuesta,
       );
     } else {
-      ToastAndroid.show(
-        'está usando fake gps y no se pueden enviar los datos',
-        ToastAndroid.LONG,
-      );
+      FakeGpsError(this.idUsuario);
     }
   };
 

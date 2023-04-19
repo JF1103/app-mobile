@@ -4,6 +4,7 @@ import {useLocation} from '../hooks/useLocation';
 import NumericInput from 'react-native-numeric-input';
 import {handleResp} from '../helpers/handleRespt';
 import {StyleSheet, Text, ToastAndroid, View} from 'react-native';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 export const MaterialesCmp = ({
   idMaterial,
@@ -77,10 +78,7 @@ export const MaterialesCmp = ({
       setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
       setCantMaterial(value);
     } else {
-      ToastAndroid.show(
-        'está usando fake gps y no se pueden enviar los datos',
-        ToastAndroid.LONG,
-      );
+      FakeGpsError(idUsuario);
     }
   };
   return (

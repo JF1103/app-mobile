@@ -4,6 +4,7 @@ import moment from 'moment';
 import {SaveCheckinOut} from './SaveCheckinOut';
 import {SendArraaycheckInOut} from './SendArraayCheckInOut';
 import {ToastAndroid} from 'react-native';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 export const CheckinOut = (
   getCurrentLocation,
@@ -43,9 +44,6 @@ export const CheckinOut = (
       });
     }
   } else {
-    ToastAndroid.show(
-      'está usando fake gps y no se pueden enviar los datos',
-      ToastAndroid.LONG,
-    );
+    FakeGpsError(userInfo.idusuario);
   }
 };

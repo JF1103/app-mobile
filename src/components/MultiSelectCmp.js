@@ -4,6 +4,7 @@ import {FormContext} from '../context/FormContext';
 import {handleResp} from '../helpers/handleRespt';
 import {useLocation} from '../hooks/useLocation';
 import RNMultiSelect from '../libs/react-native-multiple-select/build/dist/RNMultiSelect';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 export const MultiSelectCmp = ({
   pregunta,
@@ -113,10 +114,7 @@ export const MultiSelectCmp = ({
                       setmultiSelectReq(false);
                 }
               } else {
-                ToastAndroid.show(
-                  'está usando fake gps y no se pueden enviar los datos',
-                  ToastAndroid.LONG,
-                );
+                FakeGpsError(idUsuario);
               }
             }}
           />

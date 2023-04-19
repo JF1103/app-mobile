@@ -37,6 +37,7 @@ import {SetStorage} from './SetStorage';
 import {handleResp} from '../helpers/handleRespt';
 import {useLocation} from '../hooks/useLocation';
 import {ValidoExistsArchivo} from '../helpers/ValidoExistsArchivo';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 export const GetFiles = ({
   tareaId,
@@ -165,10 +166,7 @@ export const GetFiles = ({
           } else return;
         } else {
           {
-            ToastAndroid.show(
-              'está usando fake gps y no se pueden enviar los datos',
-              ToastAndroid.LONG,
-            );
+            FakeGpsError(idUsuario);
           }
         }
       },
@@ -202,10 +200,7 @@ export const GetFiles = ({
             setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
           } else return;
         } else {
-          ToastAndroid.show(
-            'está usando fake gps y no se pueden enviar los datos',
-            ToastAndroid.LONG,
-          );
+          FakeGpsError(idUsuario);
         }
       },
     );
@@ -238,10 +233,7 @@ export const GetFiles = ({
           setvisualizaImagen(true);
           setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
         } else {
-          ToastAndroid.show(
-            'está usando fake gps y no se pueden enviar los datos',
-            ToastAndroid.LONG,
-          );
+          FakeGpsError(idUsuario);
         }
       },
     );
@@ -307,10 +299,7 @@ export const GetFiles = ({
         setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
       });
     } else {
-      ToastAndroid.show(
-        'está usando fake gps y no se pueden enviar los datos',
-        ToastAndroid.LONG,
-      );
+      FakeGpsError(idUsuario);
     }
   };
 
@@ -369,6 +358,7 @@ export const GetFiles = ({
           tempUri={tempUri}
           typeFile={typeFile}
           mocked={initialPosition.mocked}
+          idUsuario={idUsuario}
         />
       )}
       {visualizaImagen &&

@@ -27,6 +27,7 @@ import {
   contrast,
   saturate,
 } from 'react-native-color-matrix-image-filters';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 export const Maps = ({
   cordsOt,
@@ -96,10 +97,7 @@ export const Maps = ({
           );
           setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
         } else {
-          ToastAndroid.show(
-            'está usando fake gps y no se pueden enviar los datos',
-            ToastAndroid.LONG,
-          );
+          FakeGpsError(idUsuario);
         }
       }
     }

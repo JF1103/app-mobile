@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import {FormContext} from '../context/FormContext';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 const heightInitial = 55;
 const heightDelta = 20;
@@ -111,10 +112,7 @@ export const TextAreaCmp = ({
                 setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
           }
         } else {
-          ToastAndroid.show(
-            'está usando fake gps y no se pueden enviar los datos',
-            ToastAndroid.LONG,
-          );
+          FakeGpsError(idUsuario);
         }
       }}
       value={text}

@@ -21,6 +21,7 @@ import {resetSign} from './ResetFirm';
 import {handleRespFirma} from './handleRespFirma';
 import {useLocation} from '../hooks/useLocation';
 import {ValidoExistsArchivo} from '../helpers/ValidoExistsArchivo';
+import {FakeGpsError} from '../helpers/FakeGpsError';
 
 const Firma = ({
   tareaId,
@@ -124,10 +125,7 @@ const Firma = ({
       setfirmaReq(false);
       setArrayReq(arrayReq.filter(item => item.id !== pregunta.id));
     } else {
-      ToastAndroid.show(
-        'está usando fake gps y no se pueden enviar los datos',
-        ToastAndroid.LONG,
-      );
+      FakeGpsError(idUsuario);
     }
   };
   const _onDragEvent = () => {};
