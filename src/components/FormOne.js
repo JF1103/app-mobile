@@ -49,9 +49,9 @@ const FormOne = ({navigation, route}) => {
   const [location, setLocation] = useState({});
 
   /*   const {form, onChange, setFormValue} = UseForm(); */
-
+  /* 
   const formData = new FormData();
-  formData.append('idusuario', userInfo.idusuario);
+  formData.append('idusuario', userInfo.idusuario); */
 
   return (
     <View>

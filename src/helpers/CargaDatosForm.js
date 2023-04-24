@@ -123,7 +123,8 @@ export const CargaDatosForm = (
                             formulario.id,
                           ); */
                           /* console.log('seteo el async'); */
-                          setformAsync({
+
+                          const info = {
                             formcomplet: [
                               ...form.formcomplet.filter(
                                 item => item.idUsuario !== idusuario,
@@ -189,7 +190,10 @@ export const CargaDatosForm = (
                                 ].filter(item => item !== undefined),
                               },
                             ],
-                          });
+                          };
+                          /*  console.log('cambie0'); */
+                          setformAsync(info);
+                          setFormularioPreguntas(info);
                         }
                       } else {
                         //si no existe el formulario
@@ -214,9 +218,9 @@ export const CargaDatosForm = (
                               form => form.id === formulario.id,
                             ).length > 0
                         ) {
-                          /* console.log('ENTRO ASETAR EL ASYNC'); */
+                          /*  console.log('ENTRO ASETAR EL ASYNC', ot.id); */
 
-                          setformAsync({
+                          const info = {
                             formcomplet: [
                               ...form.formcomplet.filter(
                                 item => item.idUsuario !== idusuario,
@@ -281,7 +285,10 @@ export const CargaDatosForm = (
                                 ].filter(item => item !== undefined),
                               },
                             ],
-                          });
+                          };
+                          /* console.log('cambie1'); */
+                          setformAsync(info);
+                          setFormularioPreguntas(info);
                           /* console.log('saliendo'); */
                         }
                         /*    console.log('saliiii'); */
@@ -293,13 +300,13 @@ export const CargaDatosForm = (
                   //si no existe la tarea y si existe la ot
                   //lo sumo al existente
                   /*        console.log('no existe la tarea en el asinc'); */
-                  console.log('no existe la tarea en el asinc');
+                  /*   console.log('no existe la tarea en el asinc'); */
                   if (
                     respuestas.ot
                       .filter(item => item.id === ot.id)[0]
                       .tarea.filter(item => item.id === tarea.id).length > 0
                   ) {
-                    console.log('ENTRO ASETAR EL ASYNC si existe la tarea');
+                    /* console.log('ENTRO ASETAR EL ASYNC si existe la tarea'); */
                     /* console.log('TEEEESSSSSS'); */
                     /*  console.log(
                       JSON.stringify(
@@ -308,7 +315,8 @@ export const CargaDatosForm = (
                           .ots.filter(item => item.id_ot == ot.id)[0],
                       ),
                     ); */
-                    setformAsync({
+
+                    const info = {
                       formcomplet: [
                         ...form.formcomplet.filter(
                           item => item.idUsuario !== idusuario,
@@ -365,7 +373,10 @@ export const CargaDatosForm = (
                           ].filter(item => item !== undefined),
                         },
                       ],
-                    });
+                    };
+                    /*  console.log('cambie2'); */
+                    setformAsync(info);
+                    setFormularioPreguntas(info);
                   }
                 }
                 /*   console.log('saliiii44'); */
@@ -386,7 +397,8 @@ export const CargaDatosForm = (
                   .filter(item => item.idUsuario == idusuario)[0]
                   ?.ots?.filter(item => item.id_ot == ot.id)[0],
               ); */
-              setformAsync({
+
+              const info = {
                 formcomplet: [
                   ...form.formcomplet.filter(
                     item => item.idUsuario !== idusuario,
@@ -474,7 +486,10 @@ export const CargaDatosForm = (
                     ].filter(item => item !== undefined),
                   },
                 ],
-              });
+              };
+              /*        console.log('cambie3'); */
+              setformAsync(info);
+              setFormularioPreguntas(info);
             }
           }
           /* console.log('saliiii55'); */
@@ -483,54 +498,37 @@ export const CargaDatosForm = (
     } else {
       //no existe elusuario lo sumo al existente
       //valido si hay respuestas en el servidor
+      /*  console.log('no existe el usuario'); */
       if (respuestas.ot.length > 0) {
-        setformAsync({
+        const info = {
           formcomplet: [
             ...form.formcomplet.filter(item => item.idUsuario !== idusuario),
             {
               idUsuario: idusuario,
-              ots: [
-                ...form.formcomplet
-                  .filter(item => item.idUsuario == idusuario)[0]
-                  .ots.filter(item => item.id_ot !== ot.id),
-                {
-                  id_ot: ot.id,
-                  fecha: ot.fecha,
-                  fechafin: ot.fechafin,
-                  tareas: [
-                    ...form.formcomplet
-                      .filter(item => item.idUsuario == idusuario)[0]
-                      .ots.filter(item => item.id_ot == ot.id)[0]
-                      .tareas.filter(item => item.TareaId !== tarea.id),
-                    {
-                      TareaId: tarea.id,
-                      idotd: tarea.idotd,
-                      ErrorSend: false,
-                      formularios: [
-                        ...form.formcomplet
-                          .filter(item => item.idUsuario == idusuario)[0]
-                          .ots.filter(item => item.id_ot == ot.id)[0]
-                          .tareas.filter(item => item.TareaId == tarea.id)[0]
-                          ?.formularios.filter(
-                            item => item.id !== formulario.id,
-                          ),
-                        {
-                          FormularioId: formulario.id,
-                          refformularioconector:
-                            formulario.refformularioconector,
-                          ended: false,
-                          preguntas: formulario.preguntas.map(pregunta => {
-                            return CreaRespuestas(pregunta);
-                          }),
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ].filter(item => item !== undefined),
+              ots: data.ot
+                .map(ot => {
+                  if (
+                    respuestas.ot.filter(item => item.id === ot.id).length > 0
+                  ) {
+                    /* console.log('entre en ot datos forrrrmmm'); */
+                    return CargaOtForm(
+                      ot,
+                      false,
+                      false,
+                      false,
+                      form,
+                      respuestas,
+                      ot.id,
+                    );
+                  }
+                })
+                .filter(item => item !== undefined),
             },
           ],
-        });
+        };
+        /*  console.log('cambie4'); */
+        setformAsync(info);
+        setFormularioPreguntas(info);
       }
     }
   }

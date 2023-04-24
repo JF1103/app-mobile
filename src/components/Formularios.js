@@ -47,7 +47,7 @@ export const Formularios = ({
   const [sending, setSending] = useState(false);
 
   /*  console.log('arrayReq del formulario', arrayReq); */
-
+  console.log('entre en formularios');
   const preguntas = formulario.preguntas;
 
   const [disabled, setDisabled] = useState(false);
@@ -56,12 +56,14 @@ export const Formularios = ({
 
   useEffect(() => {
     if (!finish) {
-      /*  console.log('entrooooooo cambio el storage'); */
+      console.log('entrooooooo cambio el storage');
+      /* console.log('formulario preguntass', JSON.stringify(formularioPreguntas)); */
       SetStorage(formularioPreguntas);
       setformAsync(formularioPreguntas);
     }
   }, [formularioPreguntas]);
 
+  /* console.log('ASYNC', JSON.stringify(formAsync)); */
   /*   useEffect(() => {
     console.log('cambiooo el requerido');
   }, [arrayReq]); */
@@ -81,12 +83,9 @@ export const Formularios = ({
       ?.tareas.filter(item => item.TareaId === tarea.id)[0]
       ?.formularios.filter(item => item.FormularioId === formulario.id)[0]
       ?.preguntas.filter(item => item.checkSend === true).length;
-    console.log(
-      'nroRespuestasNoEnveeeeeeeee',
-      formAsync?.formcomplet
-        ?.filter(item => item.idUsuario === idUsuario)[0]
-        ?.ots.filter(item => item.id_ot === employee.id)[0],
-    );
+    console.log('nroRespuestasNoEnveeeeeeeee', nroRespuestasNoEnv);
+    console.log('nro respuestas verdad', nroRespuestasVerdad);
+
     const numeroPreguntas = formulario.preguntas.length;
 
     /*  console.log('FORMAYSINC', JSON.stringify(formAsync)); */
@@ -97,13 +96,14 @@ export const Formularios = ({
       ?.formularios.filter(
         item => item.FormularioId === formulario.id,
       )[0]?.ended;
-    /*   console.log('nroRespuestasNoEnv', nroRespuestasNoEnv); */
+    console.log('nroRespuestasNoEnv', nroRespuestasNoEnv);
     if (nroRespuestasNoEnv > 0) {
-      /*  console.log('entrooooooo NO ENVE', nroRespuestasNoEnv); */
+      console.log('entrooooooo NO ENVE', nroRespuestasNoEnv);
       setformsended(true);
       setDisabled(true);
       setSending(false);
       if (ended !== true) {
+        console.log('entro y cambie el storage');
         let copy = formularioPreguntas;
         copy.formcomplet
           .filter(item => item.idUsuario === idUsuario)[0]
@@ -121,8 +121,9 @@ export const Formularios = ({
         setFormularioPreguntas({...copy});
       }
     } else {
+      console.log('nroRespuestasVerdad', nroRespuestasVerdad);
       if (nroRespuestasVerdad > 0) {
-        /*  console.log('entrooooooo VERDAD', nroRespuestasVerdad); */
+        console.log('entrooooooo VERDAD', nroRespuestasVerdad);
         setformsended(true);
         setDisabled(true);
         setSending(false);
@@ -152,7 +153,7 @@ export const Formularios = ({
             .tareas.filter(
               item => item.TareaId === tarea.id,
             )[0].ErrorSend = false;
-
+          console.log('entro y cambie el storage');
           setFormularioPreguntas({...copy});
         }
       } else {
@@ -204,7 +205,7 @@ export const Formularios = ({
                   />
                 </View>
               ) : pregunta.tiporespuesta === 'Seleccion Multiple' ? (
-                (<View style={{alignItems: 'center', marginBottom: -80}}>
+                <View style={{alignItems: 'center', marginBottom: -80}}>
                   <MultiSelectCmp
                     pregunta={pregunta}
                     disabled={disabled}
@@ -216,7 +217,8 @@ export const Formularios = ({
                     arrayReq={arrayReq}
                     setArrayReq={setArrayReq}
                   />
-                </View> /* : pregunta.tiporespuesta === 'Texto' ? (
+                </View>
+              ) : pregunta.tiporespuesta === 'Texto' ? (
                 <View
                   key={pregunta.id}
                   style={{alignItems: 'center'}}
@@ -234,133 +236,6 @@ export const Formularios = ({
                     setArrayReq={setArrayReq}
                   />
                 </View>
-              ) */ /*: pregunta.tiporespuesta === 'Texto' ? (
-                <View
-                  key={pregunta.id}
-                  style={{alignItems: 'center'}}
-                  pointerEvents={disabled ? 'none' : 'auto'}>
-                  <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <TextAreaCmp
-                    pregunta={pregunta}
-                    disabled={disabled}
-                    tarea={tarea}
-                    idotd={idotd}
-                    formulario={formulario}
-                    employee={employee}
-                    idUsuario={idUsuario}
-                    arrayReq={arrayReq}
-                    setArrayReq={setArrayReq}
-                  />
-                </View>
-              ) */ /*: pregunta.tiporespuesta === 'Texto' ? (
-                <View
-                  key={pregunta.id}
-                  style={{alignItems: 'center'}}
-                  pointerEvents={disabled ? 'none' : 'auto'}>
-                  <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <TextAreaCmp
-                    pregunta={pregunta}
-                    disabled={disabled}
-                    tarea={tarea}
-                    idotd={idotd}
-                    formulario={formulario}
-                    employee={employee}
-                    idUsuario={idUsuario}
-                    arrayReq={arrayReq}
-                    setArrayReq={setArrayReq}
-                  />
-                </View>
-              ) */ /*: pregunta.tiporespuesta === 'Texto' ? (
-                <View
-                  key={pregunta.id}
-                  style={{alignItems: 'center'}}
-                  pointerEvents={disabled ? 'none' : 'auto'}>
-                  <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <TextAreaCmp
-                    pregunta={pregunta}
-                    disabled={disabled}
-                    tarea={tarea}
-                    idotd={idotd}
-                    formulario={formulario}
-                    employee={employee}
-                    idUsuario={idUsuario}
-                    arrayReq={arrayReq}
-                    setArrayReq={setArrayReq}
-                  />
-                </View>
-              ) */ /*: pregunta.tiporespuesta === 'Texto' ? (
-                <View
-                  key={pregunta.id}
-                  style={{alignItems: 'center'}}
-                  pointerEvents={disabled ? 'none' : 'auto'}>
-                  <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <TextAreaCmp
-                    pregunta={pregunta}
-                    disabled={disabled}
-                    tarea={tarea}
-                    idotd={idotd}
-                    formulario={formulario}
-                    employee={employee}
-                    idUsuario={idUsuario}
-                    arrayReq={arrayReq}
-                    setArrayReq={setArrayReq}
-                  />
-                </View>
-              ) */ /*: pregunta.tiporespuesta === 'Texto' ? (
-                <View
-                  key={pregunta.id}
-                  style={{alignItems: 'center'}}
-                  pointerEvents={disabled ? 'none' : 'auto'}>
-                  <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <TextAreaCmp
-                    pregunta={pregunta}
-                    disabled={disabled}
-                    tarea={tarea}
-                    idotd={idotd}
-                    formulario={formulario}
-                    employee={employee}
-                    idUsuario={idUsuario}
-                    arrayReq={arrayReq}
-                    setArrayReq={setArrayReq}
-                  />
-                </View>
-              ) */ /*: pregunta.tiporespuesta === 'Texto' ? (
-                <View
-                  key={pregunta.id}
-                  style={{alignItems: 'center'}}
-                  pointerEvents={disabled ? 'none' : 'auto'}>
-                  <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <TextAreaCmp
-                    pregunta={pregunta}
-                    disabled={disabled}
-                    tarea={tarea}
-                    idotd={idotd}
-                    formulario={formulario}
-                    employee={employee}
-                    idUsuario={idUsuario}
-                    arrayReq={arrayReq}
-                    setArrayReq={setArrayReq}
-                  />
-                </View>
-              ) */ /*: pregunta.tiporespuesta === 'Texto' ? (
-                <View
-                  key={pregunta.id}
-                  style={{alignItems: 'center'}}
-                  pointerEvents={disabled ? 'none' : 'auto'}>
-                  <Text style={styles.text}>{pregunta.pregunta}</Text>
-                  <TextAreaCmp
-                    pregunta={pregunta}
-                    disabled={disabled}
-                    tarea={tarea}
-                    idotd={idotd}
-                    formulario={formulario}
-                    employee={employee}
-                    idUsuario={idUsuario}
-                    arrayReq={arrayReq}
-                    setArrayReq={setArrayReq}
-                  />
-                </View>
-              ) */)
               ) : pregunta.tiporespuesta === 'Geolocalizacion' ? (
                 <View pointerEvents={disabled ? 'none' : 'auto'}>
                   <Maps

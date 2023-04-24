@@ -21,6 +21,7 @@ import {FormContext} from '../context/FormContext';
 import {CheckinOut} from './CheckinOut';
 import {SendArraaycheckInOut} from './SendArraayCheckInOut';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {CargaDatosForm} from '../helpers/CargaDatosForm';
 
 export const TareasFinalizadas = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -52,21 +53,28 @@ export const TareasFinalizadas = ({navigation}) => {
 
   const [cargandoAsync, setcargandoAsync] = useState(false);
   /* const [formAsync, setformAsync] = useState(); */
-
+  //no es necesario cargar los datos asincronicos
+  /*
   const inicializaformularioPreguntas = async () => {
     const form = await GetStorage();
     if (form !== null) {
-      /*  console.log('entr en el if de inicializaformularioPreguntas'); */
-      setformAsync(form);
-      setFormularioPreguntas(form);
+        console.log('entr en el if de inicializaformularioPreguntas'); 
+      CargaDatosForm(
+        data,
+        form,
+        formAsync,
+        setformAsync,
+        setFormularioPreguntas,
+        userInfo.idusuario,
+      );
     }
     setcargandoAsync(false);
   };
-
+  
   useEffect(() => {
     setcargandoAsync(true);
     inicializaformularioPreguntas();
-  }, []);
+  }, []); */
 
   const checkLocationPermissions = async () => {
     if (Platform.OS === 'ios') {

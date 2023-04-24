@@ -46,7 +46,8 @@ export const CorrectFormAsync = async idUsuario => {
             formulario =>
               (formulario.ended =
                 formulario.preguntas.filter(
-                  pregunta => pregunta?.checkSend === false,
+                  pregunta =>
+                    pregunta?.checkSend === false || pregunta?.checkSend === '',
                 ).length > 0
                   ? false
                   : true),
